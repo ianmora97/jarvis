@@ -1,5 +1,5 @@
 const {app, BrowserWindow, systemPreferences } = require('electron');
-console.log(systemPreferences.getMediaAccessStatus('microphone'));
+
 function createWindow() {
     const win = new BrowserWindow({
         width: 1000,
