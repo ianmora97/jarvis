@@ -31,7 +31,7 @@ gulp.task('js', function() {
 
 // watching scss/html files
 gulp.task('serve', gulp.series('sass','js','animate', function() {
-    gulp.watch("/scss/*.scss", gulp.series('sass'));
+    gulp.watch("scss/*.scss", gulp.series('sass'));
 }));
 
 gulp.task('default', gulp.series('serve'));

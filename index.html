@@ -12,25 +12,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js" ></script>
+    <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js" ></script>
+    <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js" ></script>
 </head>
-<body>
-    <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start border-bottom p-0">
+<body style="height: 100vh;">
+    <div class="modal fade" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                    <h6 class="modal-title mt-1" id="addEntryModalLabel"><i class="fa fa-plus text-white"></i> Add Entry</h6>
+                    <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                        <h6>x</h6>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <div class="container">
+                        <dl class="row">
+                            <dt class="col-2">Description lists</dt>
+                            <dd class="col-10">A description list is perfect for defining terms.</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-0">
+                    <button type="button" class="btn btn-primary btn-sm">Add Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
+    style="height: 30px;">
         <div class="container-fluid">
-            <span class="navbar-brand p-0">Passafe</span>
-            <ul class="nav navbar-nav mr-auto p-0">
+            <span class="navbar-brand p-0 text-white"><h4>Passafe</h4></span>
+            <ul class="nav navbar-nav mr-auto p-0 nav-just">
                     <li class="nav-item dropdown p-0 mr-2">
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle p-0" type="button" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn dropdown-toggle p-0 text-white" type="button" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 File
                             </button>
                             <div class="dropdown-menu" aria-labelledby="fileMenuButton">
                                 <a class="dropdown-item" href="#">New Database</a>
                                 <a class="dropdown-item" href="#">New entry</a>
                                 <a class="dropdown-item" href="#">Open Database</a>
-
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Master Key</a>
-
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Lock Workspace</a>
                                 <a class="dropdown-item" href="#">Close</a>
                             </div>
@@ -38,13 +65,13 @@
                     </li>
                     <li class="nav-item dropdown p-0 mr-2">
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle p-0" type="button" id="editMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn dropdown-toggle p-0  text-white" type="button" id="editMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Edit
                             </button>
                             <div class="dropdown-menu" aria-labelledby="editMenuButton">
                                 <a class="dropdown-item" href="#">Copy Username</a>
                                 <a class="dropdown-item" href="#">Copy Password</a>
-                                
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Add entry</a>
                                 <a class="dropdown-item" href="#">Edit entry</a>
                                 <a class="dropdown-item" href="#">Delete entry</a>
@@ -54,7 +81,7 @@
                     </li>
                     <li class="nav-item dropdown p-0 mr-2">
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle p-0" type="button" id="toolsMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn dropdown-toggle p-0  text-white" type="button" id="toolsMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Tools
                             </button>
                             <div class="dropdown-menu" aria-labelledby="toolsMenuButton">
@@ -66,49 +93,67 @@
                 </ul>
         </div>
     </nav>
-    <div class="container-fluid">
-        <div class="row border-bottom p-1">
+    <div class="container-fluid" style="height: 95vh;">
+        <div class="row  p-1 position-relative bg-light" style="height: 50px; z-index: 5;">
             <div class="col">
                 <div class="container-fluid">
-                    <button class="btn p-0" type="button" style="margin-right: 15px;"><i class="fa fa-plus"></i></button>
-                    <button class="btn p-0" type="button" style="margin-right: 15px;"><i class="fa fa-key"></i></button> 
-                    <button class="btn p-0" type="button" style="margin-right: 15px;"><i class="fa fa-database"></i></button>
+                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
+                        <i class="fa fa-plus text-white"></i>
+                    </button>
+                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
+                        <i class="fa fa-database text-white"></i>
+                    </button>
+                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
+                        <i class="fa fa-server text-white"></i>
+                    </button>
+                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace">
+                        <i class="fa fa-lock text-white"></i>
+                    </button>
+                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key">
+                        <i class="fa fa-key text-white"></i>
+                    </button> 
+                    
                     <div class="form-inline d-inline">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-1" type="submit"><i class="fa fa-search"></i></button>
+                        <input class="form-control search-bar mr-0" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn button-actions p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row border-bottom" style="height: 80vh;">
-            <div class="col-2 mt-2 border-right">
-                
-                <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 mt-2 p-1 active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">
-                        Social Media
-                        <span class="badge badge-primary badge-pill">14</span>
-                    </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 mt-2 p-1" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">
-                        Web Pages
-                        <span class="badge badge-primary badge-pill">14</span>
-                    </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 mt-2 p-1" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">
-                        Bank
-                        <span class="badge badge-primary badge-pill">14</span>
-                    </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 mt-2 p-1" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">
-                        Others
-                        <span class="badge badge-primary badge-pill">14</span>
-                    </a>
+        <div class="row" style="height: 84%;">
+            <div class="col-2 border-right position-relative" >
+                <div class="position-absolute blue-left"></div>
+                <div class="image-back" style="z-index: 0;"></div>
+                <div class="pt-3" style="z-index: 5;">
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <h4 class="text-white" style="z-index: 6;">Databases</h4>
+                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1 active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">
+                            Social Media
+                            <span class="badge badge-warning badge-pill">14</span>
+                        </a>
+                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">
+                            Web Pages
+                            <span class="badge badge-warning badge-pill">14</span>
+                        </a>
+                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">
+                            Bank
+                            <span class="badge badge-warning badge-pill">14</span>
+                        </a>
+                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">
+                            Others
+                            <span class="badge badge-warning badge-pill">14</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-10 px-0">
+            <div class="col-10 px-0 bg-light">
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead class="thead-dark p-0 text-center">
+                        <div class="table-responsive border-top-0" id="tabla">
+                            <table class="table border-top-0" >
+                                <thead class="bg-primary border-top-0 p-0 text-white">
                                     <tr>
+                                        <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
                                         <th>Id</th>
                                         <th>Name</th>
                                         <th>User</th>
@@ -117,15 +162,8 @@
                                         <th>Level</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Cell 1</td>
-                                        <td>Cell 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cell 3</td>
-                                        <td>Cell 4</td>
-                                    </tr>
+                                <tbody id="socialmediatable">
+
                                 </tbody>
                             </table>
                         </div>   
@@ -139,15 +177,20 @@
                 
             </div>
         </div>
-        <div class="row">
-            <div class="col"><span>Bottom</span></div>
+        <div class="row position-relative bg-primary" style="height: 70px;">
+            <div class="col" style="z-index: 5;">
+                <span>Bottom</span>
+            </div>
+            <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
+            <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
         </div>
     </div>
-    <script src="js/crypto.js"></script>
-	<script src="js/app.js"></script>
+    
     <script src="js/db.js"></script>
-
-    <!-- Insert this line after script imports -->
+    
+    
+	<script src="js/wavify.js"></script>
+	<script src="js/app.js"></script>
     <script>if (window.module) module = window.module;</script>
 </body>
 </html>
