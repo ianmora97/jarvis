@@ -7,7 +7,13 @@ let db = new sqlite3.Database('database.db', (err) => {
     console.log('Connected to the in-memory SQlite database.');
 });
 
-
+function get() {
+    db.all("SELECT * FROM passwords", function(err, row) {
+        console.log(row);
+    });
+    db.serialize(function() {
+    });
+}
 /*db.serialize(function() {
     db.run("CREATE TABLE if not exists lorem (info TEXT)");
 

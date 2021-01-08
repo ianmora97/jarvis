@@ -1,2 +1,5 @@
 td, th {
     font-size: 0.8rem; }
+th{
+    padding: 3px 2px !important;
+}
