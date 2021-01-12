@@ -1,4 +1,4 @@
-const {app, BrowserWindow, systemPreferences, Tray } = require('electron');
+const {app, BrowserWindow, systemPreferences, Tray, shell } = require('electron');
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -14,7 +14,7 @@ function createWindow() {
     win.once('ready-to-show', () => {
         win.show()
     })
-    //win.removeMenu();
+    win.removeMenu();
     win.loadFile("index.html");
 }
 

@@ -9,15 +9,9 @@ function eventsOnLoad(event) {
         $('[data-toggle="tooltip"]').tooltip()
     })
 }
-function copy(el) {
-    let pass = $(el).data('pass') + "";
-    pass = String(pass);
-    console.log(typeof pass);
-    pass.select();
-  
-    /* Copy the text inside the text field */
-    document.execCommand("copy");
-} 
+function closeAlert(e) {
+    $('#close_addNewEntryAlert').removeClass('show');
+}
 
 function openModalEntry() {
     $('#addentrybutton').on('click',()=>{
@@ -27,10 +21,14 @@ function openModalEntry() {
 function changeDatabase(db) {
     $("#modal_EntryDatabase").val(db);
 }
+function fillEntryInfoButton(name,user,url,level) {
+    $('#entryInfo').append(name);
+}
 /*
     !BD
 */
 async function getInfo_addEntry() {
+    $('#spinnerWaiterAddEntry').show();
     let name,username,password,url,level,icon,database;
     name = $("#modal_entryName").val();
     username = $("#modal_entryUsername").val();
@@ -44,6 +42,14 @@ async function getInfo_addEntry() {
     icon = $("#iconSelected").html();
     icon = icon.replace(/\"/g, "\'");
     database = $("#modal_EntryDatabase").val();
+    setTimeout(() => {
+        $('#spinnerWaiterAddEntry').hide();
+        $('#addEntryModal').modal('hide');
+        $('#close_addNewEntryAlert').addClass('show');
+    }, 600);
+    setTimeout(() => {
+        $('#close_addNewEntryAlert').removeClass('show');
+    }, 2000);
 
     return [name,username,password,url,level,icon,database];
 }
