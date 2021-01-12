@@ -1,10 +1,12 @@
-var crypto = require("crypto-js");
- 
+var CryptoJS = require("crypto-js");
 // Encrypt
-var ciphertext = crypto.AES.encrypt('my message', 'secret key 123').toString();
- 
+function encrypt(pass, masterkey) {
+    var ciphertext = CryptoJS.AES.encrypt(pass, masterkey).toString();
+    return ciphertext;
+}
 // Decrypt
-var bytes  = crypto.AES.decrypt(ciphertext, 'secret key 123');
-var originalText = bytes.toString(crypto.enc.Utf8);
- 
-console.log(originalText); // 'my message'
+function decrypt(pass, masterkey) {
+    var bytes  = CryptoJS.AES.decrypt(pass, masterkey);
+    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+    return originalText;
+}
