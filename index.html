@@ -8,6 +8,7 @@
     <!-- Insert this line above script imports  -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -17,7 +18,7 @@
     <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js" ></script>
     <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js" ></script>
 </head>
-<body style="height: 100vh;">
+<body style="height: 100vh;" class="overflow-hidden">
     <div class="modal fade" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -68,7 +69,7 @@
                                     <input type="password" onkeyup="verifyPassword(this.value)" class="form-control " id="modal_entryPassword" placeholder="Entry Password...">
                                     <div class="input-group-append" id="button-addon4">
                                         <button class="btn btn-outline-secondary" type="button" id="eyeChangePass" onclick="changeVisPassButton()"><i class="fa fa-eye-slash"></i></button>
-                                        <button class="btn btn-outline-secondary" type="button" id="gearGeneratePass" onclick="generatePassButton()"><i class="fa fa-cog" id="i_gear"></i></button>
+                                        <button class="btn btn-outline-secondary" type="button" id="gearGeneratePass" onclick="generatePassButton()" data-toggle="tooltip" data-placement="right" title="Generate Password"><i class="fa fa-cog" id="i_gear"></i></button>
                                     </div>
                                 </div>
                                 <div class="progress mt-1">
@@ -97,7 +98,7 @@
                 </div>
                 <div class="modal-footer bg-light py-0">
                     <button type="button" class="btn btn-primary btn-sm" onclick="addEntry()">
-                        <div class="spinner-border" id="spinnerWaiterAddEntry" role="status" style="display: none;">
+                        <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddEntry" role="status" style="display: none;">
                             <span class="sr-only">Loading...</span>
                         </div>
                         Add Entry
@@ -106,205 +107,338 @@
             </div>
         </div>
     </div>
-    <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" style="position: absolute; width: 94%; left: 3%;">
-        <strong>Yap!</strong> You added an new Entry.
-        <button type="button" class="close" onclick="closeAlert(this)">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    
+    <div class="modal fade" id="updateEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                    <h6 class="modal-title mt-1" ><i class="fa fa-pencil text-white"></i> Update Entry</h6>
+                    <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                        <h6>x</h6>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <div class="container">
+                        <dl class="row">
+                            <dt class="col-2">Name</dt>
+                            <dd class="col-10">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control form-control-sm" id="Updatemodal_entryName" placeholder="Entry name...">
+                                    <div class="input-group-append btn-group btn-group-sm dropright">
+                                        <button type="button btn-sm" class="btn btn-outline-secondary dropdown-toggle" id="iconSelectedUpdate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-key"></i>
+                                        </button>
+                                        <div class="dropdown-menu" id="dropdownIconsUpdate">
+                                            <h6 class="dropdown-header" >Choose an Icon</h6>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-key' style='color: #ff9900;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-globe' style='color: #00790a;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-terminal' style='color: #000000;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-at' style='color: #ff351b;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-server' style='color: #2e2e2e;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-file' style='color: #949494;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-address-card' style='color: #008cff;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-apple' style='color: #000000;'> </i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-cc-visa' style='color: #0051ff;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-cog' style='color: #00a308;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-comments' style='color: #006eff;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-desktop' style='color: #000000;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-gamepad' style='color: #6b0059;'></i></button>
+                                            <button class="dropdown-item" type="button"><i class='fa fa-heart' style='color: #ff0000;'></i></button>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </dd>
+
+                            <dt class="col-2">Username</dt>
+                            <dd class="col-10"><input type="text" class="form-control form-control-sm" id="Updatemodal_entryUsername" placeholder="Entry Username..."></dd>
+
+                            <dt class="col-2">Password</dt>
+                            <dd class="col-10">
+                                <div class="input-group input-group-sm">
+                                    <input type="password" onkeyup="verifyPasswordUpdate(this.value)" class="form-control " id="Updatemodal_entryPassword" placeholder="Entry Password...">
+                                    <div class="input-group-append" id="button-addon4">
+                                        <button class="btn btn-outline-secondary" type="button" id="eyeChangePassUpdate" onclick="changeVisPassButtonUpdate()"><i class="fa fa-eye-slash"></i></button>
+                                        <button class="btn btn-outline-secondary" type="button" id="gearGeneratePass" onclick="generatePassButtonUpdate()" data-toggle="tooltip" data-placement="right" title="Generate Password"><i class="fa fa-cog" id="i_gearUpdate"></i></button>
+                                    </div>
+                                </div>
+                                <div class="progress mt-1">
+                                    <div class="progress-bar" id="passwordsafeUpdate" role="progressbar" style="width: 0%;" aria-valuemax="100"></div>
+                                </div>
+                            </dd>
+                                    
+                            <dt class="col-2">URL</dt>
+                            <dd class="col-10"><input type="url" class="form-control form-control-sm" id="Updatemodal_entryUrl" placeholder="Entry URL..."></dd>
+
+                            <dt class="col-2">Level</dt>
+                            <dd class="col-10">
+                                <input type="range" class="custom-range form-control-sm" min="0" max="5" id="Updatemodal_entryLevel" placeholder="Entry name...">
+                                <div class="d-flex justify-content-between">
+                                    <span class="">0</span>
+                                    <span class="">1</span>
+                                    <span class="">2</span>
+                                    <span class="">3</span>
+                                    <span class="">4</span>
+                                    <span class="">5</span>
+                                </div>
+                            </dd>
+                            <input type="text" style="display: none;" id="updateRowID">
+                        </dl>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-0">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="UpdateEntry()">
+                        <div class="spinner-border spinner-border-sm" id="spinnerWaiterUpdateEntry" role="status" style="display: none;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        Update Entry
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
-    style="height: 30px;">
-        <div class="container-fluid">
-            <span class="navbar-brand p-0 text-white"><h4>Passafe</h4></span>
-            <ul class="nav navbar-nav mr-auto p-0 nav-just">
-                    <li class="nav-item dropdown p-0 mr-2">
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle p-0 text-white" type="button" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                File
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="fileMenuButton">
-                                <a class="dropdown-item" href="#">New Database</a>
-                                <a class="dropdown-item" href="#">New entry</a>
-                                <a class="dropdown-item" href="#">Open Database</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Master Key</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Lock Workspace</a>
-                                <a class="dropdown-item" href="#">Close</a>
-                            </div>
+
+    <div class="modal animate__animated animate__bounceInUp" id="masterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="contentModalUnlockWorkSpace">
+                <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                    <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key</h6>
+                    <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                        <h6>x</h6>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <div class="form-group">
+                      <label for="passwordKeyMasterUnlock">Master Key</label>
+                      <div class="input-group input-group-sm">
+                        <input type="password" class="form-control" id="passwordKeyMasterUnlock" placeholder="Masterkey..." value="Lamismadesiempreq1w2e3r4!">
+                        <div class="input-group-append" id="button-addon4">
+                            <button class="btn btn-outline-secondary" type="button" id="eyeChangePassUnlock" onclick="changeVisPassButtonUnlock()"><i class="fa fa-eye-slash"></i></button>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown p-0 mr-2">
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle p-0  text-white" type="button" id="editMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Edit
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="editMenuButton">
-                                <a class="dropdown-item" href="#">Copy Username</a>
-                                <a class="dropdown-item" href="#">Copy Password</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Add entry</a>
-                                <a class="dropdown-item" href="#">Edit entry</a>
-                                <a class="dropdown-item" href="#">Delete entry</a>
-                                <a class="dropdown-item" href="#">Duplicate entry</a>
-                            </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-0">
+                    <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="askMasterkeyVerify()" id="showPassMasterKeyButton">
+                        Show Password
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="askMasterkey()" id="askMasterKeyButton">
+                        <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
+                            <span class="sr-only">Loading...</span>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown p-0 mr-2">
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle p-0  text-white" type="button" id="toolsMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Tools
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="toolsMenuButton">
-                                <a class="dropdown-item" href="#">Generate Password</a>
-                                <a class="dropdown-item" href="#">Trigger</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        Verify
+                    </button>
+                </div>
+            </div>
         </div>
-    </nav>
-    <div class="container-fluid" style="height: 95vh;">
-        <div class="row  p-1 position-relative bg-light" style="height: 50px; z-index: 5;">
-            <div class="col">
-                <div class="container-fluid">
-                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
-                        <i class="fa fa-plus text-white"></i>
-                    </button>
-                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
-                        <i class="fa fa-database text-white"></i>
-                    </button>
-                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
-                        <i class="fa fa-server text-white"></i>
-                    </button>
-                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace">
-                        <i class="fa fa-lock text-white"></i>
-                    </button>
-                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key">
-                        <i class="fa fa-key text-white"></i>
-                    </button> 
+    </div>
+    <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
+        <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
+            <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
+            <p class="text-muted">Unlock Workspace</p>
+        </div>
+    </div>
+    <div id="block_workSpace" style="display: none;">
+        <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" style="position: absolute; width: 94%; left: 3%;">
+            <strong>Yap!</strong> You added an new Entry.
+            <button type="button" class="close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
+        style="height: 30px;">
+            <div class="container-fluid">
+                <span class="navbar-brand p-0 text-white"><h4>Passafe</h4></span>
+                <ul class="nav navbar-nav mr-auto p-0 nav-just">
+                        <li class="nav-item dropdown p-0 mr-2">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle p-0 text-white" type="button" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    File
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="fileMenuButton">
+                                    <a class="dropdown-item" href="#">New Database</a>
+                                    <a class="dropdown-item" href="#">New entry</a>
+                                    <a class="dropdown-item" href="#">Open Database</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Master Key</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Lock Workspace</a>
+                                    <a class="dropdown-item" href="#">Close</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown p-0 mr-2">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle p-0  text-white" type="button" id="editMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Edit
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="editMenuButton">
+                                    <a class="dropdown-item" href="#">Copy Username</a>
+                                    <a class="dropdown-item" href="#">Copy Password</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Add entry</a>
+                                    <a class="dropdown-item" href="#">Edit entry</a>
+                                    <a class="dropdown-item" href="#">Delete entry</a>
+                                    <a class="dropdown-item" href="#">Duplicate entry</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown p-0 mr-2">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle p-0  text-white" type="button" id="toolsMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tools
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="toolsMenuButton">
+                                    <a class="dropdown-item" href="#">Generate Password</a>
+                                    <a class="dropdown-item" href="#">Trigger</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+        </nav>
+        <div class="container-fluid" style="height: 95vh;">
+            <div class="row  p-1 position-relative bg-light" style="height: 50px; z-index: 5;">
+                <div class="col">
+                    <div class="container-fluid">
+                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
+                            <i class="fa fa-plus text-white"></i>
+                        </button>
+                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
+                            <i class="fa fa-database text-white"></i>
+                        </button>
+                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
+                            <i class="fa fa-server text-white"></i>
+                        </button>
+                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace" onclick="lockWorkspace()">
+                            <i class="fa fa-lock text-white"></i>
+                        </button>
+                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key">
+                            <i class="fa fa-key text-white"></i>
+                        </button> 
+                        
+                        <div class="form-inline d-inline">
+                            <input class="form-control search-bar mr-0" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn button-actions p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="height: 84%;">
+                <div class="col-2 border-right position-relative" >
+                    <div class="position-absolute blue-left"></div>
+                    <div class="image-back" style="z-index: 0;"></div>
+                    <div class="pt-3" style="z-index: 5;">
+                        <div class="list-group" id="list-tab" role="tablist">
+                            <h4 class="text-white" style="z-index: 6;">Databases</h4>
+                            <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1 active" id="list-home-list" data-toggle="list" onclick="changeDatabase('Social Media')" href="#list-home" role="tab" aria-controls="home">
+                                Social Media
+                                <span class="badge badge-warning badge-pill">14</span>
+                            </a>
+                            <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-profile-list" data-toggle="list" onclick="changeDatabase('Web Pages')" href="#list-profile" role="tab" aria-controls="profile">
+                                Web Pages
+                                <span class="badge badge-warning badge-pill">14</span>
+                            </a>
+                            <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-messages-list" data-toggle="list" onclick="changeDatabase('Important')" href="#list-messages" role="tab" aria-controls="messages">
+                                Important
+                                <span class="badge badge-warning badge-pill">14</span>
+                            </a>
+                            <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-settings-list" data-toggle="list" onclick="changeDatabase('Others')" href="#list-settings" role="tab" aria-controls="settings">
+                                Others
+                                <span class="badge badge-warning badge-pill">14</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-10 px-0 bg-light">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                            <div class="table-responsive border-top-0 ">
+                                <table class="table border-top-0 table-hover table-striped">
+                                    <thead class="bg-primary border-top-0 p-0 text-white">
+                                        <tr>
+                                            <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
+                                            <th>&nbsp;</th>
+                                            <th>Name</th>
+                                            <th>User</th>
+                                            <th>Password</th>
+                                            <th>URL</th>
+                                            <th class="text-center">Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="socialmediatable" class="">
+
+                                    </tbody>
+                                </table>
+                            </div>   
+                        </div>
+                        <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                            <div class="table-responsive border-top-0 " >
+                                <table class="table border-top-0 table-hover table-striped">
+                                    <thead class="bg-primary border-top-0 p-0 text-white">
+                                        <tr>
+                                            <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
+                                            <th>Name</th>
+                                            <th>User</th>
+                                            <th>Password</th>
+                                            <th>URL</th>
+                                            <th>Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="webPagestable">
+
+                                    </tbody>
+                                </table>
+                            </div>    
+                        </div>
+                        <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                            <div class="table-responsive border-top-0 " >
+                                <table class="table border-top-0 table-hover table-striped">
+                                    <thead class="bg-primary border-top-0 p-0 text-white">
+                                        <tr>
+                                            <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
+                                            <th>Name</th>
+                                            <th>User</th>
+                                            <th>Password</th>
+                                            <th>URL</th>
+                                            <th>Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="importanttable">
+
+                                    </tbody>
+                                </table>
+                            </div>    
+                        </div>
+                        <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+                            <div class="table-responsive border-top-0 " >
+                                <table class="table border-top-0 table-hover table-striped">
+                                    <thead class="bg-primary border-top-0 p-0 text-white">
+                                        <tr>
+                                            <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
+                                            <th>Name</th>
+                                            <th>User</th>
+                                            <th>Password</th>
+                                            <th>URL</th>
+                                            <th>Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="otherstable">
+
+                                    </tbody>
+                                </table>
+                            </div>    
+                        </div>
+                    </div>
                     
-                    <div class="form-inline d-inline">
-                        <input class="form-control search-bar mr-0" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn button-actions p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
-                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row" style="height: 84%;">
-            <div class="col-2 border-right position-relative" >
-                <div class="position-absolute blue-left"></div>
-                <div class="image-back" style="z-index: 0;"></div>
-                <div class="pt-3" style="z-index: 5;">
-                    <div class="list-group" id="list-tab" role="tablist">
-                        <h4 class="text-white" style="z-index: 6;">Databases</h4>
-                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1 active" id="list-home-list" data-toggle="list" onclick="changeDatabase('Social Media')" href="#list-home" role="tab" aria-controls="home">
-                            Social Media
-                            <span class="badge badge-warning badge-pill">14</span>
-                        </a>
-                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-profile-list" data-toggle="list" onclick="changeDatabase('Web Pages')" href="#list-profile" role="tab" aria-controls="profile">
-                            Web Pages
-                            <span class="badge badge-warning badge-pill">14</span>
-                        </a>
-                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-messages-list" data-toggle="list" onclick="changeDatabase('Important')" href="#list-messages" role="tab" aria-controls="messages">
-                            Important
-                            <span class="badge badge-warning badge-pill">14</span>
-                        </a>
-                        <a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center bg-white border-0 rounded mt-3 p-1" id="list-settings-list" data-toggle="list" onclick="changeDatabase('Others')" href="#list-settings" role="tab" aria-controls="settings">
-                            Others
-                            <span class="badge badge-warning badge-pill">14</span>
-                        </a>
-                    </div>
+            <div class="row position-relative bg-primary" style="height: 70px;">
+                <div class="col" style="z-index: 5;">
+                    <p id="entryInfo" class="text-white"></p>
                 </div>
+                <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
+                <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
             </div>
-            <div class="col-10 px-0 bg-light">
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                        <div class="table-responsive border-top-0 ">
-                            <table class="table border-top-0 table-hover table-striped">
-                                <thead class="bg-primary border-top-0 p-0 text-white">
-                                    <tr>
-                                        <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
-                                        <th>Name</th>
-                                        <th>User</th>
-                                        <th>Password</th>
-                                        <th>URL</th>
-                                        <th>Level</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="socialmediatable" >
-
-                                </tbody>
-                            </table>
-                        </div>   
-                    </div>
-                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-                        <div class="table-responsive border-top-0 " >
-                            <table class="table border-top-0 table-hover table-striped">
-                                <thead class="bg-primary border-top-0 p-0 text-white">
-                                    <tr>
-                                        <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
-                                        <th>Name</th>
-                                        <th>User</th>
-                                        <th>Password</th>
-                                        <th>URL</th>
-                                        <th>Level</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="webPagestable">
-
-                                </tbody>
-                            </table>
-                        </div>    
-                    </div>
-                    <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-                        <div class="table-responsive border-top-0 " >
-                            <table class="table border-top-0 table-hover table-striped">
-                                <thead class="bg-primary border-top-0 p-0 text-white">
-                                    <tr>
-                                        <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
-                                        <th>Name</th>
-                                        <th>User</th>
-                                        <th>Password</th>
-                                        <th>URL</th>
-                                        <th>Level</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="importanttable">
-
-                                </tbody>
-                            </table>
-                        </div>    
-                    </div>
-                    <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
-                        <div class="table-responsive border-top-0 " >
-                            <table class="table border-top-0 table-hover table-striped">
-                                <thead class="bg-primary border-top-0 p-0 text-white">
-                                    <tr>
-                                        <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
-                                        <th>Name</th>
-                                        <th>User</th>
-                                        <th>Password</th>
-                                        <th>URL</th>
-                                        <th>Level</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="otherstable">
-
-                                </tbody>
-                            </table>
-                        </div>    
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        <div class="row position-relative bg-primary" style="height: 70px;">
-            <div class="col" style="z-index: 5;">
-                <p id="entryInfo" class="text-white"></p>
-            </div>
-            <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
-            <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
         </div>
     </div>
     <script src="node_modules/clipboard/dist/clipboard.min.js"></script>
