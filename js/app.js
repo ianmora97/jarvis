@@ -9,10 +9,32 @@ function eventsOnLoad(event) {
     openBlockLogin();
     typeEntertoUnlock();
     tryAgain();
+    popoverGenPass();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
 }
+function popoverGenPass() {
+    $("#gearGeneratePass").popover({
+        html: true,
+        sanitize: false,
+        content: function() {
+              return $('#popover-content-genpass').html();
+        }
+    });
+
+    $("#gearGeneratePass").on("shown.bs.popover",function(){
+        $(".popover-content input").on("change",function(){
+            if(this.checked){
+                this.setAttribute("checked","checked");
+            }else{
+                this.removeAttribute("checked");
+            }
+            $("#gearGeneratePass").html($(".popover-content").html());
+        });
+    });  
+}
+
 function openBlockLogin() {
     $('#masterKey').modal('show'); 
 }
@@ -261,8 +283,8 @@ function rangeLevelNumber(val) {
 }
 var lastPasswordEntry;
 function verifyPassword(val) {
-    let v = Math.ceil(val.length / 25 * 100);
-    if(val.length > 25){
+    let v = Math.ceil(val.length / 30 * 100);
+    if(val.length > 30){
         $("#modal_entryPassword").val(lastPasswordEntry);
     }else{
         lastPasswordEntry = val;
@@ -310,19 +332,30 @@ function changeVisPassButton() {
 function generatePassButton() {
     $("#i_gear").addClass('fa-spin');
 
-    var chars = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+<>ABCDEFGHIJKLMNOP1234567890";
-    var  pass = "";
-    for (var x = 0; x < 25; x++) {
-        var i = Math.floor(Math.random() * chars.length);
-        pass += chars.charAt(i);
-    }
+    let v1 = "abcdefghijklmnopqrstuvwxyz";
+    let v2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let v3 = "1234567890";
+    let v4 = "!@#$%^&*()+<>";   
+
+    let lower = $('.popover #lowercaseCheck')[0].checked;
+    let upper = $('.popover #uppercaseCheck')[0].checked;
+    let number = $('.popover #numbersCheck')[0].checked;
+    let chars = $('.popover #charactersCheck')[0].checked;     
+    setTimeout(() => {
+        let vec = [];
+        lower && vec.push(v1);
+        upper && vec.push(v2);
+        number && vec.push(v3);
+        chars && vec.push(v4);
     
-    setTimeout(()=>{
-        $("#modal_entryPassword").val(pass);
-        verifyPassword(pass);
-        $("#i_gear").removeClass('fa-spin');
-    },1000);
-    
+        generatePassword(vec).then((pass)=>{
+            setTimeout(()=>{
+                $("#modal_entryPassword").val(pass);
+                verifyPassword(pass);
+                $("#i_gear").removeClass('fa-spin');
+            },1000);
+        });
+    }, 1000);
 }
 
 function getIconSelected() {
@@ -351,6 +384,7 @@ function changeVisPassButtonUpdate() {
     $("#Updatemodal_entryPassword").html();
 }
 function generatePassButtonUpdate() {
+    
     $("#i_gearUpdate").addClass('fa-spin');
 
     var chars = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+<>ABCDEFGHIJKLMNOP1234567890";
@@ -377,8 +411,8 @@ function getIconSelectedUpdate() {
 
 var lastPasswordEntryUpdate;
 function verifyPasswordUpdate(val) {
-    let v = Math.ceil(val.length / 25 * 100);
-    if(val.length > 25){
+    let v = Math.ceil(val.length / 30 * 100);
+    if(val.length > 30){
         $("#Updatemodal_entryPassword").val(lastPasswordEntryUpdate);
     }else{
         lastPasswordEntryUpdate = val;
