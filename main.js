@@ -1,12 +1,11 @@
 const {app, BrowserWindow, systemPreferences, Tray, shell } = require('electron');
-
+const path = require('path')
 function createWindow() {
     const win = new BrowserWindow({
         width: 1500,
         height: 800,
         show: false,
         resizable: false,
-        icon: 'images/icon.png',
         webPreferences:{
             nodeIntegration: true
         }
@@ -15,10 +14,17 @@ function createWindow() {
         win.show()
     })
     // win.removeMenu();
-    win.loadFile("index.html");
+    win.loadFile(path.join(__dirname,"index.html"));
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(()=>{
+    createWindow();
+    app.on('activate',()=>{
+        if(BrowserWindow.getAllWindows().length === 0){
+            createWindow();
+        }
+    });    
+});
 
 app.on('window-all-closed',()=>{
     if(process.platform !== 'darwin'){
@@ -26,8 +32,3 @@ app.on('window-all-closed',()=>{
     }
 });
 
-app.on('activate',()=>{
-    if(BrowserWindow.getAllWindows().length === 0){
-        createWindow();
-    }
-});

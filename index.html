@@ -299,26 +299,31 @@
         <div class="container-fluid" style="height: 95vh;">
             <div class="row  p-1 position-relative bg-light" style="height: 50px; z-index: 5;">
                 <div class="col">
-                    <div class="container-fluid">
-                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
-                            <i class="fa fa-plus text-white"></i>
-                        </button>
-                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
-                            <i class="fa fa-database text-white"></i>
-                        </button>
-                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
-                            <i class="fa fa-server text-white"></i>
-                        </button>
-                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace" onclick="lockWorkspace()">
-                            <i class="fa fa-lock text-white"></i>
-                        </button>
-                        <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key">
-                            <i class="fa fa-key text-white"></i>
-                        </button> 
-                        
-                        <div class="form-inline d-inline">
-                            <input class="form-control search-bar mr-0" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn button-actions p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
+                    <div class="container-fluid px-0">
+                        <div class="row justify-content-between">
+                            <div class="col-6 d-flex align-items-center">
+                                <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
+                                <i class="fa fa-plus text-white"></i>
+                                </button>
+                                <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
+                                    <i class="fa fa-database text-white"></i>
+                                </button>
+                                <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
+                                    <i class="fa fa-server text-white"></i>
+                                </button>
+                                <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace" onclick="lockWorkspace()">
+                                    <i class="fa fa-lock text-white"></i>
+                                </button>
+                                <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key">
+                                    <i class="fa fa-key text-white"></i>
+                                </button>
+                            </div>
+                            <div class="col-6 d-flex justify-content-end">
+                                <div class="form-inline d-inline w-50 d-flex justify-content-end">
+                                    <input class="form-control search-bar mr-0 w-75" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn button-actions-search p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -472,8 +477,8 @@
             <a type="button" class="btn btn-danger btn-sm py-0 btn-block mx-auto" onclick="generatePassButton()" >Gen Password</a>
         </div>
     </div>
-    <script src="node_modules/clipboard/dist/clipboard.min.js"></script>
     <script src="js/db.js"></script>
+    <script src="js/clipboard.min.js"></script>
     
 	<script src="js/wavify.js"></script>
 	<script src="js/crypto.js"></script>
