@@ -14,6 +14,20 @@ function eventsOnLoad(event) {
         $('[data-toggle="tooltip"]').tooltip()
     })
 }
+
+function checkCheckedEdit() {
+    $("#edit_copyUser").click(function () {
+        let Options = $("[id*=marcar_]");
+
+        for (let i = 0; i < Options.length; i++) {
+            if (Options[i].checked) {
+                //CopiarUsuario
+            }
+        }
+    });
+}
+
+
 function popoverGenPass() {
     $("#gearGeneratePass").popover({
         html: true,
@@ -21,7 +35,7 @@ function popoverGenPass() {
         content: function() {
               return $('#popover-content-genpass').html();
         }
-    });
+    });id='id_"+row.rowid+"'
 
     $("#gearGeneratePass").on("shown.bs.popover",function(){
         $(".popover-content input").on("change",function(){

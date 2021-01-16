@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" ></script>
+    <script src="js/jq-bs-bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js" ></script>
     <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js" ></script>
     <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js" ></script>
@@ -272,8 +271,8 @@
                                     Edit
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="editMenuButton">
-                                    <a class="dropdown-item" href="#">Copy Username</a>
-                                    <a class="dropdown-item" href="#">Copy Password</a>
+                                    <a class="dropdown-item" href="#" id="edit_copyUser">Copy Username</a>
+                                    <a class="dropdown-item" href="#" id="edit_copyPass">Copy Password</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Add entry</a>
                                     <a class="dropdown-item" href="#">Edit entry</a>
@@ -361,7 +360,7 @@
                                 <table class="table border-top-0 table-hover table-striped">
                                     <thead class="bg-primary border-top-0 p-0 text-white">
                                         <tr>
-                                            <th><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></th>
+                                            <th><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
                                             <th>&nbsp;</th>
                                             <th>Name</th>
                                             <th>User</th>

@@ -22,8 +22,7 @@ gulp.task('animate', function() {
 gulp.task('js', function() {
     return gulp.src([
             'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/popper.js/dist/popper.min.js',
-            'node_modules/bootstrap/dist/js/bootstrap.min.js'
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
         ])
         .pipe(concat('jq-bs-bundle.js'))
         .pipe(gulp.dest('js'));

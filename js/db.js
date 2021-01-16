@@ -42,7 +42,7 @@ function getPasswords() {
             if(row.level == 5){
                 $("#socialmediatable").append(
                     "<tr id='id_"+row.rowid+"'>" +
-                        '<td><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></td>' +
+                        '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar"></td>' +
                         '<td>*******</td>' +
                         '<td>*******</td>' +
                         '<td>*******</td>' +
@@ -56,7 +56,7 @@ function getPasswords() {
             else{
                 $("#socialmediatable").append(
                     "<tr >" +
-                        '<td><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></td>' +
+                        '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.rowid+'"></td>' +
                         "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fa fa-pencil'></i></td>" +
                         "<td>" +
                         row.icon +
