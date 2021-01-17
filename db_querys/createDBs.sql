@@ -1,26 +1,34 @@
--- run this query if the database got corrupted
+-- run this query if the database get corrupted
 
+
+--Create table Passwords
 CREATE TABLE IF NOT EXISTS passwords (
-   name TEXT,
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   db INTEGER NOT NULL,
+   name TEXT NOT NULL,
    username TEXT NOT NULL,
    password TEXT NOT NULL,
    url TEXT NOT NULL,
-   level INTEGER,
-   icon TEXT,
-   database TEXT NOT NULL
+   level INTEGER DEFAULT 0,
+   icon TEXT
 );
 
-CREATE TABLE IF NOT EXISTS dabatases (
-   id INTEGER,
+--Create table databases
+CREATE TABLE IF NOT EXISTS databases (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
    name TEXT,
-   username TEXT NOT NULL,
-   password TEXT NOT NULL,
-   level INTEGER
+   nameid TEXT,
 );
 
+--Create table masterkey
 CREATE TABLE IF NOT EXISTS masterkey (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
    name TEXT,
-   username TEXT NOT NULL,
-   level INTEGER
+   password TEXT NOT NULL
 );
 
+--query testings
+SELECT db, COUNT(*) as cant FROM passwords GROUP BY db;
+
+
+SELECT db, COUNT(*) as cant FROM passwords INNER JOIN databases ON passwords.db = databases.name GROUP BY db;
