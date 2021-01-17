@@ -1,6 +1,6 @@
 # Passafe
 
-
+Password Management application with Electron Js.
 Safe your passwords encrypted with Passafe.
 
 
