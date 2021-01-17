@@ -35,7 +35,7 @@ function popoverGenPass() {
         content: function() {
               return $('#popover-content-genpass').html();
         }
-    });id='id_"+row.rowid+"'
+    });
 
     $("#gearGeneratePass").on("shown.bs.popover",function(){
         $(".popover-content input").on("change",function(){
@@ -94,7 +94,6 @@ function fillEntryInfoButton(name,user,url,level) {
 }
 /*
     !Master Key Workspace
-    *keyDecryptForAllPasswords1234! key for encrypt master
 */
 
 
@@ -170,13 +169,15 @@ function unlockWorkspace() {
     }, 1000);
     $('#spinnerWaiterMasterKey').show();
     getPasswords();
-    
+    getDatabases();
     $('#masterKey').removeClass('animate__animated animate__bounceInUp');
     $('#masterKey').addClass('animate__animated animate__bounceOutDown');
     setTimeout(() => {
         $('#masterKey').removeClass('animate__animated animate__bounceOutDown');
-        $('#masterKey').modal('hide');
         $('#spinnerWaiterMasterKey').hide();
+        $('#masterKey').modal('hide');
+        $("#modal_entryPassword").val('');
+
     }, 700);
 }
 /*
@@ -196,7 +197,7 @@ async function getInfo_addEntry() {
     level = parseInt($("#modal_entryLevel").val());
     icon = $("#iconSelected").html();
     icon = icon.replace(/\"/g, "\'");
-    database = $("#modal_EntryDatabase").val();
+    database = $( "#databases_addentry option:selected" ).text();
     setTimeout(() => {
         $('#spinnerWaiterAddEntry').hide();
         $('#addEntryModal').modal('hide');
@@ -204,11 +205,18 @@ async function getInfo_addEntry() {
     }, 600);
     setTimeout(() => {
         $('#close_addNewEntryAlert').removeClass('show');
+        cleanInputs();
     }, 2000);
-
     return [name,username,password,url,level,icon,database];
 }
-
+function cleanInputs() {
+    $("#modal_entryName").val('');
+    $("#modal_entryUsername").val('');
+    $("#modal_entryPassword").val('');
+    $("#modal_entryUrl").val('');
+    $("#modal_entryLevel").val('');
+    $("#iconSelected").html('<i class="fa fa-key"></i>');
+}
 async function getInfo_Updatentry() {
     $('#spinnerWaiterUpdateEntry').show();
     let name,username,password,url,level,icon,database;
