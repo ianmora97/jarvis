@@ -168,6 +168,7 @@ function unlockWorkspace() {
         $('#block_workSpace').removeClass('animate__animated animate__backInUp');
     }, 1000);
     $('#spinnerWaiterMasterKey').show();
+    
     getPasswords();
     getDatabases();
     $('#masterKey').removeClass('animate__animated animate__bounceInUp');

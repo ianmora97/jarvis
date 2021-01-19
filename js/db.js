@@ -32,12 +32,12 @@ function writeDatasonRows(r) {
 */
 var z_passwords_All = [];
 function getPasswords() {
+    cleanDatabasesTables();
     z_passwords_All = [];
     db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords", [], (err, rows) => {
         if (err) {
             throw err;
         }
-        
         rows.forEach((row) => {
             let database = '#'+row.db.replace(/ /g, "_")+'_Table';
             z_passwords_All.push(row);
