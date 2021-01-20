@@ -2,6 +2,9 @@ td, th {
   font-size: 0.8rem;
   padding: 4px 8px !important; }
 
+.emoji {
+  font-family: 'EmojiOneColor'; }
+
 .wave {
   position: absolute;
   left: 0;

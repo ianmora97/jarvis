@@ -1,4 +1,5 @@
-var z_masterkey = "1234";
+var z_masterkey = "";
+var z_checkMasterkeyExists;
 var clipboard = new ClipboardJS('.btn-to-clip');
 
 function eventsOnLoad(event) {
@@ -6,7 +7,7 @@ function eventsOnLoad(event) {
     openModalEdit();
     getIconSelected();
     getIconSelectedUpdate();
-    openBlockLogin();
+    checkLoginInit();
     typeEntertoUnlock();
     tryAgain();
     popoverGenPass();
@@ -49,8 +50,18 @@ function popoverGenPass() {
     });  
 }
 
-function openBlockLogin() {
-    $('#masterKey').modal('show'); 
+function checkLoginInit() {
+    db.all("SELECT COUNT(*) as cnt FROM masterkey where name = 'main'", [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        z_checkMasterkeyExists = rows[0].cnt == 1;
+        if(z_checkMasterkeyExists){
+            $('#masterKey').modal('show');
+        }else{
+            $('#addMasterKey').modal('show');
+        }
+    });
 }
 function closeAlert(e) {
     $('#close_addNewEntryAlert').removeClass('show');
@@ -122,6 +133,20 @@ function changeVisPassButtonUnlock() {
     }
     $("#passwordKeyMasterUnlock").html();
 }
+function changeVisPassButtonAddMasterkey() {
+    let type = $("#passwordKeyMasterAddMasterKey").attr('type');
+    if(type == 'password'){
+        $("#passwordKeyMasterAddMasterKey").attr('type','text');
+        $("#eyeChangePassAddMasterkey").html('');
+        $("#eyeChangePassAddMasterkey").html('<i class="fa fa-eye"></i>');
+    }
+    else{
+        $("#passwordKeyMasterAddMasterKey").attr('type','password');
+        $("#eyeChangePassAddMasterkey").html('');
+        $("#eyeChangePassAddMasterkey").html('<i class="fa fa-eye-slash">');
+    }
+    $("#passwordKeyMasterAddMasterKey").html();
+}
 function tryAgain() {
     $('#passwordKeyMasterUnlock').on('keyup',function (event){
         $("#passwordKeyMasterUnlock").removeClass('is-invalid');
@@ -135,6 +160,11 @@ function failtoUnlock() {
         $('#spinnerWaiterMasterKey').hide();
     }, 1000);
 }
+
+async function getinfo_addMasterkey(){
+    return $('#passwordKeyMasterAddMasterKey').val();
+}
+
 function lockWorkspace() {
     $('#block_workSpace').addClass('animate__animated animate__backOutDown');
     
@@ -152,7 +182,7 @@ function lockWorkspace() {
     }, 600);
 }
 function unlockWorkspace() {
-
+    
     $('#block_workSpace').addClass('animate__animated animate__backInUp');
 
     $('#blankButtonScreen').addClass('animate__animated animate__backOutUp');
@@ -173,6 +203,8 @@ function unlockWorkspace() {
     getDatabases();
     $('#masterKey').removeClass('animate__animated animate__bounceInUp');
     $('#masterKey').addClass('animate__animated animate__bounceOutDown');
+
+    $('#addMasterKey').removeClass('animate__animated animate__bounceInUp');
     setTimeout(() => {
         $('#masterKey').removeClass('animate__animated animate__bounceOutDown');
         $('#spinnerWaiterMasterKey').hide();
@@ -207,13 +239,14 @@ async function getInfo_addEntry() {
     setTimeout(() => {
         $('#close_addNewEntryAlert').removeClass('show');
         cleanInputs();
-    }, 2000);
+    }, 3000);
     return [name,username,password,url,level,icon,database];
 }
 function cleanInputs() {
     $("#modal_entryName").val('');
     $("#modal_entryUsername").val('');
     $("#modal_entryPassword").val('');
+    $("#passwordsafe").css('width',0);
     $("#modal_entryUrl").val('');
     $("#modal_entryLevel").val('');
     $("#iconSelected").html('<i class="fa fa-key"></i>');
