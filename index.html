@@ -235,6 +235,38 @@
                 </div>
             </div>
         </div>
+        <div class="modal animate__animated animate__bounceInUp" id="addMasterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpace">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key Config</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                        <label for="passwordKeyMasterUnlock">Add Master Key</label>
+                        <div class="input-group input-group-sm">
+                            <input type="password" class="form-control" id="passwordKeyMasterAddMasterKey" placeholder="Masterkey..." value="">
+                            <div class="input-group-append" id="button-addon4">
+                                <button class="btn btn-outline-secondary" type="button" id="eyeChangePassAddMasterkey" onclick="changeVisPassButtonAddMasterkey()"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                            <span class="text-muted">We ask you this Master Key every time you sign in, you can not forget this password.</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Add Masterkey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -242,11 +274,12 @@
             </div>
         </div>
         <div id="block_workSpace" style="display: none;">
-            <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" style="position: absolute; width: 94%; left: 3%;">
-                <strong>Yap!</strong> You added an new Entry.
-                <button type="button" class="close" onclick="closeAlert(this)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You added a new Entry.
+                </div>
             </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
             style="height: 30px;">

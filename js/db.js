@@ -33,6 +33,7 @@ function writeDatasonRows(r) {
 var z_passwords_All = [];
 function getPasswords() {
     cleanDatabasesTables();
+    fillDatabases();
     z_passwords_All = [];
     db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords", [], (err, rows) => {
         if (err) {
@@ -103,6 +104,21 @@ function addEntry() {
         );
     });
 }
+function safeMasterkey() {
+    getinfo_addMasterkey().then((arr) => {
+        let pass = encrypt(arr,process.env.APP_KEY);
+        db.run(
+            "INSERT INTO masterkey(name,password) VALUES('main',?)",
+            [pass],
+            (err) => {
+                if (err) {
+                    console.log(err.message);
+                }
+                console.log('Inserted:',arr);
+            }
+        );
+    });
+}
 function UpdateEntry() {
     getInfo_Updatentry().then((arr) => {
         db.run(
@@ -139,7 +155,7 @@ function cleanDatabasesTables() {
         if (err) {
             throw err;
         }
-        $("#databases_addentry").html('');
+
         rows.forEach((row) => {
             $("#"+row.nameid+"_Table").html('');
         });
@@ -147,6 +163,7 @@ function cleanDatabasesTables() {
 }
 function fillDatabases() {
     $("#list_databases").html('');
+    $("#nav-tabContent").html('');
     db.all("SELECT db, COUNT(*) as cant, nameid FROM passwords INNER JOIN databases ON passwords.db = databases.name GROUP BY db", [], (err_2, r) => {
         if (err_2) {
             throw err_2;
@@ -225,6 +242,7 @@ function askMasterkey() {
             }
             rows.forEach((row) => {
                 if(decrypt(row.password,process.env.APP_KEY) == pass){
+                    z_masterkey = pass;
                     unlockWorkspace();
                 }else{
                     failtoUnlock();
@@ -247,5 +265,14 @@ function askMasterkeyVerify() {
                 }
             });
         });
+    });
+}
+async function isMasterKey() {
+    db.all("SELECT COUNT(*) as cnt FROM masterkey where name = 'main'", [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        z_checkMasterkeyExists = rows[0].cnt == 1;
+        
     });
 }
