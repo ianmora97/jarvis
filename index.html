@@ -252,7 +252,39 @@
                             <div class="input-group-append" id="button-addon4">
                                 <button class="btn btn-outline-secondary" type="button" id="eyeChangePassAddMasterkey" onclick="changeVisPassButtonAddMasterkey()"><i class="fa fa-eye-slash"></i></button>
                             </div>
-                            <span class="text-muted">We ask you this Master Key every time you sign in, you can not forget this password.</span>
+                            <small class="text-muted">We ask you this Master Key every time you sign in, you can not forget this password.</small>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Add Masterkey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal animate__animated animate__bounceInUp" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpace">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key Config</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                        <label for="passwordKeyMasterUnlock">Add Master Key</label>
+                        <div class="input-group input-group-sm">
+                            <input type="password" class="form-control" id="passwordKeyMasterAddMasterKey" placeholder="Masterkey..." value="">
+                            <div class="input-group-append" id="button-addon4">
+                                <button class="btn btn-outline-secondary" type="button" id="eyeChangePassAddMasterkey" onclick="changeVisPassButtonAddMasterkey()"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                            <small class="text-muted">We ask you this Master Key every time you sign in, you can not forget this password.</small>
                         </div>
                         </div>
                     </div>
