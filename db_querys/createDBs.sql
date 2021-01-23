@@ -32,3 +32,6 @@ SELECT db, COUNT(*) as cant FROM passwords GROUP BY db;
 
 
 SELECT db, COUNT(*) as cant FROM passwords INNER JOIN databases ON passwords.db = databases.name GROUP BY db;
+
+
+SELECT databases.name as db, COUNT(passwords.db) as cant, nameid FROM databases LEFT JOIN passwords ON passwords.db = databases.name GROUP BY databases.name ORDER BY cant DESC, db ASC;

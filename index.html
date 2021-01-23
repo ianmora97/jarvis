@@ -235,7 +235,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal animate__animated animate__bounceInUp" id="addMasterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+        <div class="modal animate__animated animate__bounceInUp" id="addMasterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyAddLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" id="contentModalUnlockWorkSpace">
                     <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
@@ -258,7 +258,7 @@
                     </div>
                     <div class="modal-footer bg-light py-0">
                         <button type="button" class="btn btn-primary btn-sm" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiteraddMasterKey" role="status" style="display: none;">
                                 <span class="sr-only">Loading...</span>
                             </div>
                             Add Masterkey
@@ -267,33 +267,28 @@
                 </div>
             </div>
         </div>
-        <div class="modal animate__animated animate__bounceInUp" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+        <div class="modal fade" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addDatabaseLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" id="contentModalUnlockWorkSpace">
                     <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key Config</h6>
+                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Add database</h6>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group">
-                        <label for="passwordKeyMasterUnlock">Add Master Key</label>
-                        <div class="input-group input-group-sm">
-                            <input type="password" class="form-control" id="passwordKeyMasterAddMasterKey" placeholder="Masterkey..." value="">
-                            <div class="input-group-append" id="button-addon4">
-                                <button class="btn btn-outline-secondary" type="button" id="eyeChangePassAddMasterkey" onclick="changeVisPassButtonAddMasterkey()"><i class="fa fa-eye-slash"></i></button>
-                            </div>
-                            <small class="text-muted">We ask you this Master Key every time you sign in, you can not forget this password.</small>
-                        </div>
+                            <label for="passwordKeyMasterUnlock">Database name</label>
+                            <input type="text" class="form-control form-control-sm" id="addDatabaseNameinput" placeholder="Name..." value="">
+                            <small class="text-muted">This database will keep all the passwords of this category.</small>
                         </div>
                     </div>
                     <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addDatabase()" id="buttonAdddatabaseModal">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddDatabase" role="status" style="display: none;">
                                 <span class="sr-only">Loading...</span>
                             </div>
-                            Add Masterkey
+                            Add Database
                         </button>
                     </div>
                 </div>
@@ -311,6 +306,13 @@
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
                     <strong>Yey!</strong> You added a new Entry.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_addNewDatabase" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You added a new database.
                 </div>
             </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
@@ -374,12 +376,14 @@
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
                                     <i class="fa fa-plus text-white"></i>
                                     </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database" onclick="openModaladddatabase()">
                                         <i class="fa fa-database text-white"></i>
                                     </button>
+                                    <!-- 
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
                                         <i class="fa fa-server text-white"></i>
-                                    </button>
+                                    </button> 
+                                    -->
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace" onclick="lockWorkspace()">
                                         <i class="fa fa-lock text-white"></i>
                                     </button>
@@ -456,7 +460,8 @@
         </div>
         <script src="js/db.js"></script>
         <script src="js/clipboard.min.js"></script>
-        
+        <script src="js/ui.js"></script>
+        <script src="js/modals.js"></script>
         <script src="js/wavify.js"></script>
         <script src="js/crypto.js"></script>
         <script src="js/genpass.js"></script>
