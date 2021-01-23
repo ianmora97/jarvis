@@ -104,6 +104,22 @@ function addEntry() {
         );
     });
 }
+function addDatabase() {
+    getInfo_addDatabase().then((arr) => {
+        console.log(arr);
+        db.run(
+            "INSERT INTO databases(name,nameid) VALUES(?,?)",
+            arr,
+            (err) => {
+                if (err) {
+                    console.log(err.message);
+                }
+                cleanDatabasesTables();
+                getPasswords();
+            }
+        );
+    });
+}
 function safeMasterkey() {
     getinfo_addMasterkey().then((arr) => {
         let pass = encrypt(arr,process.env.APP_KEY);
@@ -114,7 +130,8 @@ function safeMasterkey() {
                 if (err) {
                     console.log(err.message);
                 }
-                console.log('Inserted:',arr);
+                z_masterkey = arr;
+                unlockAfterAddMasterkey();
             }
         );
     });
@@ -164,7 +181,7 @@ function cleanDatabasesTables() {
 function fillDatabases() {
     $("#list_databases").html('');
     $("#nav-tabContent").html('');
-    db.all("SELECT db, COUNT(*) as cant, nameid FROM passwords INNER JOIN databases ON passwords.db = databases.name GROUP BY db", [], (err_2, r) => {
+    db.all("SELECT databases.name as db, COUNT(passwords.db) as cant, nameid FROM databases LEFT JOIN passwords ON passwords.db = databases.name GROUP BY databases.name ORDER BY cant DESC, db ASC", [], (err_2, r) => {
         if (err_2) {
             throw err_2;
         }

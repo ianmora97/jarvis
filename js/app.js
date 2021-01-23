@@ -28,28 +28,6 @@ function checkCheckedEdit() {
     });
 }
 
-
-function popoverGenPass() {
-    $("#gearGeneratePass").popover({
-        html: true,
-        sanitize: false,
-        content: function() {
-              return $('#popover-content-genpass').html();
-        }
-    });
-
-    $("#gearGeneratePass").on("shown.bs.popover",function(){
-        $(".popover-content input").on("change",function(){
-            if(this.checked){
-                this.setAttribute("checked","checked");
-            }else{
-                this.removeAttribute("checked");
-            }
-            $("#gearGeneratePass").html($(".popover-content").html());
-        });
-    });  
-}
-
 function checkLoginInit() {
     db.all("SELECT COUNT(*) as cnt FROM masterkey where name = 'main'", [], (err, rows) => {
         if (err) {
@@ -63,50 +41,14 @@ function checkLoginInit() {
         }
     });
 }
-function closeAlert(e) {
-    $('#close_addNewEntryAlert').removeClass('show');
+function openModaladddatabase() {
+    $('#addDatabase').modal('show');
 }
 
-function openModalEntry() {
-    $('#addentrybutton').on('click',()=>{
-        $('#addEntryModal').modal('show');   
-    });
-}
 
-function openModalEdit() { // !modal for update a password
-    $('#updateEntryModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-
-        let id = button.data('id') 
-        let name = button.data('name') 
-        let username = button.data('username') 
-        let password = button.data('password') 
-        let url = button.data('url') 
-        let level = button.data('level') 
-        let icon = button.data('icon')
-
-        $('#updateRowID').val(id)
-        $('#Updatemodal_entryName').val(name)
-        $('#Updatemodal_entryUsername').val(username)
-        $('#Updatemodal_entryPassword').val(decrypt(password,z_masterkey))
-        verifyPasswordUpdate(decrypt(password,z_masterkey));
-        $('#Updatemodal_entryUrl').val(url)
-        $('#Updatemodal_entryLevel').val(level)
-        $('#iconSelectedUpdate').html('')
-        $('#iconSelectedUpdate').html(icon)
-      })
-}
-
-function changeDatabase(db) {
-    $("#modal_EntryDatabase").val(db);
-}
 function fillEntryInfoButton(name,user,url,level) {
     $('#entryInfo').append(name);
 }
-/*
-    !Master Key Workspace
-*/
-
 
 function typeEntertoUnlock() {
     $('#passwordKeyMasterUnlock').on('keyup',function (event){
@@ -119,167 +61,11 @@ function typeEntertoUnlock() {
 async function getMasterkey() {
     return $('#passwordKeyMasterUnlock').val();
 }
-function changeVisPassButtonUnlock() {
-    let type = $("#passwordKeyMasterUnlock").attr('type');
-    if(type == 'password'){
-        $("#passwordKeyMasterUnlock").attr('type','text');
-        $("#eyeChangePassUnlock").html('');
-        $("#eyeChangePassUnlock").html('<i class="fa fa-eye"></i>');
-    }
-    else{
-        $("#passwordKeyMasterUnlock").attr('type','password');
-        $("#eyeChangePassUnlock").html('');
-        $("#eyeChangePassUnlock").html('<i class="fa fa-eye-slash">');
-    }
-    $("#passwordKeyMasterUnlock").html();
-}
-function changeVisPassButtonAddMasterkey() {
-    let type = $("#passwordKeyMasterAddMasterKey").attr('type');
-    if(type == 'password'){
-        $("#passwordKeyMasterAddMasterKey").attr('type','text');
-        $("#eyeChangePassAddMasterkey").html('');
-        $("#eyeChangePassAddMasterkey").html('<i class="fa fa-eye"></i>');
-    }
-    else{
-        $("#passwordKeyMasterAddMasterKey").attr('type','password');
-        $("#eyeChangePassAddMasterkey").html('');
-        $("#eyeChangePassAddMasterkey").html('<i class="fa fa-eye-slash">');
-    }
-    $("#passwordKeyMasterAddMasterKey").html();
-}
-function tryAgain() {
-    $('#passwordKeyMasterUnlock').on('keyup',function (event){
-        $("#passwordKeyMasterUnlock").removeClass('is-invalid');
-    });
-}
-function failtoUnlock() {
-    $('#spinnerWaiterMasterKey').show();
-    setTimeout(() => {
-        $("#passwordKeyMasterUnlock").addClass('is-invalid');
-        $("#contentModalUnlockWorkSpace").addClass('animate__animated animate__shakeX');
-        $('#spinnerWaiterMasterKey').hide();
-    }, 1000);
-}
+
 
 async function getinfo_addMasterkey(){
     return $('#passwordKeyMasterAddMasterKey').val();
 }
-
-function lockWorkspace() {
-    $('#block_workSpace').addClass('animate__animated animate__backOutDown');
-    
-    
-    setTimeout(() => {
-        $('#block_workSpace').removeClass('animate__animated animate__backOutDown');
-        $('#blankButtonScreen').addClass('d-flex');
-        $('#blankButtonScreen').show();
-    }, 1000);
-
-    $('#masterKey').removeClass('animate__animated animate__bounceOutDown');
-    $('#masterKey').addClass('animate__animated animate__bounceInUp');
-    setTimeout(() => {
-        $('#masterKey').modal('show');
-    }, 600);
-}
-function unlockWorkspace() {
-    
-    $('#block_workSpace').addClass('animate__animated animate__backInUp');
-
-    $('#blankButtonScreen').addClass('animate__animated animate__backOutUp');
-    $('#block_workSpace').show();
-    setTimeout(() => {
-
-        $('#blankButtonScreen').removeClass('animate__animated animate__backOutUp ');
-        $('#blankButtonScreen').removeClass('d-flex');
-        $('#blankButtonScreen').hide();
-    }, 700);
-    setTimeout(() => {
-        $('#block_workSpace').removeClass('animate__animated animate__backOutDown');
-        $('#block_workSpace').removeClass('animate__animated animate__backInUp');
-    }, 1000);
-    $('#spinnerWaiterMasterKey').show();
-    
-    getPasswords();
-    getDatabases();
-    $('#masterKey').removeClass('animate__animated animate__bounceInUp');
-    $('#masterKey').addClass('animate__animated animate__bounceOutDown');
-
-    $('#addMasterKey').removeClass('animate__animated animate__bounceInUp');
-    setTimeout(() => {
-        $('#masterKey').removeClass('animate__animated animate__bounceOutDown');
-        $('#spinnerWaiterMasterKey').hide();
-        $('#masterKey').modal('hide');
-        $("#modal_entryPassword").val('');
-
-    }, 700);
-}
-/*
-    !BD
-*/
-async function getInfo_addEntry() {
-    $('#spinnerWaiterAddEntry').show();
-    let name,username,password,url,level,icon,database;
-    name = $("#modal_entryName").val();
-    username = $("#modal_entryUsername").val();
-    password = $("#modal_entryPassword").val();
-
-    //thing to encrypt passwords
-    password = encrypt(password,z_masterkey);
-
-    url = $("#modal_entryUrl").val();
-    level = parseInt($("#modal_entryLevel").val());
-    icon = $("#iconSelected").html();
-    icon = icon.replace(/\"/g, "\'");
-    database = $( "#databases_addentry option:selected" ).text();
-    setTimeout(() => {
-        $('#spinnerWaiterAddEntry').hide();
-        $('#addEntryModal').modal('hide');
-        $('#close_addNewEntryAlert').addClass('show');
-    }, 600);
-    setTimeout(() => {
-        $('#close_addNewEntryAlert').removeClass('show');
-        cleanInputs();
-    }, 3000);
-    return [name,username,password,url,level,icon,database];
-}
-function cleanInputs() {
-    $("#modal_entryName").val('');
-    $("#modal_entryUsername").val('');
-    $("#modal_entryPassword").val('');
-    $("#passwordsafe").css('width',0);
-    $("#modal_entryUrl").val('');
-    $("#modal_entryLevel").val('');
-    $("#iconSelected").html('<i class="fa fa-key"></i>');
-}
-async function getInfo_Updatentry() {
-    $('#spinnerWaiterUpdateEntry').show();
-    let name,username,password,url,level,icon,database;
-
-    let id = $("#updateRowID").val();
-    name = $("#Updatemodal_entryName").val();
-    username = $("#Updatemodal_entryUsername").val();
-    password = $("#Updatemodal_entryPassword").val();
-
-    //thing to encrypt passwords
-    password = encrypt(password,z_masterkey);
-
-    url = $("#Updatemodal_entryUrl").val();
-    level = parseInt($("#Updatemodal_entryLevel").val());
-    icon = $("#iconSelectedUpdate").html();
-    icon = icon.replace(/\"/g, "\'");
-
-    setTimeout(() => {
-        $('#spinnerWaiterUpdateEntry').hide();
-        $('#updateEntryModal').modal('hide');
-        $('#close_addNewEntryAlert').addClass('show');
-    }, 600);
-    setTimeout(() => {
-        $('#close_addNewEntryAlert').removeClass('show');
-    }, 2000);
-
-    return [name,username,password,url,level,icon,id];
-}
-
 /*
     !Tables
 */
@@ -370,20 +156,6 @@ function setBackground(id,string){
         $(id).removeClass("bg-warning");
     }
 }
-function changeVisPassButton() {
-    let type = $("#modal_entryPassword").attr('type');
-    if(type == 'password'){
-        $("#modal_entryPassword").attr('type','text');
-        $("#eyeChangePass").html('');
-        $("#eyeChangePass").html('<i class="fa fa-eye"></i>');
-    }
-    else{
-        $("#modal_entryPassword").attr('type','password');
-        $("#eyeChangePass").html('');
-        $("#eyeChangePass").html('<i class="fa fa-eye-slash">');
-    }
-    $("#modal_entryPassword").html();
-}
 
 function generatePassButton() {
     $("#i_gear").addClass('fa-spin');
@@ -425,20 +197,7 @@ function getIconSelected() {
 /*
     !UPDATEs
 */
-function changeVisPassButtonUpdate() {
-    let type = $("#Updatemodal_entryPassword").attr('type');
-    if(type == 'password'){
-        $("#Updatemodal_entryPassword").attr('type','text');
-        $("#eyeChangePassUpdate").html('');
-        $("#eyeChangePassUpdate").html('<i class="fa fa-eye"></i>');
-    }
-    else{
-        $("#Updatemodal_entryPassword").attr('type','password');
-        $("#eyeChangePassUpdate").html('');
-        $("#eyeChangePassUpdate").html('<i class="fa fa-eye-slash">');
-    }
-    $("#Updatemodal_entryPassword").html();
-}
+
 function generatePassButtonUpdate() {
     
     $("#i_gearUpdate").addClass('fa-spin');
