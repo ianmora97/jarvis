@@ -1,4 +1,4 @@
 node_modules
 package-lock.json
 releases
-databases/passafe.db
+databases
