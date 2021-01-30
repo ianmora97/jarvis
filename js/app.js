@@ -11,6 +11,7 @@ function eventsOnLoad(event) {
     typeEntertoUnlock();
     tryAgain();
     popoverGenPass();
+    popovericonselect();
     deleteDatabaseEvents();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -27,7 +28,17 @@ function checkCheckedEdit() {
         }
     });
 }
-
+function setForSearchValue(name) {
+    $('#nameoftableon').text(name);
+}
+function searchinTables() {
+    let stable = $('#nameoftableon').text();
+    let idtable = '#'+stable+'_TableOrder';
+    let table = $(idtable).DataTable();
+    let val = $('#searchBarTables').val();           
+    let result = table.search( val ).draw();
+    console.log(result);
+}
 function checkLoginInit() {
     db.all("SELECT COUNT(*) as cnt FROM masterkey where name = 'main'", [], (err, rows) => {
         if (err) {
@@ -187,7 +198,8 @@ function generatePassButton() {
 }
 
 function getIconSelected() {
-    $('#dropdownIcons button').on('click', function(){
+    $('#dropdownIcons .col button').on('click', function(){
+        console.log('click');
         let icon = $(this).html();
         $('#iconSelected').html('');
         $('#iconSelected').html(icon);

@@ -1,5 +1,8 @@
 -- run this query if the database get corrupted
+--drop tables
 
+DROP TABLE passwords;
+DROP TABLE databases;
 
 --Create table Passwords
 CREATE TABLE IF NOT EXISTS passwords (

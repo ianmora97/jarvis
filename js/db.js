@@ -38,7 +38,7 @@ function getPasswords() {
         if (err) {
             throw err;
         }
-        console.log('3')
+        $('#spinerToHide').hide()
         rows.forEach((row) => {
             let database = '#'+row.db.replace(/ /g, "_")+'_Table';
             z_passwords_All.push(row);
@@ -46,6 +46,7 @@ function getPasswords() {
                 $(database).append(
                     "<tr id='id_"+row.id+"'>" +
                         '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'" data-id="'+row.id+'"></td>' +
+                        '<td>**</td>' +
                         '<td>***********</td>' +
                         '<td>***********</td>' +
                         '<td>***********</td>' +
@@ -61,9 +62,8 @@ function getPasswords() {
                     "<tr >" +
                         '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'"></td>' +
                         "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fa fa-pencil'></i></td>" +
+                        "<td>"+row.icon+"</td>"+
                         "<td>" +
-                        row.icon +
-                        " " +
                         row.name +
                         "</td>" +
                         '<td role="button" class="btn-to-clip" data-clipboard-text="' +
@@ -85,9 +85,8 @@ function getPasswords() {
                         "</tr>"
                 );
             }
-            
+            datatablesRunAfterInsertRows();
         });
-        datatablesRunAfterInsertRows();
     });
 }
 function datatablesRunAfterInsertRows() {
@@ -95,13 +94,14 @@ function datatablesRunAfterInsertRows() {
         if (err) {
             throw err;
         }
+        
         rows.forEach((row) => {
             let database = '#'+row.nameid+'_TableOrder';
-            $(database).DataTable({
+            var table = $(database).DataTable({
                 "paging": false,
-                "info": false,
-                "searching": false
+                "info": false
             });
+            $(database+'_filter').css('display','none');
         });
     });
     
@@ -171,7 +171,6 @@ function UpdateEntry() {
 }
 var z_databases_all = [];
 function getDatabases() {
-    console.log('4')
 
     z_databases_all = [];
     db.all("SELECT * FROM databases", [], (err, rows) => {
@@ -237,7 +236,6 @@ async function cleanDatabasesTablesAsync() {
         if (err) {
             throw err;
         }
-        console.log('1')
         rows.forEach((row) => {
             $("#"+row.nameid+"_Table").html('');
         });
@@ -251,14 +249,18 @@ function fillDatabases() {
             throw err_2;
         }
         let c = 0;
-        console.log('2')
 
         r.forEach((row) => {
             if(!c){
+                $('#nameoftableon').text(row.nameid);
                 $("#list_databases").append(
-                    `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 active" id="list-${row.nameid}-list" data-toggle="list" href="#list-${row.nameid}" role="tab" aria-controls="${row.nameid}">
+                    `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 active" 
+                    id="list-${row.nameid}-list" data-toggle="list" href="#list-${row.nameid}" role="tab" aria-controls="${row.nameid}" onclick="setForSearchValue('${row.nameid}')">
                     ${row.db}
-                    <span class="badge badge-danger text-white badge-pill">${row.cant}</span>
+                    <span>
+                        <span class="badge badge-danger text-white badge-pill">${row.cant}</span>
+                        <i class="fa fa-chevron-right text-muted"></i>
+                    </span>
                     </a>`
                 );
                 $("#nav-tabContent").append(
@@ -269,7 +271,8 @@ function fillDatabases() {
                     <tr>
                     <th style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
                     <th style="width:30px;">&nbsp;</th>
-                    <th>Name</th>
+                    <th style="width:30px;">&nbsp;</th>
+                    <th data-class-name="priority">Name</th>
                     <th>User</th>
                     <th>Password</th>
                     <th>URL</th>
@@ -285,20 +288,25 @@ function fillDatabases() {
                 );
             }else{
                 $("#list_databases").append(
-                    `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0" id="list-${row.nameid}-list" data-toggle="list" href="#list-${row.nameid}" role="tab" aria-controls="${row.nameid}">
+                    `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0" 
+                    id="list-${row.nameid}-list" data-toggle="list" href="#list-${row.nameid}" role="tab" aria-controls="${row.nameid}" onclick="setForSearchValue('${row.nameid}')">
                     ${row.db}
-                    <span class="badge badge-danger text-white badge-pill">${row.cant}</span>
+                    <span>
+                        <span class="badge badge-danger text-white badge-pill">${row.cant}</span>
+                        <i class="fa fa-chevron-right text-muted"></i>
+                    </span>
                     </a>`
                 );
                 $("#nav-tabContent").append(
                     `<div class="tab-pane fade" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
                     <div class="table-responsive border-top-0 ">
-                    <table class="table border-top-0 table-hover table-striped" id="${row.nameid}_Table">
+                    <table class="table border-top-0 table-hover table-striped" id="${row.nameid}_TableOrder">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
                     <th style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
                     <th style="width:30px;">&nbsp;</th>
-                    <th>Name</th>
+                    <th style="width:30px;">&nbsp;</th>
+                    <th data-class-name="priority">Name</th>
                     <th>User</th>
                     <th>Password</th>
                     <th>URL</th>

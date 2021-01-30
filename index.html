@@ -37,26 +37,10 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control form-control-sm" id="modal_entryName" placeholder="Entry name...">
                                         <div class="input-group-append btn-group btn-group-sm dropright">
-                                            <button type="button btn-sm" class="btn btn-outline-secondary dropdown-toggle" id="iconSelected" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button btn-sm" class="btn btn-outline-secondary" id="iconSelected" 
+                                            data-toggle="popover" data-container="body" data-html="true" title="Entry Icon">
                                                 <i class="fa fa-key"></i>
                                             </button>
-                                            <div class="dropdown-menu" id="dropdownIcons">
-                                                <h6 class="dropdown-header" >Choose an Icon</h6>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-key' style='color: #ff9900;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-globe' style='color: #00790a;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-terminal' style='color: #000000;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-at' style='color: #ff351b;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-server' style='color: #2e2e2e;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-file' style='color: #949494;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-address-card' style='color: #008cff;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-apple' style='color: #000000;'> </i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-cc-visa' style='color: #0051ff;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-cog' style='color: #00a308;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-comments' style='color: #006eff;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-desktop' style='color: #000000;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-gamepad' style='color: #6b0059;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-heart' style='color: #ff0000;'></i></button>
-                                            </div>
                                         </div>    
                                     </div>
                                 </dd>
@@ -444,7 +428,8 @@
                                 </div>
                                 <div class="col-6 d-flex justify-content-end">
                                     <div class="form-inline d-inline w-50 d-flex justify-content-end">
-                                        <input class="form-control search-bar mr-0 w-75" type="search" placeholder="Search" aria-label="Search">
+                                        <span class="sr-only" id="nameoftableon"></span>
+                                        <input class="form-control search-bar mr-0 w-75" type="search" placeholder="Search" onkeyup="searchinTables()" aria-label="Search" id="searchBarTables">
                                         <button class="btn button-actions-search p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
                                     </div>
                                 </div>
@@ -466,6 +451,11 @@
                     <div class="col-10 px-0 bg-light">
                         <div class="tab-content" id="nav-tabContent">
                             
+                            <div class="d-flex justify-content-center" id="spinerToHide">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -478,35 +468,85 @@
                 </div>
             </div>
             <div class="d-none" id="popover-content-genpass">
-                <p>Password must contain:</p>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="lowercaseCheck">
-                        <span class="custom-control-label" for="lowercaseCheck">Lower Case</span>
-                    </label>
-                </div>
-                
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="uppercaseCheck">
-                        <span class="custom-control-label" for="uppercaseCheck">Upper Case</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="numbersCheck">
-                        <span class="custom-control-label" for="numbersCheck">Numbers</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="charactersCheck">
-                        <span class="custom-control-label" for="charactersCheck">Characters</span>
-                    </label>
-                </div>
+                <div style="height: 230px !important;">
+                    <p>Password must contain:</p>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="lowercaseCheck">
+                            <span class="custom-control-label" for="lowercaseCheck">Lower Case</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="uppercaseCheck">
+                            <span class="custom-control-label" for="uppercaseCheck">Upper Case</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="numbersCheck">
+                            <span class="custom-control-label" for="numbersCheck">Numbers</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="charactersCheck">
+                            <span class="custom-control-label" for="charactersCheck">Characters</span>
+                        </label>
+                    </div>
 
-                <div class="dropdown-divider"></div>
-                <a type="button" class="btn btn-danger btn-sm py-0 btn-block mx-auto" onclick="generatePassButton()" >Gen Password</a>
+                    <div class="dropdown-divider"></div>
+                    <a type="button" class="btn btn-danger btn-sm py-0 btn-block mx-auto" onclick="generatePassButton()" >Gen Password</a>
+                </div>
+            </div>
+            <div class="d-none" id="popover-content-iconselect">
+                <div class="container-fluid">
+                    <div class="row" id="dropdownIcons">
+                        <div class="col">
+                            <button class="btn py-0" type="button"><i class='fa fa-key' style='color: #ff9900;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-globe' style='color: #00790a;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-terminal' style='color: #000000;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-at' style='color: #ff351b;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-server' style='color: #2e2e2e;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-file' style='color: #949494;'></i></button>
+                            
+                        </div>
+                        <div class="col">
+                            <button class="btn py-0" type="button"><i class='fa fa-address-card' style='color: #008cff;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-apple' style='color: #000000;'> </i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-cc-visa' style='color: #0051ff;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-cog' style='color: #00a308;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-comments' style='color: #006eff;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-desktop' style='color: #000000;'></i></button>
+                        </div>
+                        <div class="col">
+                            <button class="btn py-0" type="button"><i class='fa fa-gamepad' style='color: #6b0059;'></i></button>
+                            <button class="btn py-0" type="button"><i class='fa fa-heart' style='color: #ff0000;'></i></button>
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                        <div class="col">
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <script src="js/db.js"></script>

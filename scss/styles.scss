@@ -137,8 +137,14 @@ dt{
 }
 
 .popover {
-  height: 300px !important;
   max-height:400px !important;
+}
+.popover.popoverselecticon {
+  margin-left: 10px !important;
+  margin-top: 13.5% !important;
+}
+.popover.popoverselecticon .arrow {
+  top: 31px !important;
 }
 .list-group-item:first-child {
   border-top-left-radius: 0 !important; 

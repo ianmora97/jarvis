@@ -23,7 +23,26 @@ function popoverGenPass() {
         });
     });  
 }
-
+function popovericonselect() {
+    $("#iconSelected").popover({
+        html: true,
+        sanitize: false,
+        content: function() {
+              return $('#popover-content-iconselect').html();
+        },
+        template: '<div class="popover popoverselecticon" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
+    });
+    // $("#iconSelected").on("shown.bs.popover",function(){
+    //     $(".popover-content input").on("change",function(){
+    //         if(this.checked){
+    //             this.setAttribute("checked","checked");
+    //         }else{
+    //             this.removeAttribute("checked");
+    //         }
+    //         $("#iconSelected").html($(".popover-content").html());
+    //     });
+    // });
+}
 
 function openModalEntry() {
     $('#addentrybutton').on('click',()=>{
