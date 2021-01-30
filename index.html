@@ -296,6 +296,45 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="deleteDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteDatabaseLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpace">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Delete database</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close" id="cancelClosedeleteDatabase">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                            <label for="deleteDatabaseNameinput">Choose a Database</label>
+                            <select class="form-control form-control-sm" id="deleteDatabaseNameinput">
+                            </select>
+                        </div>
+                        <div id="confirmDatabaseTobeDelete" class="border-top pt-1" style="display: none;">
+                            <small class="text-muted">For security reasons please type your masterkey.</small>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-sm" id="deleteDatabaseNameinputconfirm" placeholder="Masterkey..." value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="checkDeleteDatabase()" id="buttondeleteDatabaseModalCheck">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabaseCheck" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Check
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="deleteConfirmDatabase()" id="buttondeleteDatabaseModal" style="display: none;">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabase" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Delete Database
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -317,11 +356,18 @@
                     <strong>Yey!</strong> You added a new database.
                 </div>
             </div>
+            <div class="alert alert-success fade" role="alert" id="close_deleteDatabase" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You delete a database.
+                </div>
+            </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
             style="height: 30px;">
                 <div class="container-fluid">
                     <span class="navbar-brand p-0 text-white"><h4>Passafe</h4></span>
-                    <ul class="nav navbar-nav mr-auto p-0 nav-just">
+                    <!--<ul class="nav navbar-nav mr-auto p-0 nav-just">
                             <li class="nav-item dropdown p-0 mr-2">
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle p-0 text-white" type="button" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -366,7 +412,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </ul>
+                        </ul>-->
                 </div>
             </nav>
             <div class="container-fluid" style="height: 95vh;">
@@ -380,6 +426,9 @@
                                     </button>
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database" onclick="openModaladddatabase()">
                                         <i class="fa fa-database text-white"></i>
+                                    </button>
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Delete Database" onclick="openModaldeletedatabase()">
+                                        <i class="fa fa-trash text-white"></i>
                                     </button>
                                     <!-- 
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">

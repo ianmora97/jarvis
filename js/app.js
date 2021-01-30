@@ -11,6 +11,7 @@ function eventsOnLoad(event) {
     typeEntertoUnlock();
     tryAgain();
     popoverGenPass();
+    deleteDatabaseEvents();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })

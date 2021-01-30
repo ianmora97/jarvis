@@ -32,13 +32,13 @@ function writeDatasonRows(r) {
 */
 var z_passwords_All = [];
 function getPasswords() {
-    cleanDatabasesTables();
     fillDatabases();
     z_passwords_All = [];
     db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords", [], (err, rows) => {
         if (err) {
             throw err;
         }
+        console.log('3')
         rows.forEach((row) => {
             let database = '#'+row.db.replace(/ /g, "_")+'_Table';
             z_passwords_All.push(row);
@@ -171,18 +171,54 @@ function UpdateEntry() {
 }
 var z_databases_all = [];
 function getDatabases() {
+    console.log('4')
+
     z_databases_all = [];
     db.all("SELECT * FROM databases", [], (err, rows) => {
         if (err) {
             throw err;
         }
         $("#databases_addentry").html('');
+        $("#deleteDatabaseNameinput").html('');
         rows.forEach((row) => {
             z_databases_all.push(row);
             $("#databases_addentry").append(
                 '<option value="'+row.name+'">'+row.name+'</option>'
             );
+            $("#deleteDatabaseNameinput").append(
+                '<option value="'+row.name+'">'+row.name+'</option>'
+            );
         });
+    });
+}
+function deleteConfirmDatabase() {
+    getinfo_deleteDatabaseAsk().then((pass) => {
+        db.all("SELECT password FROM masterkey where name = 'main'", [], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+            rows.forEach((row) => {
+                if(decrypt(row.password,process.env.APP_KEY) == pass){
+                    deleteDatabase();
+                }else{
+                    failDeleteDatabase();
+                }
+            });
+        });
+    });
+}
+function deleteDatabase(){
+    getinfo_deleteDatabase().then((arr) => {
+        db.run(
+            "DELETE FROM databases where name = ?",
+            [arr],
+            (err) => {
+                if (err) {
+                    console.log(err.message);
+                }
+                databaseDeletedSuccess();
+            }
+        );
     });
 }
 function cleanDatabasesTables() {
@@ -196,6 +232,17 @@ function cleanDatabasesTables() {
         });
     });
 }
+async function cleanDatabasesTablesAsync() {
+    db.all("SELECT * FROM databases", [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        console.log('1')
+        rows.forEach((row) => {
+            $("#"+row.nameid+"_Table").html('');
+        });
+    });
+}
 function fillDatabases() {
     $("#list_databases").html('');
     $("#nav-tabContent").html('');
@@ -204,6 +251,8 @@ function fillDatabases() {
             throw err_2;
         }
         let c = 0;
+        console.log('2')
+
         r.forEach((row) => {
             if(!c){
                 $("#list_databases").append(
