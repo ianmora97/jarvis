@@ -85,8 +85,26 @@ function getPasswords() {
                         "</tr>"
                 );
             }
+            
+        });
+        datatablesRunAfterInsertRows();
+    });
+}
+function datatablesRunAfterInsertRows() {
+    db.all("SELECT * FROM databases", [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        rows.forEach((row) => {
+            let database = '#'+row.nameid+'_TableOrder';
+            $(database).DataTable({
+                "paging": false,
+                "info": false,
+                "searching": false
+            });
         });
     });
+    
 }
 function addEntry() {
     getInfo_addEntry().then((arr) => {
@@ -197,7 +215,7 @@ function fillDatabases() {
                 $("#nav-tabContent").append(
                     `<div class="tab-pane fade show active" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
                     <div class="table-responsive border-top-0 ">
-                    <table class="table border-top-0 table-hover table-striped">
+                    <table class="table border-top-0 table-hover table-striped" id="${row.nameid}_TableOrder">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
                     <th style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
@@ -226,7 +244,7 @@ function fillDatabases() {
                 $("#nav-tabContent").append(
                     `<div class="tab-pane fade" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
                     <div class="table-responsive border-top-0 ">
-                    <table class="table border-top-0 table-hover table-striped">
+                    <table class="table border-top-0 table-hover table-striped" id="${row.nameid}_Table">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
                     <th style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
@@ -246,6 +264,7 @@ function fillDatabases() {
                     </div>`
                 );
             }
+            
             c+=1;
         });
     });

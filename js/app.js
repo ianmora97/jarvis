@@ -15,7 +15,6 @@ function eventsOnLoad(event) {
         $('[data-toggle="tooltip"]').tooltip()
     })
 }
-
 function checkCheckedEdit() {
     $("#edit_copyUser").click(function () {
         let Options = $("[id*=marcar_]");
