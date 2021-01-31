@@ -32,16 +32,6 @@ function popovericonselect() {
         },
         template: '<div class="popover popoverselecticon" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
     });
-    // $("#iconSelected").on("shown.bs.popover",function(){
-    //     $(".popover-content input").on("change",function(){
-    //         if(this.checked){
-    //             this.setAttribute("checked","checked");
-    //         }else{
-    //             this.removeAttribute("checked");
-    //         }
-    //         $("#iconSelected").html($(".popover-content").html());
-    //     });
-    // });
 }
 
 function openModalEntry() {
@@ -51,6 +41,9 @@ function openModalEntry() {
 }
 function openModaldeletedatabase() {
     $('#deleteDatabase').modal('show');
+}
+function openModalConfigMasterkey(){
+    $('#configMasterkey').modal('show')
 }
 
 function openModalEdit() { // !modal for update a password
