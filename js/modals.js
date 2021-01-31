@@ -23,12 +23,34 @@ function popoverGenPass() {
         });
     });  
 }
-
+function popovericonselect() {
+    $("#iconSelected").popover({
+        html: true,
+        sanitize: false,
+        content: function() {
+              return $('#popover-content-iconselect').html();
+        },
+        template: '<div class="popover popoverselecticon" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
+    });
+    // $("#iconSelected").on("shown.bs.popover",function(){
+    //     $(".popover-content input").on("change",function(){
+    //         if(this.checked){
+    //             this.setAttribute("checked","checked");
+    //         }else{
+    //             this.removeAttribute("checked");
+    //         }
+    //         $("#iconSelected").html($(".popover-content").html());
+    //     });
+    // });
+}
 
 function openModalEntry() {
     $('#addentrybutton').on('click',()=>{
         $('#addEntryModal').modal('show');   
     });
+}
+function openModaldeletedatabase() {
+    $('#deleteDatabase').modal('show');
 }
 
 function openModalEdit() { // !modal for update a password
@@ -97,6 +119,7 @@ async function getInfo_addDatabase() {
     setTimeout(() => {
         $('#close_addNewDatabase').removeClass('show');
         $("#addDatabaseNameinput").val('');
+        getDatabases()
     }, 3000);
     return [name,nameid];
 }
@@ -137,4 +160,74 @@ async function getInfo_Updatentry() {
     }, 2000);
 
     return [name,username,password,url,level,icon,id];
+}
+function checkDeleteDatabase() {
+    $('#spinnerWaiterdeleteDatabaseCheck').show();
+    $('#deleteDatabaseNameinput').attr('disabled','on')
+    setTimeout(() => {
+        $('#spinnerWaiterdeleteDatabaseCheck').hide();
+        $('#confirmDatabaseTobeDelete').show()
+        $('#buttondeleteDatabaseModalCheck').hide() //check button turn hide
+        
+        $('#buttondeleteDatabaseModal').attr('disabled','on') //delete button turn disabled until type something
+        $('#buttondeleteDatabaseModal').show()
+        
+        $('#confirmDatabaseTobeDelete').addClass('animate__animated animate__bounceIn');
+    }, 300);
+    setTimeout(() => {
+        $('#confirmDatabaseTobeDelete').removeClass('animate__animated animate__bounceIn');
+    }, 2000);
+}
+function deleteDatabaseEvents() {
+    $('#deleteDatabaseNameinputconfirm').on('keyup',function (event){
+        let l=$('#deleteDatabaseNameinputconfirm').val().length
+        if(l>0){
+            $('#buttondeleteDatabaseModal').removeAttr('disabled')
+        }else{
+            $('#buttondeleteDatabaseModal').attr('disabled','on')
+        }
+    })
+    $('#cancelClosedeleteDatabase').on('click',function(){
+        setTimeout(() => {
+            $('#buttondeleteDatabaseModal').removeAttr('disabled')
+            $('#buttondeleteDatabaseModalCheck').show() 
+            $('#confirmDatabaseTobeDelete').hide()
+            $('#deleteDatabaseNameinput').removeAttr('disabled')
+            $('#buttondeleteDatabaseModal').hide()
+            $('#deleteDatabaseNameinputconfirm').val('')
+        }, 1000);
+    })
+}
+async function getinfo_deleteDatabaseAsk() {
+    return $( "#deleteDatabaseNameinputconfirm").val();
+}
+
+async function getinfo_deleteDatabase() {
+    return $( "#deleteDatabaseNameinput option:selected" ).text();
+}
+
+function databaseDeletedSuccess() {
+    //database deleted
+    
+    $('#spinnerWaiterdeleteDatabase').show();
+    
+    setTimeout(() => {
+        $('#spinnerWaiterdeleteDatabase').hide();
+        $('#deleteDatabase').modal('hide');
+        $('#close_deleteDatabase').addClass('show');
+        
+    }, 600);
+    setTimeout(() => {
+        $('#buttondeleteDatabaseModal').removeAttr('disabled')
+        $('#buttondeleteDatabaseModalCheck').show() 
+        $('#confirmDatabaseTobeDelete').hide()
+        $('#deleteDatabaseNameinput').removeAttr('disabled')
+        $('#buttondeleteDatabaseModal').hide()
+        $('#deleteDatabaseNameinputconfirm').val('')
+        $('#close_deleteDatabase').removeClass('show');
+        cleanDatabasesTablesAsync().then(()=>{
+            getPasswords();
+            getDatabases();
+        });
+    }, 2000);
 }

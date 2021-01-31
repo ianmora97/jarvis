@@ -154,3 +154,4 @@ function unlockAfterAddMasterkey() {
 function closeAlert(e) {
     $('#close_addNewEntryAlert').removeClass('show');
 }
+

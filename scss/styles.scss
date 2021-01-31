@@ -25,9 +25,16 @@ td, th {
   height: 35px;
 
   background: #2B2D42;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px #999;
   border-radius: 10px;
+  &:hover {
+    background: #212336;
+  }
+  &:active {
+    background: #e40505;
+  }
 }
+
 .button-actions-search{
   width: 35px;
   height: 35px;
@@ -99,7 +106,7 @@ td, th {
   height: 30px;
 }
 .button-close:hover{
-  background-color: rgb(228, 5, 5);
+  background-color: #e40505;
 }
 
 .modal-backdrop.show {
@@ -130,8 +137,14 @@ dt{
 }
 
 .popover {
-  height: 300px !important;
   max-height:400px !important;
+}
+.popover.popoverselecticon {
+  margin-left: 10px !important;
+  margin-top: 13.5% !important;
+}
+.popover.popoverselecticon .arrow {
+  top: 31px !important;
 }
 .list-group-item:first-child {
   border-top-left-radius: 0 !important; 
