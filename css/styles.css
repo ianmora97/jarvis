@@ -81,7 +81,53 @@ td, th {
   border-top: 0 !important; }
 
 /*
-  Modales
+    !Font Awwsome + Datatables
+*/
+table.dataTable thead th {
+  position: relative;
+  background-image: none !important;
+  /* Remove the DataTables bootstrap integration styling */ }
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  display: block;
+  font-family: "Font Awesome 5 Free"; }
+
+table.dataTable thead th.sorting:after {
+  font-weight: 900;
+  /* regular style/weight */
+  content: "\f0dc";
+  color: #ddd;
+  font-size: 0.8em;
+  padding-top: 0.12em; }
+
+table.dataTable thead th.sorting_asc:after {
+  font-weight: 900;
+  /* regular style/weight */
+  content: "\f0de"; }
+
+table.dataTable thead th.sorting_desc:after {
+  font-weight: 900;
+  /* regular style/weight */
+  content: "\f0dd"; }
+
+div.dataTables_scrollBody table.dataTable thead th.sorting:after,
+div.dataTables_scrollBody table.dataTable thead th.sorting_asc:after,
+div.dataTables_scrollBody table.dataTable thead th.sorting_desc:after {
+  content: ""; }
+
+/* In Bootstrap and Foundation the padding top is a little different from the DataTables stylesheet */
+table.table thead th.sorting:after,
+table.table thead th.sorting_asc:after,
+table.table thead th.sorting_desc:after {
+  top: 8px; }
+
+/*
+    !Modales
 */
 .modal-content {
   border: 0 !important;

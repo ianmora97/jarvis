@@ -44,6 +44,35 @@ function changeVisPassButton() {
     }
     $("#modal_entryPassword").html();
 }
+function changeVisPassButtonVerifyPassword() {
+    let type = $("#passwordKeyMasterUnlockPassword").attr('type');
+    if(type == 'password'){
+        $("#passwordKeyMasterUnlockPassword").attr('type','text');
+        $("#eyeChangePassUnlockVerifypassword").html('');
+        $("#eyeChangePassUnlockVerifypassword").html('<i class="fa fa-eye"></i>');
+    }
+    else{
+        $("#passwordKeyMasterUnlockPassword").attr('type','password');
+        $("#eyeChangePassUnlockVerifypassword").html('');
+        $("#eyeChangePassUnlockVerifypassword").html('<i class="fa fa-eye-slash">');
+    }
+    $("#passwordKeyMasterUnlockPassword").html();
+}
+function changeVisPassButtonGen(vis) {
+    let input = '#'+$(vis).data('input');
+    let type = $(input).attr('type');
+    if(type == 'password'){
+        $(input).attr('type','text');
+        $(vis).html('');
+        $(vis).html('<i class="fa fa-eye"></i>');
+    }
+    else{
+        $(input).attr('type','password');
+        $(vis).html('');
+        $(vis).html('<i class="fa fa-eye-slash">');
+    }
+    $(input).html();
+}
 function changeVisPassButtonUpdate() {
     let type = $("#Updatemodal_entryPassword").attr('type');
     if(type == 'password'){
@@ -71,9 +100,13 @@ function failtoUnlock() {
         $("#contentModalUnlockWorkSpace").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterMasterKey').hide();
     }, 1000);
+    setTimeout(() => {
+        $('#block_workSpace').removeClass('animate__animated animate__shakeX');
+    }, 1500);
 }
 
 function lockWorkspace() {
+    $('#block_workSpace').removeClass('animate__animated animate__shakeX');
     $('#block_workSpace').addClass('animate__animated animate__backOutDown');
     
     
