@@ -1,7 +1,13 @@
 var sqlite3 = require("sqlite3").verbose();
-const path = `${__dirname}/assets/sqlite.db`;
-let db = new sqlite3.Database("databases/passafe.db");
-require('dotenv').config();
+const path = require('path')
+
+let db = new sqlite3.Database(path.join(__dirname,'/databases/passafe.db'), (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log('Connected to the in-memory SQlite database.');
+});
+require('dotenv').config({ path: path.join(__dirname,'.env') });
 
 /*
     !UI
@@ -145,7 +151,9 @@ function addDatabase() {
 }
 function safeMasterkey() {
     getinfo_addMasterkey().then((arr) => {
+		console.log(process.env.APP_KEY)
         let pass = encrypt(arr,process.env.APP_KEY);
+		
         db.run(
             "INSERT INTO masterkey(name,password) VALUES('main',?)",
             [pass],
