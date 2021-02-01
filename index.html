@@ -345,7 +345,7 @@
                             </div>
                         </div>
                         <div class="invalid-feedback" id="feedbackPassCurrent">
-                            <strong>Passwords not equal</strong>, paswords must match!
+                            <strong>Current Password wrong!</strong>
                         </div>
                         <small class="text-muted">New Password</small>
                         <div class="input-group input-group-sm mb-2">
@@ -356,7 +356,7 @@
                             </div>
                         </div>
                         <div class="invalid-feedback" id="feedbackPassMatch">
-                            <strong>Passwords not equal</strong>, paswords must match!
+                            <strong>Passwords not equal</strong>, passwords must match!
                         </div>
                         <small class="text-muted">Confirm Password</small>
                         <div class="input-group input-group-sm">
@@ -365,6 +365,9 @@
                                 <button class="btn btn-outline-secondary" type="button" id="configMasterkeyNameinputConfirmEye" 
                                 data-input="configMasterkeyNameinputConfirm" onclick="changeVisPassButtonGen(this)"><i class="fa fa-eye-slash"></i></button>
                             </div>
+                        </div>
+                        <div class="invalid-feedback" id="feedbackPassSame">
+                            <strong>Same Passwords</strong>, new password and current must be different!
                         </div>
                     </div>
                     <div class="modal-footer bg-light py-0">
@@ -404,6 +407,13 @@
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
                     <strong>Yey!</strong> You delete a database.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_masterchanged" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">🤫</p>
+                    <strong>Yey!</strong> Masterkey Changed.
                 </div>
             </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 

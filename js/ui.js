@@ -100,9 +100,13 @@ function failtoUnlock() {
         $("#contentModalUnlockWorkSpace").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterMasterKey').hide();
     }, 1000);
+    setTimeout(() => {
+        $('#block_workSpace').removeClass('animate__animated animate__shakeX');
+    }, 1500);
 }
 
 function lockWorkspace() {
+    $('#block_workSpace').removeClass('animate__animated animate__shakeX');
     $('#block_workSpace').addClass('animate__animated animate__backOutDown');
     
     

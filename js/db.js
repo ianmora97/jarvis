@@ -160,26 +160,57 @@ function safeMasterkey() {
     });
 }
 function configMasterkeychange() {
-    getinfo_changeMasterkey().then((data) => {
-        console.log('getdata')
-        let pass = encrypt(data,process.env.APP_KEY);
-        // db.run(
-        //     "UPDATE masterkey SET password = ? WHERE name = 'main'",
-        //     [pass],
-        //     (err) => {
-        //         if (err) {
-        //             console.log(err.message);
-        //         }
-        //         z_masterkey = data;
+    db.serialize(() => {
+        $('#spinnerWaiterconfigMasterkey').show();
+        let current = $('#configMasterkeyNameinputCurrent').val();
+        let getFromdb = "";
+        db.all("SELECT password FROM masterkey where name = 'main'", [], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+            rows.forEach((row) => {
+                getFromdb = decrypt(row.password,process.env.APP_KEY);
+            });
+            if(current == getFromdb){
+                let newp = $('#configMasterkeyNameinputNew').val();
+                let conf = $('#configMasterkeyNameinputConfirm').val();
                 
-        //     }
-        // );
-        console.log(data)
-        if(data == 'new_not_equal'){
-            fail_notEqual();
-        }else if(data == 'current_not_equal'){
-            fail_currentnotEqual();
-        }
+                if(newp == conf){
+                    if(current != newp){
+                        let newpass = encrypt(newp,process.env.APP_KEY);
+                        console.log('passwords equal');
+                        db.run(
+                            "UPDATE masterkey SET password = ? WHERE name = 'main'",
+                            [newpass],
+                            (err) => {
+                                if (err) {
+                                    console.log(err.message);
+                                }
+                                z_masterkey = newp;
+                                setTimeout(() => {
+                                    $('#configMasterkey').modal('hide');
+                                    $('#spinnerWaiterconfigMasterkey').hide();
+                                    $('#close_masterchanged').addClass('show');
+                                }, 1000);
+                                setTimeout(() => {
+                                    $('#configMasterkeyNameinputCurrent').val('')
+                                    $('#configMasterkeyNameinputNew').val('');
+                                    $('#configMasterkeyNameinputConfirm').val('');
+                                    $('#close_masterchanged').removeClass('show');
+                                }, 2000);
+                            }
+                        );
+                    }else{
+                        fail_newSame();
+                    }
+                }else{
+                    fail_notEqual();
+                }
+            }else{
+                fail_currentnotEqual();
+            }
+        });
+        
     });
 }
 function UpdateEntry() {
@@ -235,17 +266,28 @@ function deleteConfirmDatabase() {
     });
 }
 function deleteDatabase(){
-    getinfo_deleteDatabase().then((arr) => {
-        db.run(
-            "DELETE FROM databases where name = ?",
-            [arr],
-            (err) => {
-                if (err) {
-                    console.log(err.message);
+    db.serialize(() => {
+        getinfo_deleteDatabase().then((arr) => {
+            db.run(
+                "DELETE FROM databases where name = ?",
+                [arr],
+                (err) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                    db.run(
+                        "DELETE FROM passwords where db = ?",
+                        [arr],
+                        (err) => {
+                            if (err) {
+                                console.log(err.message);
+                            }
+                            databaseDeletedSuccess();
+                        }
+                    );
                 }
-                databaseDeletedSuccess();
-            }
-        );
+            );
+        });
     });
 }
 function cleanDatabasesTables() {
@@ -277,7 +319,20 @@ async function fillDatabases() {
             throw err_2;
         }
         let c = 0;
-
+        if(r.length == 0){
+            $('#list_databases').append(`
+                <div class="d-flex flex-column" style="z-index:1;">
+                <button type="button" class="btn mx-auto fa-2x">🤔</button>
+                <p class="text-white mx-auto text-center"><strong>No databases!</strong><br> Add databases</p>
+                </div>
+            `);
+            $('#nav-tabContent').append(`
+                <div class="d-flex flex-column">
+                <button type="button" class="btn mx-auto fa-3x">🤔</button>
+                <p class="text-muted mx-auto text-center"><strong>No Passwords!</strong><br> Add databases first</p>
+                </div>
+            `);
+        }
         r.forEach((row) => {
             if(!c){
                 $('#nameoftableon').text(row.nameid);

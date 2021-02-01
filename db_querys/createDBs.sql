@@ -3,6 +3,7 @@
 
 DROP TABLE passwords;
 DROP TABLE databases;
+DROP TABLE masterkey;
 
 --Create table Passwords
 CREATE TABLE IF NOT EXISTS passwords (

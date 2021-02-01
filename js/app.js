@@ -104,7 +104,7 @@ async function getinfo_changeMasterkey() {
     
 }
 function fail_notEqual() {
-    $('#spinnerWaiterconfigMasterkey').show();
+    
     setTimeout(() => {
         $("#configMasterkeyNameinputNew").addClass('is-invalid');
         $("#configMasterkeyNameinputConfirm").addClass('is-invalid');
@@ -117,10 +117,20 @@ function fail_notEqual() {
     }, 2000);
 }
 function fail_currentnotEqual() {
-    $('#spinnerWaiterconfigMasterkey').show();
+    
     setTimeout(() => {
         $("#configMasterkeyNameinputCurrent").addClass('is-invalid');
         $("#feedbackPassCurrent").show();
+        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $('#spinnerWaiterconfigMasterkey').hide();
+    }, 1000);
+    setTimeout(() => {
+        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+    }, 2000);
+}
+function fail_newSame() {
+    setTimeout(() => {
+        $("#feedbackPassSame").show();
         $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
@@ -133,15 +143,18 @@ function matchPasswordsType() {
         $("#configMasterkeyNameinputNew").removeClass('is-invalid');
         $("#configMasterkeyNameinputConfirm").removeClass('is-invalid');
         $("#feedbackPassMatch").hide();
+        $("#feedbackPassSame").hide();
     });
     $('#configMasterkeyNameinputConfirm').on('keyup',function () {
         $("#configMasterkeyNameinputNew").removeClass('is-invalid');
         $("#configMasterkeyNameinputConfirm").removeClass('is-invalid');
         $("#feedbackPassMatch").hide();
+        $("#feedbackPassSame").hide();
     });
     $('#configMasterkeyNameinputCurrent').on('keyup',function () {
         $("#configMasterkeyNameinputCurrent").removeClass('is-invalid');
         $("#feedbackPassCurrent").hide();
+        $("#feedbackPassSame").hide();
     });
 }
 /*
