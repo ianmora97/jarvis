@@ -38,63 +38,72 @@ function writeDatasonRows(r) {
 */
 var z_passwords_All = [];
 function getPasswords() {
-    fillDatabases().then(()=>{
-        z_passwords_All = [];
-        db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords", [], (err, rows) => {
-            if (err) {
-                throw err;
-            }
-            $('#spinerToHide').hide()
-            rows.forEach((row) => {
-                let database = '#'+row.db.replace(/ /g, "_")+'_Table';
-                z_passwords_All.push(row);
-                if(row.level == 5){
-                    $(database).append(
-                        "<tr id='id_tr_"+row.id+"'>" +
-                            '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'" data-id="'+row.id+'"></td>' +
-                            '<td>**</td>' +
-                            '<td>**</td>' +
-                            '<td>***********</td>' +
-                            '<td>***********</td>' +
-                            '<td>***********</td>' +
-                            '<td>***********</td>' +
-                            '<td class="text-center"><button type="button" class="btn btn-danger btn-sm m-0 py-0" onclick="showLevelTR('+row.id+')"><i class="fa fa-eye text-white"></i></button>'+
-                            "</td>" +
-                            "</tr>"
-                    );
+        fillDatabases().then(()=>{
+            z_passwords_All = [];
+            db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords", [], (err, rows) => {
+                if (err) {
+                    throw err;
                 }
-                else{
-                    $(database).append(
-                        "<tr >" +
-                            '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'"></td>' +
-                            "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
-                            "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
-                            "<td style='padding-left: 0 !important;'>" +
-                            row.name +
-                            "</td>" +
-                            '<td role="button" class="btn-to-clip" data-clipboard-text="' +
-                            row.username +
-                            '">' +
-                            row.username +
-                            "</td>" +
-                            '<td role="button" class="btn-to-clip" data-clipboard-text="' +
-                            decrypt(row.password, z_masterkey) +
-                            '">***********</td>' +
-                            '<td role="button" class="btn-to-clip" data-clipboard-text="' +
-                            row.url +
-                            '"><a href="#" class="text-info">' +
-                            row.url +
-                            "</a></td>" +
-                            "<td class='text-center' >" +
-                            row.level +
-                            "</td>" +
-                            "</tr>"
-                    );
-                }
+                $('#spinerToHide').hide()
+                rows.forEach((row) => {
+                    fillsearchtable(row)
+                    let database = '#'+row.db.replace(/ /g, "_")+'_Table';
+                    z_passwords_All.push(row);
+                    if(row.level == 5){
+                        $(database).append(
+                            "<tr id='id_tr_"+row.id+"'>" +
+                                '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'" data-id="'+row.id+'"></td>' +
+                                '<td>**</td>' +
+                                '<td>**</td>' +
+                                '<td>***********</td>' +
+                                '<td>***********</td>' +
+                                '<td>***********</td>' +
+                                '<td>***********</td>' +
+                                '<td class="text-center"><button type="button" class="btn btn-danger btn-sm m-0 py-0" onclick="showLevelTR('+row.id+')"><i class="fa fa-eye text-white"></i></button>'+
+                                "</td>" +
+                                "</tr>"
+                        );
+                    }
+                    else{
+                        let temp = localStorage.getItem('l_master_key')
+                        $(database).append(
+                            "<tr >" +
+                                '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'"></td>' +
+                                "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
+                                "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
+                                "<td style='padding-left: 0 !important;'>" +
+                                row.name +
+                                "</td>" +
+                                '<td role="button" class="btn-to-clip" data-clipboard-text="' +
+                                row.username +
+                                '">' +
+                                row.username +
+                                "</td>" +
+                                '<td role="button" class="btn-to-clip" data-clipboard-text="' +
+                                decrypt(row.password, temp) +
+                                '">***********</td>' +
+                                '<td class="text-info" role="button" onclick="openExternalLink(\''+row.url+'\')">'+
+                                row.url +
+                                "</td>" +
+                                "<td class='text-center' >" +
+                                row.level +
+                                "</td>" +
+                                "</tr>"
+                        );
+                    }
+                });
+                datatablesRunAfterInsertRows();
+                var table = $('#tabletofind').DataTable({
+                    "paging": false,
+                    "info": false,
+                    "columnDefs": [
+                        { "orderable": false, "targets": [0, 1] },
+                        { "orderable": true, "targets": [2, 3, 4, 5] }
+                    ]
+                });
+                $('#tabletofind_filter').css('display','none');
             });
-            datatablesRunAfterInsertRows();
         });
-    });
 }
 function datatablesRunAfterInsertRows() {
     db.all("SELECT * FROM databases", [], (err, rows) => {
@@ -115,8 +124,8 @@ function datatablesRunAfterInsertRows() {
             $(database+'_filter').css('display','none');
         });
     });
-    
 }
+
 function addEntry() {
     getInfo_addEntry().then((arr) => {
         console.log(arr);
@@ -322,6 +331,7 @@ async function cleanDatabasesTablesAsync() {
 async function fillDatabases() {
     $("#list_databases").html('');
     $("#nav-tabContent").html('');
+    $('#tableidresponsivesearch').html('');
     db.all("SELECT databases.name as db, COUNT(passwords.db) as cant, nameid FROM databases LEFT JOIN passwords ON passwords.db = databases.name GROUP BY databases.name ORDER BY cant DESC, db ASC", [], (err_2, r) => {
         if (err_2) {
             throw err_2;
@@ -341,6 +351,24 @@ async function fillDatabases() {
                 </div>
             `);
         }
+        $('#tableidresponsivesearch').html(`
+            <table class="table border-top-0 table-hover table-striped" id="tabletofind" data-order="[[ 3, &quot;asc&quot; ]]">
+            <thead class="bg-primary border-top-0 p-0 text-white">
+            <tr>
+            <th>Database</th>
+            <th style="width:30px; padding-right: 0 !important;">&nbsp;</th>
+            <th style="padding-left: 0 !important;" data-class-name="priority">Name</th>
+            <th>User</th>
+            <th>Password</th>
+            <th>URL</th>
+            <th class="text-center" style="width:70px;">Level</th>
+            </tr>
+            </thead>
+            <tbody id="tbody_tabletofind">
+
+            </tbody>
+            </table>
+        `);
         r.forEach((row) => {
             if(!c){
                 $('#nameoftableon').text(row.nameid);
@@ -417,7 +445,19 @@ async function fillDatabases() {
         });
     });
 }
-
+function fillsearchtable(row) {
+    $('#tbody_tabletofind').append(`
+        <tr>
+            <td>${row.db}</td>
+            <td style="padding-right: 0 !important;">${row.icon}</td>
+            <td style="padding-left: 0 !important;">${row.name}</td>
+            <td role="button" class="btn-to-clip" data-clipboard-text="${row.username}">${row.username}</td>
+            <td role="button" class="btn-to-clip" data-clipboard-text="${decrypt(row.password,localStorage.getItem('l_master_key'))}">******</td>
+            <td>${row.url}</td>
+            <td class="text-center">${row.level}</td>
+        </tr>
+    `);
+}
 function askMasterkey() {
     getMasterkey().then((pass)=>{
         db.all("SELECT password FROM masterkey where name = 'main'", [], (err, rows) => {
@@ -426,8 +466,9 @@ function askMasterkey() {
             }
             rows.forEach((row) => {
                 if(decrypt(row.password,process.env.APP_KEY) == pass){
+                    localStorage.setItem('l_master_key',pass);
                     z_masterkey = pass;
-                    unlockWorkspace();
+                    unlockWorkspace(pass);
                 }else{
                     failtoUnlock();
                 }

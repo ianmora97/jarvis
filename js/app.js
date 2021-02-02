@@ -1,4 +1,5 @@
 const { resolve } = require("path");
+const { ipcRenderer } = require('electron')
 
 var z_masterkey = "";
 var z_checkMasterkeyExists;
@@ -34,13 +35,22 @@ function checkCheckedEdit() {
 function setForSearchValue(name) {
     $('#nameoftableon').text(name);
 }
-function searchinTables() {
-    let stable = $('#nameoftableon').text();
-    let idtable = '#'+stable+'_TableOrder';
-    let table = $(idtable).DataTable();
-    let val = $('#searchBarTables').val();           
+function searchonfind() {
+    var table = $('#tabletofind').DataTable();
+    let val = $('#searchBarTablesModal').val();           
     let result = table.search( val ).draw();
-    console.log(result);
+}
+function closeModalSearch() {
+    $('#modalfindintables').removeClass('animate__animated animate__bounceInRight');
+    $('#modalfindintables').addClass('animate__animated animate__bounceOutRight');
+    setTimeout(() => {
+        $('#modalfindintables').removeClass('animate__animated animate__bounceOutRight');
+        $('#modalfindintables').modal('hide');
+    }, 600);
+}
+function searchinTables() {
+    $('#modalfindintables').addClass('animate__animated animate__bounceInRight');
+    $('#modalfindintables').modal('show');
 }
 function checkLoginInit() {
     db.all("SELECT COUNT(*) as cnt FROM masterkey where name = 'main'", [], (err, rows) => {
@@ -76,7 +86,10 @@ function typeEntertoUnlock() {
         }
     });
 }
-
+function openExternalLink(url) {
+    console.log(url)
+    ipcRenderer.send('open-url', url);
+}
 async function getMasterkey() {
     return $('#passwordKeyMasterUnlock').val();
 }

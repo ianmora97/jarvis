@@ -1,4 +1,4 @@
-const {app, BrowserWindow, systemPreferences, Tray, shell } = require('electron');
+const {app, BrowserWindow, systemPreferences, Tray, shell , ipcMain} = require('electron');
 const path = require('path')
 function createWindow() {
     const win = new BrowserWindow({
@@ -14,9 +14,18 @@ function createWindow() {
         win.show()
     })
     win.setIcon(path.join(__dirname, '/images/ico.png'));
-    win.removeMenu();
+    // win.removeMenu();
     win.loadFile(path.join(__dirname,"index.html"));
 }
+
+ipcMain.on('open-url', (event, arg) => {
+    if(arg.includes('https://')){
+        shell.openExternal(arg)
+    }else{
+        shell.openExternal('https://'+arg)
+    }
+    
+})
 
 app.whenReady().then(()=>{
     createWindow();

@@ -381,6 +381,31 @@
                 </div>
             </div>
         </div>
+        <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen" role="document">
+                <div class="modal-content" style="height: 87vh;">
+                    <div class="modal-header pr-0 py-0 bg-light text-dark rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-search text-dark"></i> Search</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-dark" onclick="closeModalSearch()" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="d-flex justify-content-between pb-3">
+                            <div class="words">
+                                <small class="text-muted">Rows will appear here</small><br>
+                                <strong>Result:</strong>
+                            </div>
+                            <input class="form-control search-bar mr-0" type="search" placeholder="Search" onkeyup="searchonfind()" aria-label="Search" id="searchBarTablesModal">
+                        </div>
+                        <div class="table-responsive border-top-0 w-100" id="tableidresponsivesearch">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -497,12 +522,13 @@
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" onclick="getPasswords()">
                                         <i class="fas fa-eye-slash text-white"></i>
                                     </button>
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Search" onclick="searchinTables()">
+                                        <i class="fa fa-search text-white"></i>
+                                    </button>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end">
                                     <div class="form-inline d-inline w-50 d-flex justify-content-end">
                                         <span class="sr-only" id="nameoftableon"></span>
-                                        <input class="form-control search-bar mr-0 w-75" type="search" placeholder="Search" onkeyup="searchinTables()" aria-label="Search" id="searchBarTables">
-                                        <button class="btn button-actions-search p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -623,6 +649,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
         <script src="js/db.js"></script>
         <script src="js/clipboard.min.js"></script>

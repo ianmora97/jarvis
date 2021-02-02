@@ -122,8 +122,8 @@ function lockWorkspace() {
         $('#masterKey').modal('show');
     }, 600);
 }
-function unlockWorkspace() {
-    
+function unlockWorkspace(pass) {
+    z_masterkey = pass;
     $('#block_workSpace').addClass('animate__animated animate__backInUp');
 
     $('#blankButtonScreen').addClass('animate__animated animate__backOutUp');
