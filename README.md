@@ -55,43 +55,31 @@ Once installed, we're going to package for each OS.
 
 ### For MacOS:
 
-- From a script:
-
 ```sh
+# From a script
 $ npm run packageOSX
-```
 
-- From Electron CLI
-
-```sh
+# From Electron CLI
 $ electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.icns --prune=true --out=release-builds
 ```
 
 ### For Windows:
 
-- From a script:
-
 ```sh
+# From a script
 $ npm run packageWIN
-```
 
-- From Electron CLI
-
-```sh
+# From Electron CLI
 $ electron-packager . Passafe --overwrite --platform=win32 --arch=ia32 --icon=images/icon.ico --prune=true --out=release-builds
 ```
 
 ### For Linux:
 
-- From a script:
-
 ```sh
+# From a script
 $ npm run packageLINUX
-```
 
-- From Electron CLI
-
-```sh
+# From Electron CLI
 $ electron-packager . Passafe --overwrite --platform=linux --arch=x64 --icon=images/icon.png --prune=true --out=release-builds
 ```
 
