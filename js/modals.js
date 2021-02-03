@@ -218,9 +218,7 @@ function databaseDeletedSuccess() {
         $('#buttondeleteDatabaseModal').hide()
         $('#deleteDatabaseNameinputconfirm').val('')
         $('#close_deleteDatabase').removeClass('show');
-        cleanDatabasesTablesAsync().then(()=>{
-            getPasswords();
-            getDatabases();
-        });
+        getPasswords();
+        getDatabases();
     }, 2000);
 }

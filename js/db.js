@@ -67,7 +67,7 @@ function getPasswords() {
                     else{
                         let temp = localStorage.getItem('l_master_key')
                         $(database).append(
-                            "<tr >" +
+                            '<tr onclick="printInfotoFooter(\''+row.id+'\')">' +
                                 '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'"></td>' +
                                 "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
                                 "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
@@ -117,11 +117,13 @@ function datatablesRunAfterInsertRows() {
                 "paging": false,
                 "info": false,
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 1, 2] },
-                    { "orderable": true, "targets": [3, 4, 5, 6, 7] }
+                    { "orderable": false, "targets": [0, 1, 2, 5] },
+                    { "orderable": true, "targets": [3, 4, 6, 7] }
                 ]
             });
+            // let info = table.page.info();
             $(database+'_filter').css('display','none');
+            // $('#'+row.nameid+'_infoDataTable').html('Showing '+(info.recordsDisplay)+' of '+info.recordsTotal);
         });
     });
 }
@@ -355,13 +357,13 @@ async function fillDatabases() {
             <table class="table border-top-0 table-hover table-striped" id="tabletofind" data-order="[[ 3, &quot;asc&quot; ]]">
             <thead class="bg-primary border-top-0 p-0 text-white">
             <tr>
-            <th>Database</th>
-            <th style="width:30px; padding-right: 0 !important;">&nbsp;</th>
-            <th style="padding-left: 0 !important;" data-class-name="priority">Name</th>
-            <th>User</th>
-            <th>Password</th>
-            <th>URL</th>
-            <th class="text-center" style="width:70px;">Level</th>
+            <th class="th-custom">Database</th>
+            <th class="th-custom" style="width:30px; padding-right: 0 !important;">&nbsp;</th>
+            <th class="th-custom" style="padding-left: 0 !important;" data-class-name="priority">Name</th>
+            <th class="th-custom">User</th>
+            <th class="th-custom">Password</th>
+            <th class="th-custom">URL</th>
+            <th class="th-custom" class="text-center" style="width:70px;">Level</th>
             </tr>
             </thead>
             <tbody id="tbody_tabletofind">
@@ -374,8 +376,12 @@ async function fillDatabases() {
                 $('#nameoftableon').text(row.nameid);
                 $("#list_databases").append(
                     `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 active pr-1" 
-                    id="list-${row.nameid}-list" data-toggle="list" href="#list-${row.nameid}" role="tab" aria-controls="${row.nameid}" onclick="setForSearchValue('${row.nameid}')">
-                    ${row.db}
+                    id="list-${row.nameid}-list" data-toggle="tab" href="#list-${row.nameid}" role="tab" 
+                    aria-controls="${row.nameid}" onclick="setForSearchValue('${'#list-'+row.nameid}',event)">
+                    <div class="d-block">
+                        ${row.db}
+                        
+                    </div>
                     <span>
                         <span class="badge badge-danger text-white badge-pill mr-3">${row.cant}</span>
                         <i class="fa fa-chevron-right text-muted"></i>
@@ -384,18 +390,18 @@ async function fillDatabases() {
                 );
                 $("#nav-tabContent").append(
                     `<div class="tab-pane fade show active" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
-                    <div class="table-responsive border-top-0 ">
-                    <table class="table border-top-0 table-hover table-striped" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
+                    <div class="table-responsive border-top-0 " style="height:76vh; overflow-y:auto;">
+                    <table class="table border-top-0 table-hover" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
-                    <th style="width:15px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
-                    <th style="width:15px;">&nbsp;</th>
-                    <th style="width:15px; padding-right: 0 !important;">&nbsp;</th>
-                    <th style="padding-left: 0 !important;" data-class-name="priority">Name</th>
-                    <th>User</th>
-                    <th>Password</th>
-                    <th>URL</th>
-                    <th class="text-center" style="width:50px;">Level</th>
+                    <th class="th-custom" style="width:15px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
+                    <th class="th-custom"  style="width:15px;">&nbsp;</th>
+                    <th class="th-custom"  style="width:15px; padding-right: 0 !important;">&nbsp;</th>
+                    <th class="th-custom"  style="padding-left: 0 !important;" data-class-name="priority">Name</th>
+                    <th class="th-custom" >User</th>
+                    <th class="th-custom" >Password</th>
+                    <th class="th-custom" >URL</th>
+                    <th class="th-custom"  class="text-center" style="width:50px;">Level</th>
                     </tr>
                     </thead>
                     <tbody id="${row.nameid}_Table" class="">
@@ -408,8 +414,12 @@ async function fillDatabases() {
             }else{
                 $("#list_databases").append(
                     `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 pr-1" 
-                    id="list-${row.nameid}-list" data-toggle="list" href="#list-${row.nameid}" role="tab" aria-controls="${row.nameid}" onclick="setForSearchValue('${row.nameid}')">
-                    ${row.db}
+                    id="list-${row.nameid}-list" data-toggle="tab" href="#list-${row.nameid}" role="tab" 
+                    aria-controls="${row.nameid}" onclick="setForSearchValue('${'#list-'+row.nameid}',event)">
+                    <div class="d-block">
+                        ${row.db}
+                       
+                    </div>
                     <span>
                         <span class="badge badge-danger text-white badge-pill mr-3">${row.cant}</span>
                         <i class="fa fa-chevron-right text-muted"></i>
@@ -418,18 +428,18 @@ async function fillDatabases() {
                 );
                 $("#nav-tabContent").append(
                     `<div class="tab-pane fade" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
-                    <div class="table-responsive border-top-0 ">
-                    <table class="table border-top-0 table-hover table-striped" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
+                    <div class="table-responsive border-top-0 " style="height:76vh; overflow-y:auto;">
+                    <table class="table border-top-0 table-hover" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
-                    <th style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
-                    <th style="width:30px;">&nbsp;</th>
-                    <th style="width:30px;">&nbsp;</th>
-                    <th data-class-name="priority">Name</th>
-                    <th>User</th>
-                    <th>Password</th>
-                    <th>URL</th>
-                    <th class="text-center" style="width:50px;">Level</th>
+                    <th class="th-custom" style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
+                    <th class="th-custom" style="width:30px;">&nbsp;</th>
+                    <th class="th-custom" style="width:30px;">&nbsp;</th>
+                    <th class="th-custom" data-class-name="priority">Name</th>
+                    <th class="th-custom">User</th>
+                    <th class="th-custom">Password</th>
+                    <th class="th-custom">URL</th>
+                    <th class="th-custom" class="text-center" style="width:50px;">Level</th>
                     </tr>
                     </thead>
                     <tbody id="${row.nameid}_Table" class="">

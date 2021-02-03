@@ -4,8 +4,11 @@ function createWindow() {
     const win = new BrowserWindow({
         width: 1500,
         height: 800,
+        minWidth: 1200,
+        minHeight:720,
         show: false,
-        resizable: false,
+        resizable: true,
+        backgroundColor: '#2B2D42',
         webPreferences:{
             nodeIntegration: true
         }
@@ -14,7 +17,7 @@ function createWindow() {
         win.show()
     })
     win.setIcon(path.join(__dirname, '/images/ico.png'));
-    // win.removeMenu();
+    win.removeMenu();
     win.loadFile(path.join(__dirname,"index.html"));
 }
 

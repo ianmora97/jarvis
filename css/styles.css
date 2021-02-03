@@ -2,13 +2,29 @@ td, th {
   font-size: 0.8rem;
   padding: 4px 8px !important; }
 
+table.dataTable.no-footer {
+  border-bottom: 0px !important; }
+
+.dataTables_info {
+  display: none !important; }
+
+.th-custom {
+  position: sticky;
+  top: 0;
+  background-color: #2b2d42; }
+
 .wave {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
   bottom: 0;
   z-index: 1; }
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none; }
 
 .wave + .wave {
   z-index: 2; }
@@ -24,11 +40,15 @@ td, th {
   .button-actions:active {
     background: #e40505; }
 
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-  display: none; }
+.button-actions-bottom {
+  width: 30px;
+  height: 30px;
+  background: #e40505;
+  border-radius: 10px; }
+  .button-actions-bottom:hover {
+    background: #c72828; }
+  .button-actions-bottom:active {
+    background: #8D99AE; }
 
 .button-actions-search {
   width: 35px;
