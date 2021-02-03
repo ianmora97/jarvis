@@ -10,12 +10,14 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/fontawesome.css">
 
         <script src="js/jq-bs-bundle.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js" ></script>
         <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js" ></script>
         <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js" ></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.css"/>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js"></script>
     </head>
     <body style="height: 100vh;" class="overflow-hidden">
         <div class="modal fade" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
@@ -35,26 +37,10 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control form-control-sm" id="modal_entryName" placeholder="Entry name...">
                                         <div class="input-group-append btn-group btn-group-sm dropright">
-                                            <button type="button btn-sm" class="btn btn-outline-secondary dropdown-toggle" id="iconSelected" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button btn-sm" class="btn btn-outline-secondary" id="iconSelected" 
+                                            data-toggle="popover" data-container="body" data-html="true" title="Entry Icon">
                                                 <i class="fa fa-key"></i>
                                             </button>
-                                            <div class="dropdown-menu" id="dropdownIcons">
-                                                <h6 class="dropdown-header" >Choose an Icon</h6>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-key' style='color: #ff9900;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-globe' style='color: #00790a;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-terminal' style='color: #000000;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-at' style='color: #ff351b;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-server' style='color: #2e2e2e;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-file' style='color: #949494;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-address-card' style='color: #008cff;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-apple' style='color: #000000;'> </i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-cc-visa' style='color: #0051ff;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-cog' style='color: #00a308;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-comments' style='color: #006eff;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-desktop' style='color: #000000;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-gamepad' style='color: #6b0059;'></i></button>
-                                                <button class="dropdown-item" type="button"><i class='fa fa-heart' style='color: #ff0000;'></i></button>
-                                            </div>
                                         </div>    
                                     </div>
                                 </dd>
@@ -111,7 +97,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="modal fade" id="updateEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -200,7 +185,6 @@
                 </div>
             </div>
         </div>
-
         <div class="modal animate__animated animate__bounceInUp" id="masterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" id="contentModalUnlockWorkSpace">
@@ -211,14 +195,23 @@
                         </button>
                     </div>
                     <div class="modal-body bg-white">
-                        <div class="form-group">
-                        <label for="passwordKeyMasterUnlock">Master Key</label>
-                        <div class="input-group input-group-sm">
-                            <input type="password" class="form-control" id="passwordKeyMasterUnlock" placeholder="Masterkey..." value="">
-                            <div class="input-group-append" id="button-addon4">
-                                <button class="btn btn-outline-secondary" type="button" id="eyeChangePassUnlock" onclick="changeVisPassButtonUnlock()"><i class="fa fa-eye-slash"></i></button>
+                        <div class="form-group"  id="showallFormgroup">
+                            <label for="passwordKeyMasterUnlock">Master Key</label>
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" id="passwordKeyMasterUnlock" placeholder="Masterkey..." value="" autofocus>
+                                <div class="input-group-append" id="button-addon4">
+                                    <button class="btn btn-outline-secondary" type="button" id="eyeChangePassUnlock" onclick="changeVisPassButtonUnlock()"><i class="fa fa-eye-slash"></i></button>
+                                </div>
                             </div>
                         </div>
+                        <div class="form-group" id="showPasswordConfirmFormgroup" style="display: none;">
+                            <label for="passwordKeyMasterUnlock">Master Key</label>
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" id="passwordKeyMasterUnlockPassword" placeholder="Masterkey..." value="">
+                                <div class="input-group-append" id="button-addon4">
+                                    <button class="btn btn-outline-secondary" type="button" id="eyeChangePassUnlockVerifypassword" onclick="changeVisPassButtonVerifyPassword()"><i class="fa fa-eye-slash"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer bg-light py-0">
@@ -235,6 +228,184 @@
                 </div>
             </div>
         </div>
+        <div class="modal animate__animated animate__bounceInUp" id="addMasterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyAddLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpace">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key Config</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                        <label for="passwordKeyMasterUnlock">Add Master Key</label>
+                        <div class="input-group input-group-sm">
+                            <input type="password" class="form-control" id="passwordKeyMasterAddMasterKey" placeholder="Masterkey..." value="">
+                            <div class="input-group-append" id="button-addon4">
+                                <button class="btn btn-outline-secondary" type="button" id="eyeChangePassAddMasterkey" onclick="changeVisPassButtonAddMasterkey()"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                            <small class="text-muted">We ask you this Master Key every time you sign in, you can not forget this password.</small>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiteraddMasterKey" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Add Masterkey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addDatabaseLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpace">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Add database</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                            <label for="passwordKeyMasterUnlock">Database name</label>
+                            <input type="text" class="form-control form-control-sm" id="addDatabaseNameinput" placeholder="Name..." value="">
+                            <small class="text-muted">This database will keep all the passwords of this category.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addDatabase()" id="buttonAdddatabaseModal">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddDatabase" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Add Database
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteDatabaseLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpace">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Delete database</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close" id="cancelClosedeleteDatabase">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                            <label for="deleteDatabaseNameinput">Choose a Database</label>
+                            <select class="form-control form-control-sm" id="deleteDatabaseNameinput">
+                            </select>
+                        </div>
+                        <div id="confirmDatabaseTobeDelete" class="border-top pt-1" style="display: none;">
+                            <small class="text-muted">For security reasons please type your masterkey.</small>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-sm" id="deleteDatabaseNameinputconfirm" placeholder="Masterkey..." value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="checkDeleteDatabase()" id="buttondeleteDatabaseModalCheck">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabaseCheck" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Check
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="deleteConfirmDatabase()" id="buttondeleteDatabaseModal" style="display: none;">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabase" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Delete Database
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="configMasterkey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="configMasterkeyLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="contentModalUnlockWorkSpaceconfigmasterkey">
+                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fas fa-key text-white"></i> Config Masterkey</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <small class="text-muted">Current Password</small>
+                        <div class="input-group input-group-sm mb-2">
+                            <input type="password" class="form-control form-control-sm" id="configMasterkeyNameinputCurrent" placeholder="Name..." value="">
+                            <div class="input-group-append" id="button-addon4">
+                                <button class="btn btn-outline-secondary" type="button" id="configMasterkeyNameinputCurrentEye" 
+                                data-input="configMasterkeyNameinputCurrent" onclick="changeVisPassButtonGen(this)"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" id="feedbackPassCurrent">
+                            <strong>Current Password wrong!</strong>
+                        </div>
+                        <small class="text-muted">New Password</small>
+                        <div class="input-group input-group-sm mb-2">
+                            <input type="password" class="form-control form-control-sm" id="configMasterkeyNameinputNew" placeholder="Name..." value="">
+                            <div class="input-group-append" id="button-addon4">
+                                <button class="btn btn-outline-secondary" type="button" id="configMasterkeyNameinputNewEye" 
+                                data-input="configMasterkeyNameinputNew" onclick="changeVisPassButtonGen(this)"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" id="feedbackPassMatch">
+                            <strong>Passwords not equal</strong>, passwords must match!
+                        </div>
+                        <small class="text-muted">Confirm Password</small>
+                        <div class="input-group input-group-sm">
+                            <input type="password" class="form-control form-control-sm" id="configMasterkeyNameinputConfirm" placeholder="Name..." value="">
+                            <div class="input-group-append" id="button-addon4">
+                                <button class="btn btn-outline-secondary" type="button" id="configMasterkeyNameinputConfirmEye" 
+                                data-input="configMasterkeyNameinputConfirm" onclick="changeVisPassButtonGen(this)"><i class="fa fa-eye-slash"></i></button>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" id="feedbackPassSame">
+                            <strong>Same Passwords</strong>, new password and current must be different!
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-0">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="configMasterkeychange()" id="buttonconfigMasterkeyModal">
+                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterconfigMasterkey" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Change Masterkey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen" role="document">
+                <div class="modal-content" style="height: 87vh;">
+                    <div class="modal-header pr-0 py-0 bg-light text-dark rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-search text-dark"></i> Search</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-dark" onclick="closeModalSearch()" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="d-flex justify-content-between pb-3">
+                            <div class="words">
+                                <small class="text-muted">Rows will appear here</small><br>
+                                <strong>Result:</strong>
+                            </div>
+                            <input class="form-control search-bar mr-0" type="search" placeholder="Search" onkeyup="searchonfind()" aria-label="Search" id="searchBarTablesModal">
+                        </div>
+                        <div class="table-responsive border-top-0 w-100" id="tableidresponsivesearch">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -242,17 +413,39 @@
             </div>
         </div>
         <div id="block_workSpace" style="display: none;">
-            <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" style="position: absolute; width: 94%; left: 3%;">
-                <strong>Yap!</strong> You added an new Entry.
-                <button type="button" class="close" onclick="closeAlert(this)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You added a new Entry.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_addNewDatabase" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You added a new database.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_deleteDatabase" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You delete a database.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_masterchanged" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">🤫</p>
+                    <strong>Yey!</strong> Masterkey Changed.
+                </div>
             </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
             style="height: 30px;">
                 <div class="container-fluid">
                     <span class="navbar-brand p-0 text-white"><h4>Passafe</h4></span>
-                    <ul class="nav navbar-nav mr-auto p-0 nav-just">
+                    <!--<ul class="nav navbar-nav mr-auto p-0 nav-just">
                             <li class="nav-item dropdown p-0 mr-2">
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle p-0 text-white" type="button" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -297,7 +490,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </ul>
+                        </ul>-->
                 </div>
             </nav>
             <div class="container-fluid" style="height: 95vh;">
@@ -305,39 +498,44 @@
                     <div class="col">
                         <div class="container-fluid px-0">
                             <div class="row justify-content-between">
-                                <div class="col-6 d-flex align-items-center">
+                                <div class="mt-1 col-6 d-flex align-items-center">
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
                                     <i class="fa fa-plus text-white"></i>
                                     </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database">
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database" onclick="openModaladddatabase()">
                                         <i class="fa fa-database text-white"></i>
                                     </button>
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Delete Database" onclick="openModaldeletedatabase()">
+                                        <i class="fa fa-trash text-white"></i>
+                                    </button>
+                                    <!-- 
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Create File Database">
                                         <i class="fa fa-server text-white"></i>
-                                    </button>
+                                    </button> 
+                                    -->
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace" onclick="lockWorkspace()">
                                         <i class="fa fa-lock text-white"></i>
                                     </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key">
-                                        <i class="fa fa-key text-white"></i>
+
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Search" onclick="searchinTables()">
+                                        <i class="fa fa-search text-white"></i>
                                     </button>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end">
                                     <div class="form-inline d-inline w-50 d-flex justify-content-end">
-                                        <input class="form-control search-bar mr-0 w-75" type="search" placeholder="Search" aria-label="Search">
-                                        <button class="btn button-actions-search p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
+                                        <span class="sr-only" id="nameoftableon"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row" style="height: 84%;">
+                <div class="row" style="height: 80%;">
                     <div class="col-2 position-relative px-0" >
                         <h6 class="text-white" style="z-index: 6; position: absolute; top: 4px; left: 10px;">Databases</h6>
                         <div class="position-absolute blue-left"></div>
                         <div class="image-back" style="z-index: 0;"></div>
-                        <div class="h-75" style="z-index: 5; padding-top: 27px;">
+                        <div class="h-75" style="z-index: 5; padding-top: 28px;">
                             <div class="list-group w-100 bg-white h-100" id="list_databases" role="tablist">
                                 
                             </div>
@@ -346,52 +544,129 @@
                     <div class="col-10 px-0 bg-light">
                         <div class="tab-content" id="nav-tabContent">
                             
+                            <div class="d-flex justify-content-center" id="spinerToHide">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row position-relative bg-primary" style="height: 70px;">
-                    <div class="col" style="z-index: 5;">
-                        <p id="entryInfo" class="text-white"></p>
+                <div class="row position-relative bg-primary d-flex justify-content-between" style="height: calc(25.4% - 80px);">
+                    <div class="col-2" style="z-index: 5;">
+                        <p id="noyet" class="text-white"></p>
                     </div>
-                    <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
-                    <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
+                    <div class="col-8 pl-1" style="z-index: 5;">
+                        <small class="d-block text-white"><i class="fas fa-info-circle"></i> Entry info:</small>
+                        <p id="entryInfo" class="text-white h-50"></p>
+                    </div>
+                    <div class="col-2">
+                        <div class="row">
+                            <small class="text-white">Danger section</small>
+                        </div>
+                        <div class="row d-flex justify-content-start">
+                            <button class="btn button-actions-bottom p-0 mr-3 mb-auto mt-2" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" onclick="getPasswords()">
+                            <i class="fas fa-eye-slash text-white"></i>
+                            </button>
+                            <button class="btn button-actions-bottom p-0 mr-3 mb-auto mt-2" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">
+                                <i class="fa fa-key text-white"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <svg width="100%" height="20%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
+                    <svg width="100%" height="20%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
                 </div>
             </div>
             <div class="d-none" id="popover-content-genpass">
-                <p>Password must contain:</p>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="lowercaseCheck">
-                        <span class="custom-control-label" for="lowercaseCheck">Lower Case</span>
-                    </label>
-                </div>
-                
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="uppercaseCheck">
-                        <span class="custom-control-label" for="uppercaseCheck">Upper Case</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="numbersCheck">
-                        <span class="custom-control-label" for="numbersCheck">Numbers</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="charactersCheck">
-                        <span class="custom-control-label" for="charactersCheck">Characters</span>
-                    </label>
-                </div>
+                <div style="height: 230px !important;">
+                    <p>Password must contain:</p>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="lowercaseCheck">
+                            <span class="custom-control-label" for="lowercaseCheck">Lower Case</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="uppercaseCheck">
+                            <span class="custom-control-label" for="uppercaseCheck">Upper Case</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="numbersCheck">
+                            <span class="custom-control-label" for="numbersCheck">Numbers</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="charactersCheck">
+                            <span class="custom-control-label" for="charactersCheck">Characters</span>
+                        </label>
+                    </div>
 
-                <div class="dropdown-divider"></div>
-                <a type="button" class="btn btn-danger btn-sm py-0 btn-block mx-auto" onclick="generatePassButton()" >Gen Password</a>
+                    <div class="dropdown-divider"></div>
+                    <a type="button" class="btn btn-danger btn-sm py-0 btn-block mx-auto" onclick="generatePassButton()" >Gen Password</a>
+                </div>
             </div>
+            <div class="d-none" id="popover-content-iconselect">
+                <div class="container-fluid">
+                    <div class="row" style="max-width: 400px; overflow-x: auto;">
+                        <div class="col px-2" >
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light" style="width: 50px;" type="button"><i class='fa fa-key' style='color: #ff9900;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-globe' style='color: #00790a;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-terminal' style='color: #000000;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-at' style='color: #ff351b;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-server' style='color: #2e2e2e;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-file' style='color: #949494;'></i></button>
+                        </div>
+                        <div class="col px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-address-card' style='color: #008cff;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-apple' style='color: #000000;'> </i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-cc-visa' style='color: #0051ff;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-cog' style='color: #00a308;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-gamepad' style='color: #6b0059;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-heart' style='color: #ff0000;'></i></button>
+                            
+                        </div>
+                        <div class="col px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-comments' style='color: #006eff;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-desktop' style='color: #000000;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-amazon' style='color: #fd8700;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-app-store' style='color: #004797;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-spotify' style='color: #00a81c;'></i></button>
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                        <div class="col px-2">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <script src="js/db.js"></script>
         <script src="js/clipboard.min.js"></script>
-        
+        <script src="js/ui.js"></script>
+        <script src="js/modals.js"></script>
         <script src="js/wavify.js"></script>
         <script src="js/crypto.js"></script>
         <script src="js/genpass.js"></script>
