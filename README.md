@@ -35,7 +35,7 @@ Once installed, we're going to package for each OS.
 - From a script:
 
 ```sh
-    npm packageOSX
+    npm run packageOSX
 ```
 
 - From Electron CLI
@@ -49,7 +49,7 @@ Once installed, we're going to package for each OS.
 - From a script:
 
 ```sh
-    npm packageWIN
+    npm run packageWIN
 ```
 
 - From Electron CLI
@@ -63,7 +63,7 @@ Once installed, we're going to package for each OS.
 - From a script:
 
 ```sh
-    npm packageLINUX
+    npm run packageLINUX
 ```
 
 - From Electron CLI
