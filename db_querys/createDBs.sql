@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS masterkey (
 
 --New databases
 insert into databases(name,nameid) values('Internet','Internet');
-insert into databases(name,nameid) values('Emails','Emails');
+insert into databases(name,nameid) values('Social','Social');
 
 --New Entrys
 insert into passwords(db,name,username,password,url,level,icon) values('Internet','example','John Doe','12345','example.com',1,"<i class='fa fa-globe' style='color: #00790a;'></i>");

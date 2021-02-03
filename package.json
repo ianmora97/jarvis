@@ -6,6 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "wpc": "node ./node/wipeDb.js",
+    "mkc": "node ./node/doMaster.js",
     "dist": "electron-builder",
     "packageOSX": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.icns --prune=true --out=release-builds",
     "packageWIN": "electron-packager . Passafe --overwrite --platform=win32 --arch=ia32 --icon=images/icon.ico --prune=true --out=release-builds",
@@ -18,7 +20,6 @@
     "animate.css": "^4.1.1",
     "bootstrap": "^4.5.3",
     "browser-sync": "^2.26.13",
-    "dotenv": "^8.2.0",
     "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
     "gulp": "^4.0.2",
@@ -35,6 +36,7 @@
     "clipboard": "^2.0.6",
     "crypto-js": "^4.0.0",
     "datatables.net-bs4": "^1.10.23",
+    "dotenv": "^8.2.0",
     "path": "^0.12.7",
     "sqlite3": "^5.0.0"
   },
