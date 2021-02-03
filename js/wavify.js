@@ -1,5 +1,5 @@
 var wave1 = $('#feel-the-wave').wavify({
-    height: 60,
+    height: 1,
     bones: 4,
     amplitude: 10,
     color: 'rgba(237, 237, 237, .8)',
@@ -7,7 +7,7 @@ var wave1 = $('#feel-the-wave').wavify({
   });
   
   var wave2 = $('#feel-the-wave-two').wavify({
-    height: 50,
+    height: 1,
     bones: 3,
     amplitude: 8,
     color: 'rgba(214, 214, 214, .4)',

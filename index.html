@@ -198,7 +198,7 @@
                         <div class="form-group"  id="showallFormgroup">
                             <label for="passwordKeyMasterUnlock">Master Key</label>
                             <div class="input-group input-group-sm">
-                                <input type="password" class="form-control" id="passwordKeyMasterUnlock" placeholder="Masterkey..." value="">
+                                <input type="password" class="form-control" id="passwordKeyMasterUnlock" placeholder="Masterkey..." value="" autofocus>
                                 <div class="input-group-append" id="button-addon4">
                                     <button class="btn btn-outline-secondary" type="button" id="eyeChangePassUnlock" onclick="changeVisPassButtonUnlock()"><i class="fa fa-eye-slash"></i></button>
                                 </div>
@@ -381,6 +381,31 @@
                 </div>
             </div>
         </div>
+        <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen" role="document">
+                <div class="modal-content" style="height: 87vh;">
+                    <div class="modal-header pr-0 py-0 bg-light text-dark rounded-0" >
+                        <h6 class="modal-title mt-1" ><i class="fa fa-search text-dark"></i> Search</h6>
+                        <button type="button" class="close button-close p-0 m-0 text-dark" onclick="closeModalSearch()" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="d-flex justify-content-between pb-3">
+                            <div class="words">
+                                <small class="text-muted">Rows will appear here</small><br>
+                                <strong>Result:</strong>
+                            </div>
+                            <input class="form-control search-bar mr-0" type="search" placeholder="Search" onkeyup="searchonfind()" aria-label="Search" id="searchBarTablesModal">
+                        </div>
+                        <div class="table-responsive border-top-0 w-100" id="tableidresponsivesearch">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -473,7 +498,7 @@
                     <div class="col">
                         <div class="container-fluid px-0">
                             <div class="row justify-content-between">
-                                <div class="col-6 d-flex align-items-center">
+                                <div class="mt-1 col-6 d-flex align-items-center">
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Entry" id="addentrybutton">
                                     <i class="fa fa-plus text-white"></i>
                                     </button>
@@ -491,25 +516,21 @@
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Lock WorkSpace" onclick="lockWorkspace()">
                                         <i class="fa fa-lock text-white"></i>
                                     </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">
-                                        <i class="fa fa-key text-white"></i>
-                                    </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" onclick="getPasswords()">
-                                        <i class="fas fa-eye-slash text-white"></i>
+
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Search" onclick="searchinTables()">
+                                        <i class="fa fa-search text-white"></i>
                                     </button>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end">
                                     <div class="form-inline d-inline w-50 d-flex justify-content-end">
                                         <span class="sr-only" id="nameoftableon"></span>
-                                        <input class="form-control search-bar mr-0 w-75" type="search" placeholder="Search" onkeyup="searchinTables()" aria-label="Search" id="searchBarTables">
-                                        <button class="btn button-actions-search p-0 ml-0 my-1 text-white" type="submit"><i class="fa fa-search"></i></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row" style="height: 84%;">
+                <div class="row" style="height: 80%;">
                     <div class="col-2 position-relative px-0" >
                         <h6 class="text-white" style="z-index: 6; position: absolute; top: 4px; left: 10px;">Databases</h6>
                         <div class="position-absolute blue-left"></div>
@@ -531,12 +552,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="row position-relative bg-primary" style="height: 70px;">
-                    <div class="col" style="z-index: 5;">
-                        <p id="entryInfo" class="text-white"></p>
+                <div class="row position-relative bg-primary d-flex justify-content-between" style="height: calc(25.4% - 80px);">
+                    <div class="col-2" style="z-index: 5;">
+                        <p id="noyet" class="text-white"></p>
                     </div>
-                    <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
-                    <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
+                    <div class="col-8 pl-1" style="z-index: 5;">
+                        <small class="d-block text-white"><i class="fas fa-info-circle"></i> Entry info:</small>
+                        <p id="entryInfo" class="text-white h-50"></p>
+                    </div>
+                    <div class="col-2">
+                        <div class="row">
+                            <small class="text-white">Danger section</small>
+                        </div>
+                        <div class="row d-flex justify-content-start">
+                            <button class="btn button-actions-bottom p-0 mr-3 mb-auto mt-2" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" onclick="getPasswords()">
+                            <i class="fas fa-eye-slash text-white"></i>
+                            </button>
+                            <button class="btn button-actions-bottom p-0 mr-3 mb-auto mt-2" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">
+                                <i class="fa fa-key text-white"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <svg width="100%" height="20%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
+                    <svg width="100%" height="20%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
                 </div>
             </div>
             <div class="d-none" id="popover-content-genpass">
@@ -623,6 +661,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
         <script src="js/db.js"></script>
         <script src="js/clipboard.min.js"></script>

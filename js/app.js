@@ -1,4 +1,5 @@
 const { resolve } = require("path");
+const { ipcRenderer } = require('electron')
 
 var z_masterkey = "";
 var z_checkMasterkeyExists;
@@ -16,6 +17,7 @@ function eventsOnLoad(event) {
     popovericonselect();
     deleteDatabaseEvents();
     matchPasswordsType();
+    // changeTabsonShow();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
@@ -31,16 +33,60 @@ function checkCheckedEdit() {
         }
     });
 }
-function setForSearchValue(name) {
-    $('#nameoftableon').text(name);
+function changeTabsonShow() {
+    $('a.dbs').on('shown.bs.tab', function (event) {
+        let newly = event.target // newly activated tab
+        let prev = event.relatedTarget // previous active tab
+        console.log(newly,prev)
+    })
+}
+function setForSearchValue(name,e) {
+    e.target
+    
+    // $(this).tab('show')
+    // $(name).html('Showing '+(info.recordsTotal)+' of '+info.recordsTotal);
+    
+
+}
+function printInfotoFooter(id) {
+    for(let i=0;i<z_passwords_All.length;i++){
+        if(z_passwords_All[i].id == id){
+            let row = z_passwords_All[i];
+            let link ='';
+            if(row.url.includes('https://')){
+                link = row.url;
+            }else{
+                link = 'https://'+row.url;
+            }
+            console.log(link)
+            $('#entryInfo').html(`
+                ${row.icon}
+                <strong>Name:</strong> ${row.name} | 
+                <strong>User:</strong> ${row.username} | 
+                <span role="button" class="text-info" onclick="openExternalLink('${link}')">${link}</span> | 
+                <button type="button" class="btn btn-light py-0 btn-sm">
+                    Level <span class="badge badge-primary">${row.level}</span>
+                </button>
+            `);
+        }
+    }
+}
+function searchonfind() {
+    var table = $('#tabletofind').DataTable();
+    let val = $('#searchBarTablesModal').val();           
+    let result = table.search( val ).draw();
+}
+function closeModalSearch() {
+    $('#modalfindintables').removeClass('animate__animated animate__bounceInRight');
+    $('#modalfindintables').addClass('animate__animated animate__bounceOutRight');
+    setTimeout(() => {
+        $('#modalfindintables').removeClass('animate__animated animate__bounceOutRight');
+        $('#modalfindintables').modal('hide');
+    }, 600);
 }
 function searchinTables() {
-    let stable = $('#nameoftableon').text();
-    let idtable = '#'+stable+'_TableOrder';
-    let table = $(idtable).DataTable();
-    let val = $('#searchBarTables').val();           
-    let result = table.search( val ).draw();
-    console.log(result);
+    $('#modalfindintables').addClass('animate__animated animate__bounceInRight');
+    $('#modalfindintables').modal('show');
 }
 function checkLoginInit() {
     db.all("SELECT COUNT(*) as cnt FROM masterkey where name = 'main'", [], (err, rows) => {
@@ -55,6 +101,7 @@ function checkLoginInit() {
         }
     });
 }
+
 function openModaladddatabase() {
     $('#addDatabase').modal('show');
 }
@@ -76,7 +123,10 @@ function typeEntertoUnlock() {
         }
     });
 }
-
+function openExternalLink(url) {
+    console.log(url)
+    ipcRenderer.send('open-url', url);
+}
 async function getMasterkey() {
     return $('#passwordKeyMasterUnlock').val();
 }
@@ -175,12 +225,9 @@ function printChangeValues() {
     $('#showPassMasterKeyButton').hide();
     $('#askMasterKeyButton').show();
     let id = tempIdToShow;
-    console.log(z_passwords_All.length)
     for(let i=0;i<z_passwords_All.length;i++){
-        console.log(z_passwords_All[i].id, id)
         if(z_passwords_All[i].id == id){
             $('#id_tr_'+id).html('');
-            console.log('#id_tr_'+id)
             let row = z_passwords_All[i];
             $('#id_tr_'+id).append(
                 '<td><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></td>' +
