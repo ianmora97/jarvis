@@ -162,23 +162,73 @@ table.table thead th.sorting_desc:after {
 /*
     !Modales
 */
-
+.close {
+  font-size: 0.9rem;
+  line-height: 0 !important;
+  text-shadow: none !important;
+  opacity: 1 !important; 
+}
 .modal-content {
   border: 0 !important;
-  border-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   outline: 0;
+}
+
+.btn-close{
+  background-color: #f7f7f7;
+  &:hover{
+    background-color: #dbdfe3;
+  }
 }
 
 .button-close{
   width: 30px;
   height: 30px;
+  outline: 0 !important;
+  &:hover{
+    color: #e40505;
+  }
 }
-.button-close:hover{
-  background-color: #e40505;
+.button-close-mac{
+  width: 30px;
+  height: 25px;
+  outline: 0 !important;
+  &:hover{
+    color: #e40505;
+  }
 }
 
+.modal-header-mac{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: #fff !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 0 !important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+  background-color: #3E3F41 !important;
+}
+.modal-header-win{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: #fff !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 0 !important;
+  background-color: #212336 !important;
+}
+
+.modal-footer{
+  border:0 !important;
+}
 .modal-backdrop.show {
-  opacity: 0.1 !important;
+  opacity: 0 !important;
 }
 dt{
   font-weight: normal;
@@ -210,9 +260,14 @@ dt{
 .popover.popoverselecticon {
   margin-left: 10px !important;
   margin-top: 13.5% !important;
+  
 }
 .popover.popoverselecticon .arrow {
   top: 31px !important;
+}
+.popover.popoverselecticon .popover-body{
+  overflow-y: overlay;
+  height: 280px;
 }
 .list-group-item:first-child {
   border-top-left-radius: 0 !important; 

@@ -6,6 +6,7 @@ var z_checkMasterkeyExists;
 var clipboard = new ClipboardJS('.btn-to-clip');
 
 function eventsOnLoad(event) {
+    changeModalsOS();
     openModalEntry();
     openModalEdit();
     getIconSelected();
@@ -21,19 +22,50 @@ function eventsOnLoad(event) {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-}
-function checkCheckedEdit() {
-    $("#edit_copyUser").click(function () {
-        let Options = $("[id*=marcar_]");
+    $(function () {
 
-        for (let i = 0; i < Options.length; i++) {
-            if (Options[i].checked) {
-                //CopiarUsuario
-            }
-        }
-    });
+    })
+    
 }
-function changeTabsonShow() {
+function getOS() {
+    var userAgent = window.navigator.userAgent,
+        platform = window.navigator.platform,
+        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+        os = null;
+  
+    if (macosPlatforms.indexOf(platform) !== -1) {
+      os = 'OSX';
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+      os = 'iOS';
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+      os = 'Windows';
+    } else if (/Android/.test(userAgent)) {
+      os = 'Android';
+    } else if (!os && /Linux/.test(platform)) {
+      os = 'Linux';
+    }
+    return os;
+}
+function changeModalsOS() {
+    let os = getOS();
+    if(os == 'OSX'){
+        $('div[data-modal="header"]').removeClass('modal-header');
+        $('div[data-modal="header"]').addClass('modal-header-mac');
+
+        $('div[data-modal="header"]').find('span').addClass('order-2');
+        $('div[data-modal="header"]').find('button').addClass('order-1');
+
+        $('div[data-modal="header"]').find('button').removeClass('button-close');
+        $('div[data-modal="header"]').find('button').addClass('button-close-mac');
+
+        $('div[data-modal="header"]').find('button').html('<i class="fas fa-circle" style="color:#e65d5d;"></i>');
+    }else if(os == 'Windows'){
+
+    }
+}
+function changeTabsonShow() { // !shows the prev and new tabs *Not working*
     $('a.dbs').on('shown.bs.tab', function (event) {
         let newly = event.target // newly activated tab
         let prev = event.relatedTarget // previous active tab
@@ -48,7 +80,8 @@ function setForSearchValue(name,e) {
     
 
 }
-function printInfotoFooter(id) {
+
+function printInfotoFooter(id) { // ! Shows the information of the entry below the tables
     for(let i=0;i<z_passwords_All.length;i++){
         if(z_passwords_All[i].id == id){
             let row = z_passwords_All[i];
@@ -61,6 +94,7 @@ function printInfotoFooter(id) {
             console.log(link)
             $('#entryInfo').html(`
                 ${row.icon}
+                <small class="sr-only">${row.id}</small>
                 <strong>Name:</strong> ${row.name} | 
                 <strong>User:</strong> ${row.username} | 
                 <span role="button" class="text-info" onclick="openExternalLink('${link}')">${link}</span> | 
@@ -230,7 +264,6 @@ function printChangeValues() {
             $('#id_tr_'+id).html('');
             let row = z_passwords_All[i];
             $('#id_tr_'+id).append(
-                '<td><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></td>' +
                 "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
                 "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
                 "<td style='padding-left: 0 !important;'>" +

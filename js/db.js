@@ -52,7 +52,6 @@ function getPasswords() {
                     if(row.level == 5){
                         $(database).append(
                             "<tr id='id_tr_"+row.id+"'>" +
-                                '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'" data-id="'+row.id+'"></td>' +
                                 '<td>**</td>' +
                                 '<td>**</td>' +
                                 '<td>***********</td>' +
@@ -68,7 +67,6 @@ function getPasswords() {
                         let temp = localStorage.getItem('l_master_key')
                         $(database).append(
                             '<tr onclick="printInfotoFooter(\''+row.id+'\')">' +
-                                '<td><input class="custom-checkbox" type="checkbox" name="checked[]" id="marcar_'+row.id+'"></td>' +
                                 "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
                                 "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
                                 "<td style='padding-left: 0 !important;'>" +
@@ -117,8 +115,8 @@ function datatablesRunAfterInsertRows() {
                 "paging": false,
                 "info": false,
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 1, 2, 5] },
-                    { "orderable": true, "targets": [3, 4, 6, 7] }
+                    { "orderable": false, "targets": [0, 1, 5] },
+                    { "orderable": true, "targets": [2, 3, 4, 6] }
                 ]
             });
             // let info = table.page.info();
@@ -394,7 +392,6 @@ async function fillDatabases() {
                     <table class="table border-top-0 table-hover" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
-                    <th class="th-custom" style="width:15px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
                     <th class="th-custom"  style="width:15px;">&nbsp;</th>
                     <th class="th-custom"  style="width:15px; padding-right: 0 !important;">&nbsp;</th>
                     <th class="th-custom"  style="padding-left: 0 !important;" data-class-name="priority">Name</th>
@@ -432,7 +429,6 @@ async function fillDatabases() {
                     <table class="table border-top-0 table-hover" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
                     <thead class="bg-primary border-top-0 p-0 text-white">
                     <tr>
-                    <th class="th-custom" style="width:30px;"><input class="custom-checkbox" type="checkbox" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)" id="marcar"></th>
                     <th class="th-custom" style="width:30px;">&nbsp;</th>
                     <th class="th-custom" style="width:30px;">&nbsp;</th>
                     <th class="th-custom" data-class-name="priority">Name</th>
