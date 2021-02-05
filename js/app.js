@@ -69,7 +69,6 @@ function changeTabsonShow() { // !shows the prev and new tabs *Not working*
     $('a.dbs').on('shown.bs.tab', function (event) {
         let newly = event.target // newly activated tab
         let prev = event.relatedTarget // previous active tab
-        console.log(newly,prev)
     })
 }
 function setForSearchValue(name,e) {
@@ -91,7 +90,6 @@ function printInfotoFooter(id) { // ! Shows the information of the entry below t
             }else{
                 link = 'https://'+row.url;
             }
-            console.log(link)
             $('#entryInfo').html(`
                 ${row.icon}
                 <small class="sr-only">${row.id}</small>
@@ -158,7 +156,6 @@ function typeEntertoUnlock() {
     });
 }
 function openExternalLink(url) {
-    console.log(url)
     ipcRenderer.send('open-url', url);
 }
 async function getMasterkey() {
@@ -265,7 +262,7 @@ function printChangeValues() {
             let row = z_passwords_All[i];
             $('#id_tr_'+id).append(
                 "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
-                "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
+                "<td>"+row.icon+"</td>"+
                 "<td style='padding-left: 0 !important;'>" +
                 row.name +
                 "</td>" +
@@ -366,7 +363,6 @@ function generatePassButton() {
 
 function getIconSelected() {
     $(document).on('click','.btn-icon', function(){
-        console.log('click');
         let icon = $(this).html();
         $('#iconSelected').html('');
         $('#iconSelected').html(icon);
@@ -421,4 +417,5 @@ function verifyPasswordUpdate(val) {
     }
     
 }
+
 document.addEventListener("DOMContentLoaded", eventsOnLoad);

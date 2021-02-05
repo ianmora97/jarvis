@@ -5,7 +5,7 @@ let db = new sqlite3.Database(path.join(__dirname,'/databases/passafe.db'), (err
   if (err) {
     return console.error(err.message);
   }
-  console.log('Connected to the in-memory SQlite database.');
+  console.log('Connected to Passafe SQlite database.');
 });
 require('dotenv').config({ path: path.join(__dirname,'.env') });
 
@@ -45,61 +45,75 @@ function getPasswords() {
                     throw err;
                 }
                 $('#spinerToHide').hide()
-                rows.forEach((row) => {
-                    fillsearchtable(row)
-                    let database = '#'+row.db.replace(/ /g, "_")+'_Table';
-                    z_passwords_All.push(row);
-                    if(row.level == 5){
-                        $(database).append(
-                            "<tr id='id_tr_"+row.id+"'>" +
-                                '<td>**</td>' +
-                                '<td>**</td>' +
-                                '<td>***********</td>' +
-                                '<td>***********</td>' +
-                                '<td>***********</td>' +
-                                '<td>***********</td>' +
-                                '<td class="text-center"><button type="button" class="btn btn-danger btn-sm m-0 py-0" onclick="showLevelTR('+row.id+')"><i class="fa fa-eye text-white"></i></button>'+
-                                "</td>" +
-                                "</tr>"
-                        );
-                    }
-                    else{
-                        let temp = localStorage.getItem('l_master_key')
-                        $(database).append(
-                            '<tr onclick="printInfotoFooter(\''+row.id+'\')">' +
-                                "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
-                                "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
-                                "<td style='padding-left: 0 !important;'>" +
-                                row.name +
-                                "</td>" +
-                                '<td role="button" class="btn-to-clip" data-clipboard-text="' +
-                                row.username +
-                                '">' +
-                                row.username +
-                                "</td>" +
-                                '<td role="button" class="btn-to-clip" data-clipboard-text="' +
-                                decrypt(row.password, temp) +
-                                '">***********</td>' +
-                                '<td class="text-info" role="button" onclick="openExternalLink(\''+row.url+'\')">'+
-                                row.url +
-                                "</td>" +
-                                "<td class='text-center' >" +
-                                row.level +
-                                "</td>" +
-                                "</tr>"
-                        );
-                    }
-                });
-                datatablesRunAfterInsertRows();
-                var table = $('#tabletofind').DataTable({
-                    "paging": false,
-                    "info": false,
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 1] },
-                        { "orderable": true, "targets": [2, 3, 4, 5] }
-                    ]
-                });
-                $('#tabletofind_filter').css('display','none');
+                
+                setTimeout(() => {
+                    let cont = 2;
+                    let entero = 0;
+                    rows.forEach((row) => {
+                        fillsearchtable(row)
+                        let database = '#'+row.db.replace(/ /g, "_")+'_Table';
+                        z_passwords_All.push(row);
+                        if(row.level == 5){
+                            $(database).append(
+                                '<tr id="id_tr_'+row.id+'" class="animate__animated animate__slideInRight" id="tr-animate-'+row.id+'">' +
+                                    '<td>**</td>' +
+                                    '<td>**</td>' +
+                                    '<td>***********</td>' +
+                                    '<td>***********</td>' +
+                                    '<td>***********</td>' +
+                                    '<td>***********</td>' +
+                                    '<td class="text-center"><button type="button" class="btn btn-danger btn-sm m-0 py-0" onclick="showLevelTR('+row.id+')"><i class="fa fa-eye text-white"></i></button>'+
+                                    "</td>" +
+                                    "</tr>"
+                            );
+                        }
+                        else{
+                            let temp = localStorage.getItem('l_master_key')
+                            $(database).append(
+                                '<tr onclick="printInfotoFooter(\''+row.id+'\')" class="animate__animated animate__slideInRight" id="tr-animate-'+row.id+'">' +
+                                    "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
+                                    "<td>"+row.icon+"</td>"+
+                                    "<td style='padding-left: 0 !important;'>" +
+                                    row.name +
+                                    "</td>" +
+                                    '<td role="button" class="btn-to-clip" data-clipboard-text="' +
+                                    row.username +
+                                    '">' +
+                                    row.username +
+                                    "</td>" +
+                                    '<td role="button" class="btn-to-clip" data-clipboard-text="' +
+                                    decrypt(row.password, temp) +
+                                    '">***********</td>' +
+                                    '<td class="text-info" role="button" onclick="openExternalLink(\''+row.url+'\')">'+
+                                    row.url +
+                                    "</td>" +
+                                    "<td class='text-center' >" +
+                                    row.level +
+                                    "</td>" +
+                                "</tr>"+
+                                "<script>"+
+                                "$('#tr-animate-"+row.id+"').css('animation-duration', '"+entero+"."+cont+"s');"+
+                                "</script>"
+                            );
+                        }
+                        cont+=2;
+                        if(cont == 10){
+                            cont = 0;
+                            entero+=1;
+                        }
+                    });
+                
+                    datatablesRunAfterInsertRows();
+                    var table = $('#tabletofind').DataTable({
+                        "paging": false,
+                        "info": false,
+                        "columnDefs": [
+                            { "orderable": false, "targets": [0, 1] },
+                            { "orderable": true, "targets": [2, 3, 4, 5] }
+                        ]
+                    });
+                    $('#tabletofind_filter').css('display','none');
+                }, 3000);
             });
         });
 }
@@ -122,13 +136,15 @@ function datatablesRunAfterInsertRows() {
             // let info = table.page.info();
             $(database+'_filter').css('display','none');
             // $('#'+row.nameid+'_infoDataTable').html('Showing '+(info.recordsDisplay)+' of '+info.recordsTotal);
+            //style="height:76vh; overflow-y:auto;"
+            $('#table-res-'+row.nameid).css('height','76vh')
+            $('#table-res-'+row.nameid).css('overflow-y','auto')
         });
     });
 }
 
 function addEntry() {
     getInfo_addEntry().then((arr) => {
-        console.log(arr);
         db.run(
             "INSERT INTO passwords(name,username,password,url,level,icon,db) VALUES(?,?,?,?,?,?,?)",
             arr,
@@ -144,7 +160,6 @@ function addEntry() {
 }
 function addDatabase() {
     getInfo_addDatabase().then((arr) => {
-        console.log(arr);
         db.run(
             "INSERT INTO databases(name,nameid) VALUES(?,?)",
             arr,
@@ -160,7 +175,6 @@ function addDatabase() {
 }
 function safeMasterkey() {
     getinfo_addMasterkey().then((arr) => {
-		console.log(process.env.APP_KEY)
         let pass = encrypt(arr,process.env.APP_KEY);
 		
         db.run(
@@ -176,7 +190,7 @@ function safeMasterkey() {
         );
     });
 }
-function configMasterkeychange() {
+function configMasterkeychange() { // !change the masterkey password
     db.serialize(() => {
         $('#spinnerWaiterconfigMasterkey').show();
         let current = $('#configMasterkeyNameinputCurrent').val();
@@ -195,7 +209,6 @@ function configMasterkeychange() {
                 if(newp == conf){
                     if(current != newp){
                         let newpass = encrypt(newp,process.env.APP_KEY);
-                        console.log('passwords equal');
                         db.run(
                             "UPDATE masterkey SET password = ? WHERE name = 'main'",
                             [newpass],
@@ -329,127 +342,136 @@ async function cleanDatabasesTablesAsync() {
     });
 }
 async function fillDatabases() {
-    $("#list_databases").html('');
-    $("#nav-tabContent").html('');
-    $('#tableidresponsivesearch').html('');
-    db.all("SELECT databases.name as db, COUNT(passwords.db) as cant, nameid FROM databases LEFT JOIN passwords ON passwords.db = databases.name GROUP BY databases.name ORDER BY cant DESC, db ASC", [], (err_2, r) => {
-        if (err_2) {
-            throw err_2;
-        }
-        let c = 0;
-        if(r.length == 0){
-            $('#list_databases').append(`
-                <div class="d-flex flex-column" style="z-index:1;">
-                <button type="button" class="btn mx-auto fa-2x">🤔</button>
-                <p class="text-white mx-auto text-center"><strong>No databases!</strong><br> Add databases</p>
-                </div>
-            `);
-            $('#nav-tabContent').append(`
-                <div class="d-flex flex-column">
-                <button type="button" class="btn mx-auto fa-3x">🤔</button>
-                <p class="text-muted mx-auto text-center"><strong>No Passwords!</strong><br> Add databases first</p>
-                </div>
-            `);
-        }
-        $('#tableidresponsivesearch').html(`
-            <table class="table border-top-0 table-hover table-striped" id="tabletofind" data-order="[[ 3, &quot;asc&quot; ]]">
-            <thead class="bg-primary border-top-0 p-0 text-white">
-            <tr>
-            <th class="th-custom">Database</th>
-            <th class="th-custom" style="width:30px; padding-right: 0 !important;">&nbsp;</th>
-            <th class="th-custom" style="padding-left: 0 !important;" data-class-name="priority">Name</th>
-            <th class="th-custom">User</th>
-            <th class="th-custom">Password</th>
-            <th class="th-custom">URL</th>
-            <th class="th-custom" class="text-center" style="width:70px;">Level</th>
-            </tr>
-            </thead>
-            <tbody id="tbody_tabletofind">
-
-            </tbody>
-            </table>
-        `);
-        r.forEach((row) => {
-            if(!c){
-                $('#nameoftableon').text(row.nameid);
-                $("#list_databases").append(
-                    `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 active pr-1" 
-                    id="list-${row.nameid}-list" data-toggle="tab" href="#list-${row.nameid}" role="tab" 
-                    aria-controls="${row.nameid}" onclick="setForSearchValue('${'#list-'+row.nameid}',event)">
-                    <div class="d-block">
-                        ${row.db}
-                        
-                    </div>
-                    <span>
-                        <span class="badge badge-danger text-white badge-pill mr-3">${row.cant}</span>
-                        <i class="fa fa-chevron-right text-muted"></i>
-                    </span>
-                    </a>`
-                );
-                $("#nav-tabContent").append(
-                    `<div class="tab-pane fade show active" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
-                    <div class="table-responsive border-top-0 " style="height:76vh; overflow-y:auto;">
-                    <table class="table border-top-0 table-hover" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
-                    <thead class="bg-primary border-top-0 p-0 text-white">
-                    <tr>
-                    <th class="th-custom"  style="width:15px;">&nbsp;</th>
-                    <th class="th-custom"  style="width:15px; padding-right: 0 !important;">&nbsp;</th>
-                    <th class="th-custom"  style="padding-left: 0 !important;" data-class-name="priority">Name</th>
-                    <th class="th-custom" >User</th>
-                    <th class="th-custom" >Password</th>
-                    <th class="th-custom" >URL</th>
-                    <th class="th-custom"  class="text-center" style="width:50px;">Level</th>
-                    </tr>
-                    </thead>
-                    <tbody id="${row.nameid}_Table" class="">
-
-                    </tbody>
-                    </table>
-                    </div>   
-                    </div>`
-                );
-            }else{
-                $("#list_databases").append(
-                    `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 pr-1" 
-                    id="list-${row.nameid}-list" data-toggle="tab" href="#list-${row.nameid}" role="tab" 
-                    aria-controls="${row.nameid}" onclick="setForSearchValue('${'#list-'+row.nameid}',event)">
-                    <div class="d-block">
-                        ${row.db}
-                       
-                    </div>
-                    <span>
-                        <span class="badge badge-danger text-white badge-pill mr-3">${row.cant}</span>
-                        <i class="fa fa-chevron-right text-muted"></i>
-                    </span>
-                    </a>`
-                );
-                $("#nav-tabContent").append(
-                    `<div class="tab-pane fade" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
-                    <div class="table-responsive border-top-0 " style="height:76vh; overflow-y:auto;">
-                    <table class="table border-top-0 table-hover" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
-                    <thead class="bg-primary border-top-0 p-0 text-white">
-                    <tr>
-                    <th class="th-custom" style="width:30px;">&nbsp;</th>
-                    <th class="th-custom" style="width:30px;">&nbsp;</th>
-                    <th class="th-custom" data-class-name="priority">Name</th>
-                    <th class="th-custom">User</th>
-                    <th class="th-custom">Password</th>
-                    <th class="th-custom">URL</th>
-                    <th class="th-custom" class="text-center" style="width:50px;">Level</th>
-                    </tr>
-                    </thead>
-                    <tbody id="${row.nameid}_Table" class="">
-
-                    </tbody>
-                    </table>
-                    </div>   
-                    </div>`
-                );
+        $("#list_databases").html('');
+        $("#nav-tabContent").html('');
+        $('#tableidresponsivesearch').html('');
+        db.all("SELECT databases.name as db, COUNT(passwords.db) as cant, nameid FROM databases LEFT JOIN passwords ON passwords.db = databases.name GROUP BY databases.name ORDER BY cant DESC, db ASC", [], (err_2, r) => {
+            if (err_2) {
+                throw err_2;
             }
+            let c = 0;
+            if(r.length == 0){
+                $('#list_databases').append(`
+                    <div class="d-flex flex-column" style="z-index:1;">
+                    <button type="button" class="btn mx-auto fa-2x">🤔</button>
+                    <p class="text-white mx-auto text-center"><strong>No databases!</strong><br> Add databases</p>
+                    </div>
+                `);
+                $('#nav-tabContent').append(`
+                    <div class="d-flex flex-column">
+                    <button type="button" class="btn mx-auto fa-3x">🤔</button>
+                    <p class="text-muted mx-auto text-center"><strong>No Passwords!</strong><br> Add databases first</p>
+                    </div>
+                `);
+            }
+            $('#tableidresponsivesearch').html(`
+                <table class="table border-top-0 table-hover table-striped" id="tabletofind" data-order="[[ 3, &quot;asc&quot; ]]">
+                <thead class="bg-primary border-top-0 p-0 text-white">
+                <tr>
+                <th class="th-custom">Database</th>
+                <th class="th-custom" style="width:30px; padding-right: 0 !important;">&nbsp;</th>
+                <th class="th-custom" style="padding-left: 0 !important;" data-class-name="priority">Name</th>
+                <th class="th-custom">User</th>
+                <th class="th-custom">Password</th>
+                <th class="th-custom">URL</th>
+                <th class="th-custom" class="text-center" style="width:70px;">Level</th>
+                </tr>
+                </thead>
+                <tbody id="tbody_tabletofind">
+
+                </tbody>
+                </table>
+            `);
+            r.forEach((row) => {
+                if(!c){
+                    $('#nameoftableon').text(row.nameid);
+                    $("#list_databases").append(
+                        `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 active pr-1" 
+                        id="list-${row.nameid}-list" data-toggle="tab" href="#list-${row.nameid}" role="tab" 
+                        aria-controls="${row.nameid}" onclick="setForSearchValue('${'#list-'+row.nameid}',event)">
+                        <div class="d-block">
+                            ${row.db}
+                            
+                        </div>
+                        <span>
+                            <span class="badge badge-danger text-white badge-pill mr-3">${row.cant}</span>
+                            <i class="fa fa-chevron-right text-muted"></i>
+                        </span>
+                        </a>`
+                    );
+                    
+                    $("#nav-tabContent").append(
+                        `<div class="tab-pane fade show active" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
+                        <div class="table-responsive border-top-0 " id="table-res-${row.nameid}" >
+                        <table class="table border-top-0 table-hover m-0" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
+                        <thead class="bg-primary border-top-0 p-0 text-white">
+                        <tr>
+                        <th class="th-custom"  style="width:15px;">&nbsp;</th>
+                        <th class="th-custom"  style="width:15px; padding-right: 0 !important;">&nbsp;</th>
+                        <th class="th-custom"  style="padding-left: 0 !important;" data-class-name="priority">Name</th>
+                        <th class="th-custom" >User</th>
+                        <th class="th-custom" >Password</th>
+                        <th class="th-custom" >URL</th>
+                        <th class="th-custom"  class="text-center" style="width:50px;">Level</th>
+                        </tr>
+                        </thead>
+                        <tbody id="${row.nameid}_Table" class="">
+
+                        </tbody>
+                        </table>
+                        </div> 
+                        <div class="skeleton-tr"></div>
+                        <div class="skeleton-tr"></div>
+                        <div class="skeleton-tr"></div>
+                        </div>`
+                    );
+                }else{
+                    $("#list_databases").append(
+                        `<a class="list-group-item dbs list-group-item-action d-flex justify-content-between align-items-center border-0 pr-1" 
+                        id="list-${row.nameid}-list" data-toggle="tab" href="#list-${row.nameid}" role="tab" 
+                        aria-controls="${row.nameid}" onclick="setForSearchValue('${'#list-'+row.nameid}',event)">
+                        <div class="d-block">
+                            ${row.db}
+                        
+                        </div>
+                        <span>
+                            <span class="badge badge-danger text-white badge-pill mr-3">${row.cant}</span>
+                            <i class="fa fa-chevron-right text-muted"></i>
+                        </span>
+                        </a>`
+                    );
+                    $("#nav-tabContent").append(
+                        `<div class="tab-pane fade" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
+                        <div class="table-responsive border-top-0 " id="table-res-${row.nameid}">
+                        <table class="table border-top-0 table-hover m-0" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
+                        <thead class="bg-primary border-top-0 p-0 text-white">
+                        <tr>
+                        <th class="th-custom" style="width:30px;">&nbsp;</th>
+                        <th class="th-custom" style="width:30px;">&nbsp;</th>
+                        <th class="th-custom" data-class-name="priority">Name</th>
+                        <th class="th-custom">User</th>
+                        <th class="th-custom">Password</th>
+                        <th class="th-custom">URL</th>
+                        <th class="th-custom" class="text-center" style="width:50px;">Level</th>
+                        </tr>
+                        </thead>
+                        <tbody id="${row.nameid}_Table" class="">
+
+                        </tbody>
+                        </table>
+                        </div>
+                        <div class="skeleton-tr"></div>
+                        <div class="skeleton-tr"></div>
+                        <div class="skeleton-tr"></div>
+                        </div>`
+                    );
+                }
+                
+                c+=1;
+            });
             
-            c+=1;
         });
-    });
+        $( "div" ).remove( ".skeleton-list-a" );
 }
 function fillsearchtable(row) {
     $('#tbody_tabletofind').append(`

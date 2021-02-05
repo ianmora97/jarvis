@@ -34,7 +34,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
   height: 35px;
 
   background: #2B2D42;
-  box-shadow: 0 4px 4px #999;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   &:hover {
     background: #212336;
@@ -44,13 +44,14 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
   }
 }
 .button-actions-bottom{
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
 
-  background: #e40505;
+  background: #c72828;
   border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   &:hover {
-    background: #c72828;
+    background: #ab1212;
   }
   &:active {
     background: #8D99AE;
@@ -169,7 +170,7 @@ table.table thead th.sorting_desc:after {
   opacity: 1 !important; 
 }
 .modal-content {
-  border: 0 !important;
+  
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   outline: 0;
@@ -277,4 +278,94 @@ dt{
 .list-group-item:last-child {
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
+}
+/*
+  !Skeletons
+*/
+
+.skeleton-tr {
+  background-repeat: no-repeat;
+  background-image: 
+  linear-gradient(90deg, 
+  rgba(255, 255, 255, 0) 0,
+  rgba(255, 255, 255, 0.8) 50%,
+  rgba(255, 255, 255, 0) 100%), 
+    radial-gradient(circle 8px, #e6e6e6 99%, transparent 0), //icon
+    linear-gradient(rgb(237, 242, 244) 40px, transparent 0), //name
+    linear-gradient(rgb(237, 242, 244) 40px, transparent 0), //user
+    linear-gradient(rgb(237, 242, 244) 40px, transparent 0), //password
+    linear-gradient(rgb(237, 242, 244) 40px, transparent 0), //url
+    linear-gradient(rgb(237, 242, 244) 40px, transparent 0), //level
+    linear-gradient(#fff 100%, transparent 0); //white
+    background-size:
+    150px 100px,
+    16px 16px, //icon
+    15% 15px, //name
+    15% 15px, //user
+    20% 15px, //pass
+    15% 15px, //url
+    6.6% 15px, //lvl
+    100% 100%;
+    background-position:
+    -150% 0,
+    2% 8px, //icon
+    6.3% 8px, //name
+    30.3% 8px, //user
+    55.3% 8px, //pass
+    88.8% 8px, //url
+    99.3% 8px, //lvl
+    0 0;
+    height: 30px;
+    width: 100%;
+    animation: loadingtr 1.5s infinite;
+}
+
+.skeleton-list-a{
+  background-repeat: no-repeat;
+  background-image: 
+  linear-gradient(90deg, 
+  rgba(237, 242, 244 , 0%) 0,
+  rgba(237, 242, 244 , 80%) 50%,
+  rgba(237, 242, 244 , 0%) 100%), 
+  linear-gradient(#ffffff 40px, transparent 0), 
+  radial-gradient(circle 11px, #ffffff 99%, transparent 0), 
+  linear-gradient(rgb(237, 242, 244) 100%, transparent 0);
+
+  background-size: 150px 100px, 60% 16px, 9% 22px, 100% 100%;
+  background-position: -150% 0, 20% 50%, 85% 50%, 0 0;
+  height: 48px;
+  width: 100%;
+  z-index: 1;
+  padding: 0.75rem 1.25rem;
+  padding-right: 0.25rem;
+  animation: loadinglist 1.5s infinite;
+}
+
+
+/*
+  !KeyFrames
+*/
+@keyframes loadinglist {
+  to {
+    background-position:
+      350% 0,        
+      20% 50%,  
+      85% 50%,
+      0 0
+    ;
+  }
+}
+
+@keyframes loadingtr {
+  to {
+    background-position:
+      350% 0,
+      2% 8px, //icon
+      6.3% 8px, //name
+      30.3% 8px, //user
+      55.3% 8px, //pass
+      88.8% 8px, //url
+      99.3% 8px, //lvl
+      0 0;
+  }
 }
