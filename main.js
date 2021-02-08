@@ -16,7 +16,7 @@ function createWindow() {
     win.once('ready-to-show', () => {
         win.show()
     })
-    win.setIcon(path.join(__dirname, '/images/ico.png'));
+    win.setIcon(path.join(__dirname, '/images/icon.png'));
     win.removeMenu();
     win.loadFile(path.join(__dirname,"index.html"));
 }

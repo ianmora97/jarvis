@@ -6,6 +6,7 @@ var z_checkMasterkeyExists;
 var clipboard = new ClipboardJS('.btn-to-clip');
 
 function eventsOnLoad(event) {
+    changeModalsOS();
     openModalEntry();
     openModalEdit();
     getIconSelected();
@@ -17,38 +18,117 @@ function eventsOnLoad(event) {
     popovericonselect();
     deleteDatabaseEvents();
     matchPasswordsType();
+    whenOpenModals();
     // changeTabsonShow();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-}
-function checkCheckedEdit() {
-    $("#edit_copyUser").click(function () {
-        let Options = $("[id*=marcar_]");
+    $(function () {
 
-        for (let i = 0; i < Options.length; i++) {
-            if (Options[i].checked) {
-                //CopiarUsuario
-            }
-        }
-    });
+    })
+    
 }
-function changeTabsonShow() {
+
+function whenOpenModals() {
+    $('#masterKey').on('show.bs.modal', function () {
+        animateReturn('#masterKey','bounceInUp')
+    })
+    $('#addDatabase').on('show.bs.modal', function () {
+        animateReturn('#addDatabase','bounceIn')
+    })
+    $('#addEntryModal').on('show.bs.modal', function () {
+        animateReturn('#addEntryModal','bounceIn')
+    })
+    $('#deleteDatabase').on('show.bs.modal', function () {
+        animateReturn('#deleteDatabase','bounceIn')
+    })
+    $('#updateEntryModal').on('show.bs.modal', function () {
+        animateReturn('#updateEntryModal','bounceIn')
+    })
+    $('#configMasterkey').on('show.bs.modal', function () {
+        animateReturn('#configMasterkey','bounceIn')
+    })
+}
+const animateReturn = (element, animation, prefix = 'animate__') => {
+    // We create a Promise and return it
+      new Promise((resolve, reject) => {
+          const animationName = `${prefix}${animation}`;
+          const node = document.querySelector(element);
+  
+          node.classList.add(`${prefix}animated`, animationName);
+  
+          // When the animation ends, we clean the classes and resolve the Promise
+          function handleAnimationEnd(event) {
+          event.stopPropagation();
+          node.classList.remove(`${prefix}animated`, animationName);
+          resolve('Animation ended');
+          }
+  
+          node.addEventListener('animationend', handleAnimationEnd, {once: true});
+      });
+  }
+  
+function getOS() {
+    var userAgent = window.navigator.userAgent,
+        platform = window.navigator.platform,
+        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+        os = null;
+  
+    if (macosPlatforms.indexOf(platform) !== -1) {
+      os = 'OSX';
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+      os = 'iOS';
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+      os = 'Windows';
+    } else if (/Android/.test(userAgent)) {
+      os = 'Android';
+    } else if (!os && /Linux/.test(platform)) {
+      os = 'Linux';
+    }
+    return os;
+}
+function changeModalsOS() {
+    let os = getOS();
+    if(os == 'OSX'){
+        $('div[data-modal="header"]').removeClass('modal-header');
+        $('div[data-modal="header"]').addClass('modal-header-mac');
+
+        $('div[data-modal="header"]').find('span').addClass('order-2');
+        $('div[data-modal="header"]').find('button').addClass('order-1');
+
+        $('div[data-modal="header"]').find('button').removeClass('button-close');
+        $('div[data-modal="header"]').find('button').addClass('button-close-mac');
+
+        $('div[data-modal="header"]').find('button').html('<i class="fas fa-circle" style="color:#e65d5d;"></i>');
+    }else if(os == 'Windows'){ //Windows
+        $('div[data-modal="header"]').removeClass('modal-header');
+        $('div[data-modal="header"]').addClass('modal-header-win');
+
+        $('div[data-modal="header"]').find('small').remove();
+
+        $('div[data-modal="header"]').find('span').addClass('order-1');
+        $('div[data-modal="header"]').find('button').addClass('order-2');
+
+        $('div[data-modal="header"]').find('span').addClass('my-auto');
+        $('div[data-modal="header"]').find('button').find('h6').addClass('my-auto');
+    }
+}
+function changeTabsonShow() { // !shows the prev and new tabs *Not working*
     $('a.dbs').on('shown.bs.tab', function (event) {
         let newly = event.target // newly activated tab
         let prev = event.relatedTarget // previous active tab
-        console.log(newly,prev)
     })
 }
 function setForSearchValue(name,e) {
     e.target
-    
     // $(this).tab('show')
     // $(name).html('Showing '+(info.recordsTotal)+' of '+info.recordsTotal);
-    
-
 }
-function printInfotoFooter(id) {
+
+
+function printInfotoFooter(id) { // ! Shows the information of the entry below the tables
     for(let i=0;i<z_passwords_All.length;i++){
         if(z_passwords_All[i].id == id){
             let row = z_passwords_All[i];
@@ -58,9 +138,9 @@ function printInfotoFooter(id) {
             }else{
                 link = 'https://'+row.url;
             }
-            console.log(link)
             $('#entryInfo').html(`
                 ${row.icon}
+                <small class="sr-only">${row.id}</small>
                 <strong>Name:</strong> ${row.name} | 
                 <strong>User:</strong> ${row.username} | 
                 <span role="button" class="text-info" onclick="openExternalLink('${link}')">${link}</span> | 
@@ -124,7 +204,6 @@ function typeEntertoUnlock() {
     });
 }
 function openExternalLink(url) {
-    console.log(url)
     ipcRenderer.send('open-url', url);
 }
 async function getMasterkey() {
@@ -159,11 +238,11 @@ function fail_notEqual() {
         $("#configMasterkeyNameinputNew").addClass('is-invalid');
         $("#configMasterkeyNameinputConfirm").addClass('is-invalid');
         $("#feedbackPassMatch").show();
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
     setTimeout(() => {
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").removeClass('animate__animated animate__shakeX');
     }, 2000);
 }
 function fail_currentnotEqual() {
@@ -171,21 +250,21 @@ function fail_currentnotEqual() {
     setTimeout(() => {
         $("#configMasterkeyNameinputCurrent").addClass('is-invalid');
         $("#feedbackPassCurrent").show();
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
     setTimeout(() => {
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").removeClass('animate__animated animate__shakeX');
     }, 2000);
 }
 function fail_newSame() {
     setTimeout(() => {
         $("#feedbackPassSame").show();
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
     setTimeout(() => {
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").removeClass('animate__animated animate__shakeX');
     }, 2000);
 }
 function matchPasswordsType() {
@@ -230,9 +309,8 @@ function printChangeValues() {
             $('#id_tr_'+id).html('');
             let row = z_passwords_All[i];
             $('#id_tr_'+id).append(
-                '<td><input class="custom-checkbox" type="checkbox" name="all" id="marcar"></td>' +
                 "<td role='button' data-toggle='modal' data-target='#updateEntryModal' "+writeDatasonRows(row)+"><i class='fas fa-pen'></i></td>" +
-                "<td style='padding-right: 0 !important;'>"+row.icon+"</td>"+
+                "<td>"+row.icon+"</td>"+
                 "<td style='padding-left: 0 !important;'>" +
                 row.name +
                 "</td>" +
@@ -333,7 +411,6 @@ function generatePassButton() {
 
 function getIconSelected() {
     $(document).on('click','.btn-icon', function(){
-        console.log('click');
         let icon = $(this).html();
         $('#iconSelected').html('');
         $('#iconSelected').html(icon);
@@ -388,4 +465,5 @@ function verifyPasswordUpdate(val) {
     }
     
 }
+
 document.addEventListener("DOMContentLoaded", eventsOnLoad);
