@@ -113,7 +113,7 @@ function getPasswords() {
                         ]
                     });
                     $('#tabletofind_filter').css('display','none');
-                }, 3000);
+                }, 2000);
             });
         });
 }
@@ -268,6 +268,25 @@ function getDatabases() {
         }
         $("#databases_addentry").html('');
         $("#deleteDatabaseNameinput").html('');
+        if(rows.length == 0){
+            $('#addentrybutton').addClass('disabled')
+            $('#addentrybutton').prop('disabled','disabled')
+
+            $('#deleteDatabaseButton').addClass('disabled')
+            $('#deleteDatabaseButton').prop('disabled','disabled')
+
+            $('#reloadlvl5pass').addClass('disabled')
+            $('#reloadlvl5pass').prop('disabled','disabled')
+        }else{
+            $('#addentrybutton').removeClass('disabled')
+            $('#addentrybutton').prop('disabled',false)
+
+            $('#deleteDatabaseButton').removeClass('disabled')
+            $('#deleteDatabaseButton').prop('disabled',false)
+
+            $('#reloadlvl5pass').removeClass('disabled')
+            $('#reloadlvl5pass').prop('disabled',false)
+        }
         rows.forEach((row) => {
             z_databases_all.push(row);
             $("#databases_addentry").append(
@@ -481,7 +500,7 @@ function fillsearchtable(row) {
             <td style="padding-left: 0 !important;">${row.name}</td>
             <td role="button" class="btn-to-clip" data-clipboard-text="${row.username}">${row.username}</td>
             <td role="button" class="btn-to-clip" data-clipboard-text="${decrypt(row.password,localStorage.getItem('l_master_key'))}">******</td>
-            <td>${row.url}</td>
+            <td class="text-info" role="button" onclick="openExternalLink('${row.url}')">${row.url}</td>
             <td class="text-center">${row.level}</td>
         </tr>
     `);

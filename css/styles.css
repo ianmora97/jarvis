@@ -171,9 +171,11 @@ table.table thead th.sorting_desc:after {
 .button-close {
   width: 30px;
   height: 30px;
-  outline: 0 !important; }
+  outline: 0 !important;
+  color: #ffffff; }
   .button-close:hover {
-    color: #e40505; }
+    background-color: #e40505;
+    color: #ffffff; }
 
 .button-close-mac {
   width: 30px;
@@ -201,6 +203,7 @@ table.table thead th.sorting_desc:after {
   justify-content: space-between;
   color: #fff !important;
   padding-right: 0 !important;
+  padding-left: 1rem;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   border-radius: 0 !important;

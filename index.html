@@ -21,7 +21,7 @@
         <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js"></script>
     </head>
     <body style="height: 100vh;" class="overflow-hidden">
-        <div class="modal " id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
+        <div class="modal" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered draggable" role="document">
                 <div class="modal-content" id="addEntryDialog">
                     <div class="modal-header" data-modal="header" id="addEntryHeader">
@@ -111,14 +111,15 @@
                 $("#addEntryDialog").draggable({ handle: "#addEntryHeader", containment: "#addEntryModal" }); 
             </script>
         </div>
-        <div class="modal fade" id="updateEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntryModalLabel" aria-hidden="true">
+        <div class="modal" id="updateEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" data-modal="header">
-                        <h6 class="modal-title mt-1" ><i class="fa fa-pencil text-white"></i> Update Entry</h6>
+                <div class="modal-content" id="updateEntryDialog">
+                    <div class="modal-header" data-modal="header" id="updateEntryHeader">
+                        <span class="modal-title">Update Entry</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3"></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="container">
@@ -188,23 +189,35 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="modal-footer bg-white py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="UpdateEntry()">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterUpdateEntry" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Update Entry
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="UpdateEntry()">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterUpdateEntry" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Update Entry
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#updateEntryDialog").draggable({ handle: "#updateEntryHeader", containment: "#updateEntryModal" }); 
+            </script>
         </div>
-        <div class="modal  animate__animated animate__bounceInUp" id="masterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+        <div class="modal" id="masterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered draggable" role="document" >
                 <div class="modal-content" id="masterKeyDialog">
                     <div class="modal-header" data-modal="header" id="masterKeyHeader">
                         <span class="modal-title text-light" >Master Key</span>
-                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
                         <small class="order-3"></small>
@@ -300,14 +313,15 @@
                 $("#addMasterKeyDialog").draggable({ handle: "#addMasterKeyHeader", containment: "#addMasterKey" }); 
             </script>
         </div>
-        <div class="modal fade" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addDatabaseLabel" aria-hidden="true">
+        <div class="modal" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addDatabaseLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpace">
-                    <div class="modal-header" data-modal="header">
-                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Add database</h6>
+                <div class="modal-content" id="addDatabaseDialog">
+                    <div class="modal-header" data-modal="header" id="addDatabaseHeader">
+                        <span class="modal-title">Add database</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3"></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group">
@@ -316,25 +330,38 @@
                             <small class="text-muted">This database will keep all the passwords of this category.</small>
                         </div>
                     </div>
-                    <div class="modal-footer bg-white py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="addDatabase()" id="buttonAdddatabaseModal">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddDatabase" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Add Database
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="addDatabase()" id="buttonAdddatabaseModal">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddDatabase" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Add Database
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#addDatabaseDialog").draggable({ handle: "#addDatabaseHeader", containment: "#addDatabase" }); 
+            </script>
         </div>
-        <div class="modal fade" id="deleteDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteDatabaseLabel" aria-hidden="true">
+        <div class="modal" id="deleteDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteDatabaseLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpace">
-                    <div class="modal-header" data-modal="header">
-                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Delete database</h6>
+                <div class="modal-content" id="deleteDatabaseDialog">
+                    <div class="modal-header" data-modal="header" id="deleteDatabaseHeader">
+                        <span class="modal-title">Delete database</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close" id="cancelClosedeleteDatabase">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3"></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group">
@@ -349,31 +376,44 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-white py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="checkDeleteDatabase()" id="buttondeleteDatabaseModalCheck">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabaseCheck" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Check
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="deleteConfirmDatabase()" id="buttondeleteDatabaseModal" style="display: none;">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabase" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="checkDeleteDatabase()" id="buttondeleteDatabaseModalCheck">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabaseCheck" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Check
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="deleteConfirmDatabase()" id="buttondeleteDatabaseModal" style="display: none;">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabase" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Delete Database
+                                </button>
                             </div>
-                            Delete Database
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#deleteDatabaseDialog").draggable({ handle: "#deleteDatabaseHeader", containment: "#deleteDatabase" }); 
+            </script>
         </div>
-        <div class="modal fade" id="configMasterkey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="configMasterkeyLabel" aria-hidden="true">
+        <div class="modal" id="configMasterkey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="configMasterkeyLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpaceconfigmasterkey">
-                    <div class="modal-header" data-modal="header">
-                        <h6 class="modal-title mt-1" ><i class="fas fa-key text-white"></i> Config Masterkey</h6>
+                <div class="modal-content" id="configMasterDialog">
+                    <div class="modal-header" data-modal="header" id="configMasterHeader">
+                        <span class="modal-title">Config Masterkey</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3"></small>
                     </div>
                     <div class="modal-body bg-white">
                         <small class="text-muted">Current Password</small>
@@ -410,25 +450,38 @@
                             <strong>Same Passwords</strong>, new password and current must be different!
                         </div>
                     </div>
-                    <div class="modal-footer bg-white py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="configMasterkeychange()" id="buttonconfigMasterkeyModal">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterconfigMasterkey" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Change Masterkey
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="configMasterkeychange()" id="buttonconfigMasterkeyModal">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterconfigMasterkey" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Change Masterkey
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#configMasterDialog").draggable({ handle: "#configMasterHeader", containment: "#configMasterkey" }); 
+            </script>
         </div>
         <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen" role="document" style="height: 95.3vh;">
-                <div class="modal-content" style="height: calc(50px + 80%);">
-                    <div class="modal-header" data-modal="header">
-                        <h6 class="modal-title mt-1" ><i class="fa fa-search text-dark"></i> Search</h6>
-                        <button type="button" class="close button-close p-0 m-0 text-dark" onclick="closeModalSearch()" aria-label="Close">
+                <div class="modal-content border-0" style="height: calc(50px + 80%);" id="modalfindDialog">
+                    <div class="modal-header" data-modal="header" id="modalfindHeader">
+                        <span class="modal-title" >Search</span>
+                        <button type="button" class="close button-close p-0 m-0" onclick="closeModalSearch()" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3"> </small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="d-flex justify-content-between pb-3">
@@ -445,7 +498,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -545,7 +597,7 @@
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database" onclick="openModaladddatabase()">
                                         <i class="fa fa-database text-white"></i>
                                     </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Delete Database" onclick="openModaldeletedatabase()">
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Delete Database" id="deleteDatabaseButton" onclick="openModaldeletedatabase()">
                                         <i class="fa fa-trash text-white"></i>
                                     </button>
                                     <!-- 
@@ -564,7 +616,7 @@
                                 <div class="mt-1 col-6 d-flex justify-content-end">
                                     <div class="form-inline d-inline w-50 d-flex justify-content-end">
                                         <span class="sr-only" id="nameoftableon"></span>
-                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" onclick="getPasswords()">
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" id="reloadlvl5pass" onclick="getPasswords()">
                                             <i class="fas fa-eye-slash text-white"></i>
                                         </button>
                                         <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">

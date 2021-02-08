@@ -18,6 +18,7 @@ function eventsOnLoad(event) {
     popovericonselect();
     deleteDatabaseEvents();
     matchPasswordsType();
+    whenOpenModals();
     // changeTabsonShow();
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -27,6 +28,46 @@ function eventsOnLoad(event) {
     })
     
 }
+
+function whenOpenModals() {
+    $('#masterKey').on('show.bs.modal', function () {
+        animateReturn('#masterKey','bounceInUp')
+    })
+    $('#addDatabase').on('show.bs.modal', function () {
+        animateReturn('#addDatabase','bounceIn')
+    })
+    $('#addEntryModal').on('show.bs.modal', function () {
+        animateReturn('#addEntryModal','bounceIn')
+    })
+    $('#deleteDatabase').on('show.bs.modal', function () {
+        animateReturn('#deleteDatabase','bounceIn')
+    })
+    $('#updateEntryModal').on('show.bs.modal', function () {
+        animateReturn('#updateEntryModal','bounceIn')
+    })
+    $('#configMasterkey').on('show.bs.modal', function () {
+        animateReturn('#configMasterkey','bounceIn')
+    })
+}
+const animateReturn = (element, animation, prefix = 'animate__') => {
+    // We create a Promise and return it
+      new Promise((resolve, reject) => {
+          const animationName = `${prefix}${animation}`;
+          const node = document.querySelector(element);
+  
+          node.classList.add(`${prefix}animated`, animationName);
+  
+          // When the animation ends, we clean the classes and resolve the Promise
+          function handleAnimationEnd(event) {
+          event.stopPropagation();
+          node.classList.remove(`${prefix}animated`, animationName);
+          resolve('Animation ended');
+          }
+  
+          node.addEventListener('animationend', handleAnimationEnd, {once: true});
+      });
+  }
+  
 function getOS() {
     var userAgent = window.navigator.userAgent,
         platform = window.navigator.platform,
@@ -61,8 +102,17 @@ function changeModalsOS() {
         $('div[data-modal="header"]').find('button').addClass('button-close-mac');
 
         $('div[data-modal="header"]').find('button').html('<i class="fas fa-circle" style="color:#e65d5d;"></i>');
-    }else if(os == 'Windows'){
+    }else if(os == 'Windows'){ //Windows
+        $('div[data-modal="header"]').removeClass('modal-header');
+        $('div[data-modal="header"]').addClass('modal-header-win');
 
+        $('div[data-modal="header"]').find('small').remove();
+
+        $('div[data-modal="header"]').find('span').addClass('order-1');
+        $('div[data-modal="header"]').find('button').addClass('order-2');
+
+        $('div[data-modal="header"]').find('span').addClass('my-auto');
+        $('div[data-modal="header"]').find('button').find('h6').addClass('my-auto');
     }
 }
 function changeTabsonShow() { // !shows the prev and new tabs *Not working*
@@ -73,12 +123,10 @@ function changeTabsonShow() { // !shows the prev and new tabs *Not working*
 }
 function setForSearchValue(name,e) {
     e.target
-    
     // $(this).tab('show')
     // $(name).html('Showing '+(info.recordsTotal)+' of '+info.recordsTotal);
-    
-
 }
+
 
 function printInfotoFooter(id) { // ! Shows the information of the entry below the tables
     for(let i=0;i<z_passwords_All.length;i++){
@@ -190,11 +238,11 @@ function fail_notEqual() {
         $("#configMasterkeyNameinputNew").addClass('is-invalid');
         $("#configMasterkeyNameinputConfirm").addClass('is-invalid');
         $("#feedbackPassMatch").show();
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
     setTimeout(() => {
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").removeClass('animate__animated animate__shakeX');
     }, 2000);
 }
 function fail_currentnotEqual() {
@@ -202,21 +250,21 @@ function fail_currentnotEqual() {
     setTimeout(() => {
         $("#configMasterkeyNameinputCurrent").addClass('is-invalid');
         $("#feedbackPassCurrent").show();
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
     setTimeout(() => {
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").removeClass('animate__animated animate__shakeX');
     }, 2000);
 }
 function fail_newSame() {
     setTimeout(() => {
         $("#feedbackPassSame").show();
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").addClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").addClass('animate__animated animate__shakeX');
         $('#spinnerWaiterconfigMasterkey').hide();
     }, 1000);
     setTimeout(() => {
-        $("#contentModalUnlockWorkSpaceconfigmasterkey").removeClass('animate__animated animate__shakeX');
+        $("#configMasterDialog").removeClass('animate__animated animate__shakeX');
     }, 2000);
 }
 function matchPasswordsType() {
