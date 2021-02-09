@@ -486,10 +486,12 @@
                     <div class="modal-body bg-white">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="customFile" onchange="readFile()">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
+                            <label class="custom-file-label" for="customFile" id="customFileLabel">Choose file</label>
                         </div>
-                        <div class="panelInfoDatabaseHeader mt-2" id="filenameRead">file.json</div>
-                        <div class="panelInfoDatabase pt-1" id="readPanelAll"></div>
+                        <div id="borderfileuploadpanel" class="mt-2 ">
+                            <div class="panelInfoDatabaseHeader " id="filenameRead">file.json</div>
+                            <div class="panelInfoDatabase pt-1" id="readPanelAll"></div>
+                        </div>
                     </div>
                     <div class="modal-footer bg-white p-0">
                         <div class="row no-gutters w-100 m-0">
@@ -499,7 +501,7 @@
                                 </button>
                             </div>
                             <div class="col-6 order-1">
-                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="loadDataToDatabase()" id="buttonLoadFiletoDatabase">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="loadDataToDatabase()" id="buttonLoadFiletoDatabase" disabled>
                                     <div class="spinner-border spinner-border-sm" id="spinerloadtodatabase" role="status" style="display: none;">
                                         <span class="sr-only">Loading...</span>
                                     </div>
@@ -596,6 +598,9 @@
             </div>
         </div>
         <div id="block_workSpace" style="display: none;">
+            <div class="toast-container" aria-live="polite" aria-atomic="true" id="pushToastContainer">
+                
+            </div>
             <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" 
             style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
