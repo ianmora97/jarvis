@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Passafe</title>
-        <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"> -->
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
 
         <!-- Insert this line above script imports  -->
         <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -13,12 +13,12 @@
         <link rel="stylesheet" href="css/fontawesome.css">
 
         <script src="js/jq-bs-bundle.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js" ></script>
-        <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js" ></script>
-        <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js" ></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.css"/>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
+        <script src="js/TweenMax.min.js" ></script>
+        <script src="js/wavify-js.js" ></script>
+        <script src="js/jquery.wavify.js" ></script>
+        <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+        <script type="text/javascript" src="js/datatables.min.js"></script>
     </head>
     <body style="height: 100vh;" class="overflow-hidden">
         <div class="modal" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
@@ -473,6 +473,97 @@
                 $("#configMasterDialog").draggable({ handle: "#configMasterHeader", containment: "#configMasterkey" }); 
             </script>
         </div>
+        <div class="modal" id="uploadDataModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="uploadDataModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0" id="uploadDataModalDialog">
+                    <div class="modal-header" data-modal="header" id="uploadDataModalHeader">
+                        <span class="modal-title" >Upload Database</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                        <small class="order-3"> </small>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" onchange="readFile()">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                        <div class="panelInfoDatabaseHeader mt-2" id="filenameRead">file.json</div>
+                        <div class="panelInfoDatabase pt-1" id="readPanelAll"></div>
+                    </div>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="loadDataToDatabase()" id="buttonLoadFiletoDatabase">
+                                    <div class="spinner-border spinner-border-sm" id="spinerloadtodatabase" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Load Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#uploadDataModalDialog").draggable({ handle: "#uploadDataModalHeader", containment: "#uploadDataModal" }); 
+            </script>
+        </div>
+        <div class="modal" id="saveModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0" id="saveModalDialog">
+                    <div class="modal-header" data-modal="header" id="saveModalHeader">
+                        <span class="modal-title" >Save Databases</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                        <small class="order-3"> </small>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                            <label for="inputNameFileCustom">Filename</label>
+                            <input type="text" class="form-control" id="inputNameFileCustom" placeholder="Name">
+                            <small class="text-muted">This will be the name of the file</small>
+                        </div>
+                        <div class="panelInfoDatabaseHeader">file.json</div>
+                        <div class="panelInfoDatabase" id="reviewInfoPanel"></div>
+                    </div>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-4 order-3">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="col-4 order-2">
+                                <button type="button" class="btn btn-secondary btn-block m-0 rounded-0" onclick="reviewInfo()" id="buttonSaveFileCustomReview">
+                                    <div class="spinner-border spinner-border-sm" id="spinersaveFilecustomReview" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Review Info
+                                </button>
+                            </div>
+                            <div class="col-4 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="makeFile()" id="buttonSaveFileCustomSave">
+                                    <div class="spinner-border spinner-border-sm" id="spinersaveFilecustomSave" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Save File
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#saveModalDialog").draggable({ handle: "#saveModalHeader", containment: "#saveModal" }); 
+            </script>
+        </div>
         <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen" role="document" style="height: 95.3vh;">
                 <div class="modal-content border-0" style="height: calc(50px + 80%);" id="modalfindDialog">
@@ -531,6 +622,13 @@
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">🤫</p>
                     <strong>Yey!</strong> Masterkey Changed.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_saveFileAlert" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You safe your data.
                 </div>
             </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
@@ -614,13 +712,19 @@
                                     </button>
                                 </div>
                                 <div class="mt-1 col-6 d-flex justify-content-end">
-                                    <div class="form-inline d-inline w-50 d-flex justify-content-end">
+                                    <div class="d-inline w-50 d-flex justify-content-end">
                                         <span class="sr-only" id="nameoftableon"></span>
                                         <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" id="reloadlvl5pass" onclick="getPasswords()">
                                             <i class="fas fa-eye-slash text-white"></i>
                                         </button>
                                         <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">
                                             <i class="fa fa-key text-white"></i>
+                                        </button>
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Upload databases" onclick="openModalUploadData()">
+                                            <i class="fas fa-file-archive text-white"></i>
+                                        </button>
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Save Passwords to File" onclick="openmakeFile()">
+                                            <i class="fas fa-save text-white"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -786,6 +890,7 @@
         <script src="js/wavify.js"></script>
         <script src="js/crypto.js"></script>
         <script src="js/genpass.js"></script>
+        <script src="js/saveFile.js"></script>
         <script src="js/app.js"></script>
         <script>if (window.module) module = window.module;</script>
     </body>

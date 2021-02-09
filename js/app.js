@@ -20,12 +20,7 @@ function eventsOnLoad(event) {
     matchPasswordsType();
     whenOpenModals();
     // changeTabsonShow();
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-    $(function () {
-
-    })
+    $('[data-toggle="tooltip"]').tooltip()
     
 }
 
@@ -47,6 +42,12 @@ function whenOpenModals() {
     })
     $('#configMasterkey').on('show.bs.modal', function () {
         animateReturn('#configMasterkey','bounceIn')
+    })
+    $('#uploadDataModal').on('show.bs.modal', function () {
+        animateReturn('#uploadDataModal','bounceIn')
+    })
+    $('#saveModal').on('show.bs.modal', function () {
+        animateReturn('#saveModal','bounceIn')
     })
 }
 const animateReturn = (element, animation, prefix = 'animate__') => {
@@ -232,6 +233,11 @@ async function getinfo_changeMasterkey() {
     }, 1000);
     
 }
+
+function openModalUploadData() {
+    $('#uploadDataModal').modal('show')
+}
+
 function fail_notEqual() {
     
     setTimeout(() => {

@@ -15,7 +15,7 @@ async function createDatabases() {
     db.serialize(()=>{
         var dbs = `CREATE TABLE IF NOT EXISTS databases (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
+            name TEXT UNIQUE,
             nameid TEXT
         )`
         var ps = `CREATE TABLE IF NOT EXISTS passwords (
