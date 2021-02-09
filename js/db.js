@@ -175,19 +175,23 @@ function addDatabase() {
 }
 function safeMasterkey() {
     getinfo_addMasterkey().then((arr) => {
-        let pass = encrypt(arr,process.env.APP_KEY);
-		
-        db.run(
-            "INSERT INTO masterkey(name,password) VALUES('main',?)",
-            [pass],
-            (err) => {
-                if (err) {
-                    console.log(err.message);
+        if(arr == ""){
+            animateReturn('#addMasterKeyDialog','shakeX')
+        }else{
+            let pass = encrypt(arr,process.env.APP_KEY);
+            
+            db.run(
+                "INSERT INTO masterkey(name,password) VALUES('main',?)",
+                [pass],
+                (err) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                    z_masterkey = arr;
+                    unlockAfterAddMasterkey();
                 }
-                z_masterkey = arr;
-                unlockAfterAddMasterkey();
-            }
-        );
+            );
+        }
     });
 }
 function configMasterkeychange() { // !change the masterkey password
