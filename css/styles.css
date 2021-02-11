@@ -253,6 +253,9 @@ dt {
 /*
   !Cambios al bootstrap
 */
+.show {
+  display: block !important; }
+
 .form-control:focus {
   border-color: #5d628f;
   box-shadow: 0 0 0 0 rgba(255, 255, 255, 0) !important; }

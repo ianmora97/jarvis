@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron')
 var z_masterkey = "";
 var z_checkMasterkeyExists;
 var clipboard = new ClipboardJS('.btn-to-clip');
+$.fn.modal.Constructor.prototype._enforceFocus = function() {};
 
 function eventsOnLoad(event) {
     changeModalsOS();
@@ -19,36 +20,92 @@ function eventsOnLoad(event) {
     deleteDatabaseEvents();
     matchPasswordsType();
     whenOpenModals();
+    whenClosedModals();
     // changeTabsonShow();
     $('[data-toggle="tooltip"]').tooltip()
+    clipboard.on('success', function(e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
     
+        e.clearSelection();
+    });
 }
 
 function whenOpenModals() {
     $('#masterKey').on('show.bs.modal', function () {
-        animateReturn('#masterKey','bounceInUp')
+
     })
     $('#addDatabase').on('show.bs.modal', function () {
-        animateReturn('#addDatabase','bounceIn')
+
     })
     $('#addEntryModal').on('show.bs.modal', function () {
-        animateReturn('#addEntryModal','bounceIn')
+
     })
     $('#deleteDatabase').on('show.bs.modal', function () {
-        animateReturn('#deleteDatabase','bounceIn')
+        $('#deleteDatabaseNameinput').attr('disabled',false)
+        $('#deleteDatabaseNameinput').removeAttr('disabled')
+        $('#buttondeleteDatabaseModal').removeAttr('disabled')
+        $('#confirmDatabaseTobeDelete').hide()
+        $('#buttondeleteDatabaseModalCheck').show()
+        $('#buttondeleteDatabaseModal').hide()
     })
     $('#updateEntryModal').on('show.bs.modal', function () {
-        animateReturn('#updateEntryModal','bounceIn')
+
     })
     $('#configMasterkey').on('show.bs.modal', function () {
-        animateReturn('#configMasterkey','bounceIn')
+
     })
     $('#uploadDataModal').on('show.bs.modal', function () {
-        animateReturn('#uploadDataModal','bounceIn')
+
     })
     $('#saveModal').on('show.bs.modal', function () {
+
+    })
+    $('#modalConfirmdeleteEntry').on('show.bs.modal', function () {
+
+    })
+    $('#addMasterKey').on('show.bs.modal', function () {
+
+    })
+    $("#modalfindintables").on("shown.bs.modal", function() {
+        
+    });
+}
+function whenClosedModals() {
+    $('#masterKey').on('hidden.bs.modal', function () {
+        animateReturn('#masterKey','bounceInUp')
+    })
+    $('#addDatabase').on('hidden.bs.modal', function () {
+        animateReturn('#addDatabase','bounceIn')
+    })
+    $('#addEntryModal').on('hidden.bs.modal', function () {
+        animateReturn('#addEntryModal','bounceIn')
+    })
+    $('#deleteDatabase').on('hidden.bs.modal', function () {
+        animateReturn('#deleteDatabase','bounceIn')
+    })
+    $('#updateEntryModal').on('hidden.bs.modal', function () {
+        animateReturn('#updateEntryModal','bounceIn')
+    })
+    $('#configMasterkey').on('hidden.bs.modal', function () {
+        animateReturn('#configMasterkey','bounceIn')
+    })
+    $('#uploadDataModal').on('hidden.bs.modal', function () {
+        animateReturn('#uploadDataModal','bounceIn')
+    })
+    $('#saveModal').on('hidden.bs.modal', function () {
         animateReturn('#saveModal','bounceIn')
     })
+    $('#modalConfirmdeleteEntry').on('hidden.bs.modal', function () {
+        animateReturn('#modalConfirmdeleteEntry','shakeX')
+    })
+    $('#addMasterKey').on('hidden.bs.modal', function () {
+        animateReturn('#addMasterKey','bounceInUp')
+    })
+    $("#modalfindintables").on("hiddenn.bs.modal", function() {
+        
+    });
 }
 const animateReturn = (element, animation, prefix = 'animate__') => {
     // We create a Promise and return it
@@ -201,6 +258,16 @@ function typeEntertoUnlock() {
     $('#passwordKeyMasterUnlockPassword').on('keyup',function (event){
         if(event.which == 13){
             askMasterkeyVerify();
+        }
+    });
+    $('#addDatabaseNameinput').on('keyup',function (event){
+        if(event.which == 13){
+            addDatabase();
+        }
+    });
+    $('#deleteDatabaseNameinputconfirm').on('keyup',function (event){
+        if(event.which == 13){
+            deleteConfirmDatabase();
         }
     });
 }
