@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Passafe</title>
-        <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"> -->
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
 
         <!-- Insert this line above script imports  -->
         <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -13,21 +13,23 @@
         <link rel="stylesheet" href="css/fontawesome.css">
 
         <script src="js/jq-bs-bundle.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js" ></script>
-        <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js" ></script>
-        <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js" ></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.css"/>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
+        <script src="js/TweenMax.min.js" ></script>
+        <script src="js/wavify-js.js" ></script>
+        <script src="js/jquery.wavify.js" ></script>
+        <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+        <script type="text/javascript" src="js/datatables.min.js"></script>
     </head>
     <body style="height: 100vh;" class="overflow-hidden">
-        <div class="modal fade" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" id="addEntryModalLabel"><i class="fa fa-plus text-white"></i> Add Entry</h6>
-                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+        <div class="modal" id="addEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addEntryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered draggable" role="document">
+                <div class="modal-content" id="addEntryDialog">
+                    <div class="modal-header" data-modal="header" id="addEntryHeader">
+                        <span class="modal-title " id="addEntryModalLabel">Add Entry</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="container">
@@ -38,7 +40,7 @@
                                         <input type="text" class="form-control form-control-sm" id="modal_entryName" placeholder="Entry name...">
                                         <div class="input-group-append btn-group btn-group-sm dropright">
                                             <button type="button btn-sm" class="btn btn-outline-secondary" id="iconSelected" 
-                                            data-toggle="popover" data-container="body" data-html="true" title="Entry Icon">
+                                            data-toggle="popover" data-container="body" data-html="true" title="Entry Icon" data-trigger="focus">
                                                 <i class="fa fa-key"></i>
                                             </button>
                                         </div>    
@@ -86,25 +88,38 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="addEntry()">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddEntry" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Add Entry
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="addEntry()">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddEntry" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Add Entry
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#addEntryDialog").draggable({ handle: "#addEntryHeader", containment: "#addEntryModal" }); 
+            </script>
         </div>
-        <div class="modal fade" id="updateEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntryModalLabel" aria-hidden="true">
+        <div class="modal" id="updateEntryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-pencil text-white"></i> Update Entry</h6>
+                <div class="modal-content" id="updateEntryDialog">
+                    <div class="modal-header" data-modal="header" id="updateEntryHeader">
+                        <span class="modal-title">Update Entry</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="container">
@@ -174,25 +189,79 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="UpdateEntry()">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterUpdateEntry" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-4 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="UpdateEntry()">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterUpdateEntry" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Update Entry
+                                </button>
                             </div>
-                            Update Entry
-                        </button>
+                            <div class="col-4 order-2">
+                                <button type="button" class="btn btn-danger btn-block m-0 rounded-0" onclick="deleteEntry()">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterUpdateEntryDelete" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Delete Entry
+                                </button>
+                            </div>
+                            <div class="col-4 order-3">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#updateEntryDialog").draggable({ handle: "#updateEntryHeader", containment: "#updateEntryModal" }); 
+            </script>
         </div>
-        <div class="modal animate__animated animate__bounceInUp" id="masterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpace">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key</h6>
-                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+        <div class="modal" id="modalConfirmdeleteEntry" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalConfirmdeleteEntryLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered draggable" role="document" >
+                <div class="modal-content" id="modalConfirmdeleteEntryDialog">
+                    <div class="modal-header" data-modal="header" id="modalConfirmdeleteEntryHeader">
+                        <span class="modal-title text-light" >Delete Entry</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
+                    </div>
+                    <div class="modal-body bg-white text-center">
+                        <strong>Are you sure to delete this entry?</strong>
+                    </div>    
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-danger btn-block m-0 rounded-0" onclick="confirmdeleteEntry()" id="askmodalConfirmdeleteEntryButton">
+                                    <i class="fa fa-trash text-white" id="iconDeleteEntryConfirm"></i> Verify
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#modalConfirmdeleteEntryDialog").draggable({ handle: "#modalConfirmdeleteEntryHeader", containment: "#modalConfirmdeleteEntry" }); 
+            </script>
+        </div>
+        <div class="modal" id="masterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered draggable" role="document" >
+                <div class="modal-content" id="masterKeyDialog">
+                    <div class="modal-header" data-modal="header" id="masterKeyHeader">
+                        <span class="modal-title text-light" >Master Key</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group"  id="showallFormgroup">
@@ -214,28 +283,41 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="askMasterkeyVerify()" id="showPassMasterKeyButton">
-                            Show Password
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="askMasterkey()" id="askMasterKeyButton">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Verify
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" style="display: none;" onclick="askMasterkeyVerify()" id="showPassMasterKeyButton">
+                                    Show Password
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="askMasterkey()" id="askMasterKeyButton">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterMasterKey" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Verify
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#masterKeyDialog").draggable({ handle: "#masterKeyHeader", containment: "#masterKey" }); 
+            </script>
         </div>
-        <div class="modal animate__animated animate__bounceInUp" id="addMasterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyAddLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpace">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-key text-white"></i> Master Key Config</h6>
-                        <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
+        <div class="modal" id="addMasterKey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="masterKeyAddLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered draggable" role="document">
+                <div class="modal-content" id="addMasterKeyDialog">
+                    <div class="modal-header" data-modal="header" id="addMasterKeyHeader">
+                        <span class="modal-title " >Master Key Config</span>
+                        <button type="button" class="close button-close p-0 m-0 text-white" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group">
@@ -249,25 +331,33 @@
                         </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiteraddMasterKey" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-12 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="safeMasterkey()" id="askMasterKeyButtonAddMaster">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiteraddMasterKey" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Add Masterkey
+                                </button>
                             </div>
-                            Add Masterkey
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#addMasterKeyDialog").draggable({ handle: "#addMasterKeyHeader", containment: "#addMasterKey" }); 
+            </script>
         </div>
-        <div class="modal fade" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addDatabaseLabel" aria-hidden="true">
+        <div class="modal" id="addDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addDatabaseLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpace">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Add database</h6>
+                <div class="modal-content" id="addDatabaseDialog">
+                    <div class="modal-header" data-modal="header" id="addDatabaseHeader">
+                        <span class="modal-title">Add database</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group">
@@ -276,25 +366,38 @@
                             <small class="text-muted">This database will keep all the passwords of this category.</small>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="addDatabase()" id="buttonAdddatabaseModal">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddDatabase" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Add Database
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="addDatabase()" id="buttonAdddatabaseModal">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterAddDatabase" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Add Database
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#addDatabaseDialog").draggable({ handle: "#addDatabaseHeader", containment: "#addDatabase" }); 
+            </script>
         </div>
-        <div class="modal fade" id="deleteDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteDatabaseLabel" aria-hidden="true">
+        <div class="modal" id="deleteDatabase" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteDatabaseLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpace">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-database text-white"></i> Delete database</h6>
+                <div class="modal-content" id="deleteDatabaseDialog">
+                    <div class="modal-header" data-modal="header" id="deleteDatabaseHeader">
+                        <span class="modal-title">Delete database</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close" id="cancelClosedeleteDatabase">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="form-group">
@@ -304,36 +407,52 @@
                         </div>
                         <div id="confirmDatabaseTobeDelete" class="border-top pt-1" style="display: none;">
                             <small class="text-muted">For security reasons please type your masterkey.</small>
-                            <div class="form-group">
+                            <div class="input-group input-group-sm">                                
                                 <input type="password" class="form-control form-control-sm" id="deleteDatabaseNameinputconfirm" placeholder="Masterkey..." value="">
+                                <div class="input-group-append" id="button-addon4">
+                                    <button class="btn btn-outline-secondary" type="button" id="deleteDatabaseNameinputconfirmEye" 
+                                    data-input="deleteDatabaseNameinputconfirm" onclick="changeVisPassButtonGen(this)"><i class="fa fa-eye-slash"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="checkDeleteDatabase()" id="buttondeleteDatabaseModalCheck">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabaseCheck" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Check
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="deleteConfirmDatabase()" id="buttondeleteDatabaseModal" style="display: none;">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabase" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-danger btn-block m-0 rounded-0" onclick="checkDeleteDatabase()" id="buttondeleteDatabaseModalCheck">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterdeleteDatabaseCheck" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Check
+                                </button>
+                                <button type="button" class="btn btn-danger btn-block m-0 rounded-0" onclick="deleteConfirmDatabase()" id="buttondeleteDatabaseModal" style="display: none;">
+                                    <i class="fa fa-trash text-white" id="faDeleteDatabaseicon"></i> Delete Database
+                                </button>
                             </div>
-                            Delete Database
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#deleteDatabaseDialog").draggable({ handle: "#deleteDatabaseHeader", containment: "#deleteDatabase" }); 
+            </script>
         </div>
-        <div class="modal fade" id="configMasterkey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="configMasterkeyLabel" aria-hidden="true">
+        <div class="modal" id="configMasterkey" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="configMasterkeyLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" id="contentModalUnlockWorkSpaceconfigmasterkey">
-                    <div class="modal-header pr-0 py-0 bg-primary text-white rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fas fa-key text-white"></i> Config Masterkey</h6>
+                <div class="modal-content" id="configMasterDialog">
+                    <div class="modal-header" data-modal="header" id="configMasterHeader">
+                        <span class="modal-title">Config Masterkey</span>
                         <button type="button" class="close button-close p-0 m-0 text-white" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <small class="text-muted">Current Password</small>
@@ -370,25 +489,131 @@
                             <strong>Same Passwords</strong>, new password and current must be different!
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-0">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="configMasterkeychange()" id="buttonconfigMasterkeyModal">
-                            <div class="spinner-border spinner-border-sm" id="spinnerWaiterconfigMasterkey" role="status" style="display: none;">
-                                <span class="sr-only">Loading...</span>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            Change Masterkey
-                        </button>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="configMasterkeychange()" id="buttonconfigMasterkeyModal">
+                                    <div class="spinner-border spinner-border-sm" id="spinnerWaiterconfigMasterkey" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Change Masterkey
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <script>
+                $("#configMasterDialog").draggable({ handle: "#configMasterHeader", containment: "#configMasterkey" }); 
+            </script>
         </div>
-        <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen" role="document">
-                <div class="modal-content" style="height: 87vh;">
-                    <div class="modal-header pr-0 py-0 bg-light text-dark rounded-0" >
-                        <h6 class="modal-title mt-1" ><i class="fa fa-search text-dark"></i> Search</h6>
-                        <button type="button" class="close button-close p-0 m-0 text-dark" onclick="closeModalSearch()" aria-label="Close">
+        <div class="modal" id="uploadDataModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="uploadDataModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0" id="uploadDataModalDialog">
+                    <div class="modal-header" data-modal="header" id="uploadDataModalHeader">
+                        <span class="modal-title" >Upload Database</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
                             <h6>x</h6>
                         </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" onchange="readFile()">
+                            <label class="custom-file-label" for="customFile" id="customFileLabel">Choose file</label>
+                        </div>
+                        <div id="borderfileuploadpanel" class="mt-2 ">
+                            <div class="panelInfoDatabaseHeader " id="filenameRead">file.json</div>
+                            <div class="panelInfoDatabase pt-1" id="readPanelAll"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-6 order-2">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="col-6 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="loadDataToDatabase()" id="buttonLoadFiletoDatabase" disabled>
+                                    <div class="spinner-border spinner-border-sm" id="spinerloadtodatabase" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Load Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#uploadDataModalDialog").draggable({ handle: "#uploadDataModalHeader", containment: "#uploadDataModal" }); 
+            </script>
+        </div>
+        <div class="modal" id="saveModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0" id="saveModalDialog">
+                    <div class="modal-header" data-modal="header" id="saveModalHeader">
+                        <span class="modal-title" >Save Databases</span>
+                        <button type="button" class="close button-close p-0 m-0" data-dismiss="modal" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <div class="form-group">
+                            <label for="inputNameFileCustom">Filename</label>
+                            <input type="text" class="form-control" id="inputNameFileCustom" placeholder="Name">
+                            <small class="text-muted">This will be the name of the file</small>
+                        </div>
+                        <div class="panelInfoDatabaseHeader">file.json</div>
+                        <div class="panelInfoDatabase" id="reviewInfoPanel"></div>
+                    </div>
+                    <div class="modal-footer bg-white p-0">
+                        <div class="row no-gutters w-100 m-0">
+                            <div class="col-4 order-3">
+                                <button type="button" class="btn btn-close btn-block m-0 rounded-0" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="col-4 order-2">
+                                <button type="button" class="btn btn-secondary btn-block m-0 rounded-0" onclick="reviewInfo()" id="buttonSaveFileCustomReview">
+                                    <div class="spinner-border spinner-border-sm" id="spinersaveFilecustomReview" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Review Info
+                                </button>
+                            </div>
+                            <div class="col-4 order-1">
+                                <button type="button" class="btn btn-primary btn-block m-0 rounded-0" onclick="makeFile()" id="buttonSaveFileCustomSave">
+                                    <div class="spinner-border spinner-border-sm" id="spinersaveFilecustomSave" role="status" style="display: none;">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Save File
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#saveModalDialog").draggable({ handle: "#saveModalHeader", containment: "#saveModal" }); 
+            </script>
+        </div>
+        <div class="modal" id="modalfindintables" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalfindintablesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen" role="document" style="height: 95.3vh;">
+                <div class="modal-content border-0" style="height: calc(50px + 80%);" id="modalfindDialog">
+                    <div class="modal-header" data-modal="header" id="modalfindHeader">
+                        <span class="modal-title" >Search</span>
+                        <button type="button" class="close button-close p-0 m-0" onclick="closeModalSearch()" aria-label="Close">
+                            <h6>x</h6>
+                        </button>
+                        <small class="order-3 invisible"><h6 class="button-close-mac m-0">x</h6></small>
                     </div>
                     <div class="modal-body bg-white">
                         <div class="d-flex justify-content-between pb-3">
@@ -405,7 +630,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="d-flex justify-content-center align-items-center h-100 bg-light" id="blankButtonScreen">
             <div class="cerrojo d-flex flex-column" role="button" onclick="$('#masterKey').modal('show');">
                 <button type="button" class="btn mx-auto"><i class="fa fa-lock text-gray fa-5x"></i></button>
@@ -413,32 +637,42 @@
             </div>
         </div>
         <div id="block_workSpace" style="display: none;">
+            <div class="toast-container" aria-live="polite" aria-atomic="true" id="pushToastContainer">
+                
+            </div>
             <div class="alert alert-success fade" role="alert" id="close_addNewEntryAlert" 
-            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;display: none;">
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
                     <strong>Yey!</strong> You added a new Entry.
                 </div>
             </div>
             <div class="alert alert-success fade" role="alert" id="close_addNewDatabase" 
-            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;display: none;">
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
                     <strong>Yey!</strong> You added a new database.
                 </div>
             </div>
             <div class="alert alert-success fade" role="alert" id="close_deleteDatabase" 
-            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;display: none;">
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
                     <strong>Yey!</strong> You delete a database.
                 </div>
             </div>
             <div class="alert alert-success fade" role="alert" id="close_masterchanged" 
-            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;">
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;display: none;">
                 <div class="h-100 d-flex align-items-center w-100 flex-column">
                     <p class="mb-0 emoji" style="font-size: 50px;">🤫</p>
                     <strong>Yey!</strong> Masterkey Changed.
+                </div>
+            </div>
+            <div class="alert alert-success fade" role="alert" id="close_saveFileAlert" 
+            style="position: absolute;width: 25%;top: 35%;left: 37.5%;z-index: 6;display: none;">
+                <div class="h-100 d-flex align-items-center w-100 flex-column">
+                    <p class="mb-0 emoji" style="font-size: 50px;">😁</p>
+                    <strong>Yey!</strong> You safe your data.
                 </div>
             </div>
             <nav class="navbar navbar-light navbar-expand-md d-flex d-md-flex justify-content-md-start align-items-md-start p-0 bg-primary" 
@@ -505,7 +739,7 @@
                                     <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Add Database" onclick="openModaladddatabase()">
                                         <i class="fa fa-database text-white"></i>
                                     </button>
-                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Delete Database" onclick="openModaldeletedatabase()">
+                                    <button class="btn button-actions p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Delete Database" id="deleteDatabaseButton" onclick="openModaldeletedatabase()">
                                         <i class="fa fa-trash text-white"></i>
                                     </button>
                                     <!-- 
@@ -521,9 +755,21 @@
                                         <i class="fa fa-search text-white"></i>
                                     </button>
                                 </div>
-                                <div class="col-6 d-flex justify-content-end">
-                                    <div class="form-inline d-inline w-50 d-flex justify-content-end">
+                                <div class="mt-1 col-6 d-flex justify-content-end">
+                                    <div class="d-inline w-50 d-flex justify-content-end">
                                         <span class="sr-only" id="nameoftableon"></span>
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" id="reloadlvl5pass" onclick="getPasswords()">
+                                            <i class="fas fa-eye-slash text-white"></i>
+                                        </button>
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">
+                                            <i class="fa fa-key text-white"></i>
+                                        </button>
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Upload databases" onclick="openModalUploadData()">
+                                            <i class="fas fa-file-archive text-white"></i>
+                                        </button>
+                                        <button class="btn button-actions-bottom p-0 mr-3" type="button" data-toggle="tooltip" data-placement="bottom" title="Save Passwords to File" id="savePasswordsId" onclick="openmakeFile()">
+                                            <i class="fas fa-save text-white"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -537,7 +783,9 @@
                         <div class="image-back" style="z-index: 0;"></div>
                         <div class="h-75" style="z-index: 5; padding-top: 28px;">
                             <div class="list-group w-100 bg-white h-100" id="list_databases" role="tablist">
-                                
+                                <div class="skeleton-list-a"></div>
+                                <div class="skeleton-list-a"></div>
+                                <div class="skeleton-list-a"></div>
                             </div>
                         </div>
                     </div>
@@ -556,22 +804,9 @@
                     <div class="col-2" style="z-index: 5;">
                         <p id="noyet" class="text-white"></p>
                     </div>
-                    <div class="col-8 pl-1" style="z-index: 5;">
+                    <div class="col-10 pl-1" style="z-index: 5;">
                         <small class="d-block text-white"><i class="fas fa-info-circle"></i> Entry info:</small>
                         <p id="entryInfo" class="text-white h-50"></p>
-                    </div>
-                    <div class="col-2">
-                        <div class="row">
-                            <small class="text-white">Danger section</small>
-                        </div>
-                        <div class="row d-flex justify-content-start">
-                            <button class="btn button-actions-bottom p-0 mr-3 mb-auto mt-2" type="button" data-toggle="tooltip" data-placement="bottom" title="Hide lv5 passwords" onclick="getPasswords()">
-                            <i class="fas fa-eye-slash text-white"></i>
-                            </button>
-                            <button class="btn button-actions-bottom p-0 mr-3 mb-auto mt-2" type="button" data-toggle="tooltip" data-placement="bottom" title="Master Key Config" onclick="openModalConfigMasterkey()">
-                                <i class="fa fa-key text-white"></i>
-                            </button>
-                        </div>
                     </div>
                     <svg width="100%" height="20%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave" d=""/></svg>
                     <svg width="100%" height="20%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><defs></defs><path id="feel-the-wave-two" d=""/></svg>
@@ -612,8 +847,8 @@
             </div>
             <div class="d-none" id="popover-content-iconselect">
                 <div class="container-fluid">
-                    <div class="row" style="max-width: 400px; overflow-x: auto;">
-                        <div class="col px-2" >
+                    <div class="row">
+                        <div class="col-3 px-2" >
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light" style="width: 50px;" type="button"><i class='fa fa-key' style='color: #ff9900;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-globe' style='color: #00790a;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-terminal' style='color: #000000;'></i></button>
@@ -621,41 +856,70 @@
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-server' style='color: #2e2e2e;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-file' style='color: #949494;'></i></button>
                         </div>
-                        <div class="col px-2">
+                        <div class="col-3 px-2">
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-address-card' style='color: #008cff;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-apple' style='color: #000000;'> </i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-cc-visa' style='color: #0051ff;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-cog' style='color: #00a308;'></i></button>
-                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-gamepad' style='color: #6b0059;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-steam' style='color: #2b3963;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-heart' style='color: #ff0000;'></i></button>
                             
                         </div>
-                        <div class="col px-2">
+                        <div class="col-3 px-2">
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-comments' style='color: #006eff;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fa fa-desktop' style='color: #000000;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-amazon' style='color: #fd8700;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-app-store' style='color: #004797;'></i></button>
                             <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-spotify' style='color: #00a81c;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-microsoft' style='color: #004ea8;'></i></button>
                         </div>
-                        <div class="col px-2">
+                        <div class="col-3 px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-dropbox' style='color: #006eff;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fas fa-wifi' style='color: #fede0c;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-aws' style='color: #fd8700;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-jira' style='color: #3391fc;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-chrome' style='color: #f43131;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-confluence' style='color: #3f98fc;'></i></button>
                             
                         </div>
-                        <div class="col px-2">
+                    </div>
+                    <div class="row">
+                        <div class="col-3 px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-discord' style='color: #7289DA;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-facebook' style='color: #4867AA;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-github' style='color: #3c3c3c;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-google' style='color: #c93f3f;'></i></button>
+                        </div>
+                        <div class="col-3 px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-linkedin' style='color: #7289DA;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-linux' style='color: #e3ae00;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-paypal' style='color: #0082e0;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-reddit' style='color: #f1c639;'></i></button>
+                        </div>
+                        <div class="col-3 px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-twitter' style='color: #389bff;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-windows' style='color: #0062e3;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-xbox' style='color: #168c04;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-youtube' style='color: #f13939;'></i></button>
+                        </div>
+                        <div class="col-3 px-2">
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-google-drive' style='color: #3a9143;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-instagram' style='color: #f0b93a;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-slack' style='color: #ac53e3;'></i></button>
+                            <button class="btn btn-icon py-1 mb-1 btn-outline-light " style="width: 50px;" type="button"><i class='fab fa-twitch' style='color: #9b3af0;'></i></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 px-2">
                             
                         </div>
-                        <div class="col px-2">
+                        <div class="col-3 px-2">
                             
                         </div>
-                        <div class="col px-2">
+                        <div class="col-3 px-2">
                             
                         </div>
-                        <div class="col px-2">
-                            
-                        </div>
-                        <div class="col px-2">
-                            
-                        </div>
-                        <div class="col px-2">
+                        <div class="col-3 px-2">
                             
                         </div>
                     </div>
@@ -670,6 +934,7 @@
         <script src="js/wavify.js"></script>
         <script src="js/crypto.js"></script>
         <script src="js/genpass.js"></script>
+        <script src="js/saveFile.js"></script>
         <script src="js/app.js"></script>
         <script>if (window.module) module = window.module;</script>
     </body>

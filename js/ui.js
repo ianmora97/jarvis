@@ -97,12 +97,9 @@ function failtoUnlock() {
     $('#spinnerWaiterMasterKey').show();
     setTimeout(() => {
         $("#passwordKeyMasterUnlock").addClass('is-invalid');
-        $("#contentModalUnlockWorkSpace").addClass('animate__animated animate__shakeX');
+        animateReturn("#masterKeyDialog",'shakeX');
         $('#spinnerWaiterMasterKey').hide();
     }, 1000);
-    setTimeout(() => {
-        $('#block_workSpace').removeClass('animate__animated animate__shakeX');
-    }, 1500);
 }
 
 function lockWorkspace() {
@@ -188,3 +185,6 @@ function closeAlert(e) {
     $('#close_addNewEntryAlert').removeClass('show');
 }
 
+function failDeleteDatabase() {
+    animateReturn('#deleteDatabaseDialog','shakeX')
+}
