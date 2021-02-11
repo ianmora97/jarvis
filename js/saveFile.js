@@ -39,6 +39,16 @@ function reviewInfo() {
                 console.log(err);
             }
             rows.forEach((row) => {
+                // let pass={
+                //     id:row.id,
+                //     db: row.db,
+                //     name: row.name,
+                //     username: row.username,
+                //     password: decrypt(row.password,z_masterkey),
+                //     url: row.url,
+                //     level: row.level,
+                //     icon: row.icon
+                // }
                 sf_passwords.push(row)
             });
         }).all("SELECT * FROM databases", [], (err, rows) => {
@@ -100,6 +110,7 @@ function makeFile() {
                 fs.writeFile(filepath, fileContent, (err) => {
                     if (err) throw err;
                     $('#close_saveFileAlert').addClass('show')
+                    animateReturn('#close_saveFileAlert','bounce')
                     $('#saveModal').modal('hide')
                     setTimeout(() => {
                         $('#close_saveFileAlert').removeClass('show')

@@ -92,6 +92,7 @@ async function getInfo_addEntry() {
         $('#spinnerWaiterAddEntry').hide();
         $('#addEntryModal').modal('hide');
         $('#close_addNewEntryAlert').addClass('show');
+        animateReturn('#close_addNewEntryAlert','bounce')
     }, 600);
     setTimeout(() => {
         $('#close_addNewEntryAlert').removeClass('show');
@@ -108,6 +109,7 @@ async function getInfo_addDatabase() {
         $('#spinnerWaiterAddDatabase').hide();
         $('#addDatabase').modal('hide');
         $('#close_addNewDatabase').addClass('show');
+        animateReturn('#close_addNewDatabase','bounce')
     }, 600);
     setTimeout(() => {
         $('#close_addNewDatabase').removeClass('show');
@@ -156,7 +158,7 @@ async function getInfo_Updatentry() {
 }
 function checkDeleteDatabase() {
     $('#spinnerWaiterdeleteDatabaseCheck').show();
-    $('#deleteDatabaseNameinput').attr('disabled','on')
+    $('#deleteDatabaseNameinput').attr('disabled',true)
     setTimeout(() => {
         $('#spinnerWaiterdeleteDatabaseCheck').hide();
         $('#confirmDatabaseTobeDelete').show()
@@ -208,7 +210,7 @@ function databaseDeletedSuccess() {
         $('#spinnerWaiterdeleteDatabase').hide();
         $('#deleteDatabase').modal('hide');
         $('#close_deleteDatabase').addClass('show');
-        
+        animateReturn('#close_deleteDatabase','bounce')
     }, 600);
     setTimeout(() => {
         $('#buttondeleteDatabaseModal').removeAttr('disabled')
@@ -221,4 +223,9 @@ function databaseDeletedSuccess() {
         getPasswords();
         getDatabases();
     }, 2000);
+}
+
+function deleteEntry() {
+    $('#updateEntryModal').modal('hide')
+    $('#modalConfirmdeleteEntry').modal('show')
 }

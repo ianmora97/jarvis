@@ -40,14 +40,14 @@ var z_passwords_All = [];
 function getPasswords() {
         fillDatabases().then(()=>{
             z_passwords_All = [];
-            db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords", [], (err, rows) => {
+            db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords ORDER BY name ASC", [], (err, rows) => {
                 if (err) {
-                    throw err;
+                    console.log(err.message);
                 }
                 $('#spinerToHide').hide()
                 
                 setTimeout(() => {
-                    let cont = 2;
+                    let cont = 0;
                     let entero = 0;
                     rows.forEach((row) => {
                         fillsearchtable(row)
@@ -96,7 +96,7 @@ function getPasswords() {
                                 "</script>"
                             );
                         }
-                        cont+=2;
+                        cont+=1;
                         if(cont == 10){
                             cont = 0;
                             entero+=1;
@@ -108,8 +108,8 @@ function getPasswords() {
                         "paging": false,
                         "info": false,
                         "columnDefs": [
-                            { "orderable": false, "targets": [0, 1] },
-                            { "orderable": true, "targets": [2, 3, 4, 5] }
+                            { "orderable": false, "targets": [0, 1, 4] },
+                            { "orderable": true, "targets": [2, 3, 5, 6] }
                         ]
                     });
                     $('#tabletofind_filter').css('display','none');
@@ -129,8 +129,8 @@ function datatablesRunAfterInsertRows() {
                 "paging": false,
                 "info": false,
                 "columnDefs": [
-                    { "orderable": false, "targets": [0, 1, 5] },
-                    { "orderable": true, "targets": [2, 3, 4, 6] }
+                    { "orderable": false, "targets": [0, 1, 4] },
+                    { "orderable": true, "targets": [2, 3, 5, 6] }
                 ]
             });
             // let info = table.page.info();
@@ -221,17 +221,8 @@ function configMasterkeychange() { // !change the masterkey password
                                     console.log(err.message);
                                 }
                                 z_masterkey = newp;
-                                setTimeout(() => {
-                                    $('#configMasterkey').modal('hide');
-                                    $('#spinnerWaiterconfigMasterkey').hide();
-                                    $('#close_masterchanged').addClass('show');
-                                }, 1000);
-                                setTimeout(() => {
-                                    $('#configMasterkeyNameinputCurrent').val('')
-                                    $('#configMasterkeyNameinputNew').val('');
-                                    $('#configMasterkeyNameinputConfirm').val('');
-                                    $('#close_masterchanged').removeClass('show');
-                                }, 2000);
+                                localStorage.setItem('l_master_key',newp)
+                                changeAllDecryptforPasswords(current,newp);
                             }
                         );
                     }else{
@@ -246,6 +237,67 @@ function configMasterkeychange() { // !change the masterkey password
         });
         
     });
+}
+function changeAllDecryptforPasswords(old,newp) {
+    let changepassallpromise = new Promise((resolve,reject)=>{
+        db.serialize(()=>{
+            db.all("SELECT id,name,username,password,icon,url,level,db FROM passwords ORDER BY name ASC", [], (err, rows) => {
+                if (err) {
+                    console.log(err.message);
+                }else{
+                    let c = 0;
+                    rows.forEach((row) => {
+                        let pass = [encrypt(decrypt(row.password,old),newp),row.id]
+                        db.run("UPDATE passwords SET password = ? where id = ?", pass,
+                        (err) => {
+                            if (err) {
+                                console.log(err.message);
+                            }
+                        })
+                        c+=1;
+                        if(rows.length == c){
+                            resolve('this')
+                        }
+                    })
+                }
+            })
+        })
+    })
+    changepassallpromise.then((message)=>{
+        getPasswords();
+        setTimeout(() => {
+            $('#configMasterkey').modal('hide');
+            $('#spinnerWaiterconfigMasterkey').hide();
+            $('#close_masterchanged').addClass('show');
+            animateReturn('#close_masterchanged','bounce')
+        }, 1000);
+        setTimeout(() => {
+            $('#configMasterkeyNameinputCurrent').val('')
+            $('#configMasterkeyNameinputNew').val('');
+            $('#configMasterkeyNameinputConfirm').val('');
+            $('#close_masterchanged').removeClass('show');
+        }, 2000);
+    })
+}
+function confirmdeleteEntry() {
+    $('#iconDeleteEntryConfirm').removeClass('fa-trash')
+    $('#iconDeleteEntryConfirm').addClass('fa-spin fa-spinner')
+    let id = $('#updateRowID').val();
+    db.run(
+        "DELETE FROM passwords WHERE id = ?",
+        [id],
+        (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+            getPasswords();
+        }
+    );
+    setTimeout(() => {
+        $('#modalConfirmdeleteEntry').modal('hide')
+        $('#iconDeleteEntryConfirm').addClass('fa-trash')
+        $('#iconDeleteEntryConfirm').removeClass('fa-spin fa-spinner')
+    }, 2000);
 }
 function UpdateEntry() {
     getInfo_Updatentry().then((arr) => {
@@ -281,6 +333,9 @@ function getDatabases() {
 
             $('#reloadlvl5pass').addClass('disabled')
             $('#reloadlvl5pass').prop('disabled','disabled')
+            
+            $('#savePasswordsId').addClass('disabled')
+            $('#savePasswordsId').prop('disabled','disabled')
         }else{
             $('#addentrybutton').removeClass('disabled')
             $('#addentrybutton').prop('disabled',false)
@@ -290,6 +345,9 @@ function getDatabases() {
 
             $('#reloadlvl5pass').removeClass('disabled')
             $('#reloadlvl5pass').prop('disabled',false)
+            
+            $('#savePasswordsId').removeClass('disabled')
+            $('#savePasswordsId').prop('disabled',false)
         }
         rows.forEach((row) => {
             z_databases_all.push(row);
@@ -303,19 +361,35 @@ function getDatabases() {
     });
 }
 function deleteConfirmDatabase() {
+    $('#faDeleteDatabaseicon').removeClass('fa-trash')
+    $('#faDeleteDatabaseicon').addClass('fa-spin fa-spinner')
     getinfo_deleteDatabaseAsk().then((pass) => {
         db.all("SELECT password FROM masterkey where name = 'main'", [], (err, rows) => {
             if (err) {
-                throw err;
+                console.log(err.message);
+                setTimeout(() => {
+                    failDeleteDatabase();
+                    $('#faDeleteDatabaseicon').addClass('fa-trash')
+                    $('#faDeleteDatabaseicon').removeClass('fa-spin fa-spinner')
+                }, 2000);
             }
             rows.forEach((row) => {
                 if(decrypt(row.password,process.env.APP_KEY) == pass){
                     deleteDatabase();
+                    setTimeout(() => {
+                        $('#faDeleteDatabaseicon').addClass('fa-trash')
+                        $('#faDeleteDatabaseicon').removeClass('fa-spin fa-spinner')
+                    }, 2000);
                 }else{
-                    failDeleteDatabase();
+                    setTimeout(() => {
+                        failDeleteDatabase();
+                        $('#faDeleteDatabaseicon').addClass('fa-trash')
+                        $('#faDeleteDatabaseicon').removeClass('fa-spin fa-spinner')
+                    }, 2000);
                 }
             });
         });
+
     });
 }
 function deleteDatabase(){
@@ -426,7 +500,7 @@ async function fillDatabases() {
                     $("#nav-tabContent").append(
                         `<div class="tab-pane fade show active" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
                         <div class="table-responsive border-top-0 " id="table-res-${row.nameid}" >
-                        <table class="table border-top-0 table-hover m-0" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
+                        <table class="table border-top-0 table-hover m-0" id="${row.nameid}_TableOrder" data-order="[[ 2, &quot;asc&quot; ]]">
                         <thead class="bg-primary border-top-0 p-0 text-white">
                         <tr>
                         <th class="th-custom"  style="width:15px;">&nbsp;</th>
@@ -466,7 +540,7 @@ async function fillDatabases() {
                     $("#nav-tabContent").append(
                         `<div class="tab-pane fade" id="list-${row.nameid}" role="tabpanel" aria-labelledby="list-${row.nameid}-list">
                         <div class="table-responsive border-top-0 " id="table-res-${row.nameid}">
-                        <table class="table border-top-0 table-hover m-0" id="${row.nameid}_TableOrder" data-order="[[ 3, &quot;asc&quot; ]]">
+                        <table class="table border-top-0 table-hover m-0" id="${row.nameid}_TableOrder" data-order="[[ 2, &quot;asc&quot; ]]">
                         <thead class="bg-primary border-top-0 p-0 text-white">
                         <tr>
                         <th class="th-custom" style="width:30px;">&nbsp;</th>
@@ -497,13 +571,14 @@ async function fillDatabases() {
         $( "div" ).remove( ".skeleton-list-a" );
 }
 function fillsearchtable(row) {
+    let dec = decrypt(row.password,z_masterkey);
     $('#tbody_tabletofind').append(`
         <tr>
             <td>${row.db}</td>
             <td style="padding-right: 0 !important;">${row.icon}</td>
             <td style="padding-left: 0 !important;">${row.name}</td>
             <td role="button" class="btn-to-clip" data-clipboard-text="${row.username}">${row.username}</td>
-            <td role="button" class="btn-to-clip" data-clipboard-text="${decrypt(row.password,localStorage.getItem('l_master_key'))}">******</td>
+            <td role="button" class="btn-to-clip" data-clipboard-text="${dec}">******</td>
             <td class="text-info" role="button" onclick="openExternalLink('${row.url}')">${row.url}</td>
             <td class="text-center">${row.level}</td>
         </tr>
